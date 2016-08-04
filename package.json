@@ -1,0 +1,34 @@
+{
+  "name": "react-native-background-fetch",
+  "version": "0.0.1",
+  "description": "iOS BackgroundFetch API implementation for React Native",
+  "main": "RNBackgroundFetch.ios.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/transistorsoft/react-native-background-fetch.git"
+  },
+  "keywords": [
+    "react-native",
+    "react-component",
+    "ios",
+    "android",
+    "background",
+    "fetch"
+  ],
+  "author": "Chris Scott <chris@transistorsoft.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/transistorsoft/react-native-background-fetch/issues"
+  },
+  "homepage": "https://transistorsoft.github.io/react-native-background-fetch",
+  "dependencies": {},
+  "peerDependencies": {
+    "react-native": ">=0.8.0"
+  },
+  "devDependencies": {
+    "react-native": "^0.30.0"
+  }
+}
