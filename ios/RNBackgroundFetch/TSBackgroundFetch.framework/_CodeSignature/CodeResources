@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/TSBackgroundFetch.h</key>
 		<data>
-		a4bFLSq1GYKoHC0WTUe3mmWU780=
+		/plH8k3nTSFIPhORF5cd6xcRFAs=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -23,11 +23,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			a4bFLSq1GYKoHC0WTUe3mmWU780=
+			/plH8k3nTSFIPhORF5cd6xcRFAs=
 			</data>
 			<key>hash2</key>
 			<data>
-			qZr1FfESE39hioZfR354ZfYcZ+fPyPg/yZ4YT5Vme9Y=
+			ZYjNUn39Qs/g9uaw8whlBbqtCzIx9p/1F8fQOr33NC0=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
