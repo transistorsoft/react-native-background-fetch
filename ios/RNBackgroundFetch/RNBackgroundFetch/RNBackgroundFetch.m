@@ -16,8 +16,6 @@
 static NSString *const RN_BACKGROUND_FETCH_TAG = @"RNBackgroundFetch";
 
 @implementation RNBackgroundFetch {
-    NSNotification *mNotification;
-    void (^completionHandler)(UIBackgroundFetchResult);
     BOOL configured;
 }
 
@@ -35,10 +33,11 @@ RCT_EXPORT_MODULE();
 }
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
 {
-    RCTLogInfo(@"configure");
     if (configured) {
-        RCTLogInfo(@"- Already configured");
+        RCTLogInfo(@"- %@ already configured", RN_BACKGROUND_FETCH_TAG);
     }
+    RCTLogInfo(@"- %@ configure", RN_BACKGROUND_FETCH_TAG);
+    
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager configure:config];
     
@@ -46,24 +45,24 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         configured = YES;
         void (^handler)();
         handler = ^void(void){
-            RCTLogInfo(@"- RNBackgroundFetch Rx Fetch Event");
+            RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
             [_bridge.eventDispatcher sendDeviceEventWithName:[self eventName:@"fetch"] body:nil];
         };
-        [fetchManager addListener:handler];
+        [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
     } else {
-        RCTLogInfo(@"- RNBackgroundFetch failed to start");
+        RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
         failure(@[@"Failed to start background fetch API"]);
     }
 }
 
 RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
-    RCTLogInfo(@"- RNBackgroundFetch start");
+    RCTLogInfo(@"- %@ start", RN_BACKGROUND_FETCH_TAG);
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     if ([fetchManager start]) {
         success(@[]);
     } else {
-        RCTLogInfo(@"- RNBackgroundFetch failed to start");
+        RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
         failure(@[@"Failed to start background fetch API"]);
     }
 }
@@ -79,7 +78,7 @@ RCT_EXPORT_METHOD(finish)
 {
     RCTLogInfo(@"- RNBackgroundFetch finish");
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager finish:UIBackgroundFetchResultNewData];
+    [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:UIBackgroundFetchResultNewData];
 }
 
 -(NSString*) eventName:(NSString*)name
@@ -89,7 +88,7 @@ RCT_EXPORT_METHOD(finish)
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 @end
