@@ -9,7 +9,7 @@ iOS Background Fetch is basically an API which wakes up your app about every 15 
 
 ## Installing the plugin ##
 
-### [iOS Manual Installation](INSTALL)
+### [iOS Manual Installation](INSTALL.md)
 
 ## Config 
 
