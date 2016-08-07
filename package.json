@@ -14,11 +14,10 @@
     "react-native",
     "react-component",
     "ios",
-    "android",
     "background",
     "fetch"
   ],
-  "author": "Chris Scott <chris@transistorsoft.com>",
+  "author": "Chris Scott, Transistor Software <chris@transistorsoft.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/transistorsoft/react-native-background-fetch/issues"
