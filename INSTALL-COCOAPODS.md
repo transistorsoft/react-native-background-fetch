@@ -9,9 +9,10 @@ project, you can also add the react-native-mapbox-gl project to your Podfile.
 - In your `Podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
 - Ensure you have the Pod `pod React', :path => '../node_modules/react-native'`
 - Add `pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'` 
+
 ```Ruby
 pod 'React', :path => '../node_modules/react-native'
-pod 'RNBackgroundFetch', :path => '../node_modules/
+pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'
 ```
 
 - Open your Xcode project and ensure that the "Build Settings" parameter
