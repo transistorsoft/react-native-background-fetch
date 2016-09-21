@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-fetch",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "iOS BackgroundFetch API implementation for React Native",
   "main": "RNBackgroundFetch.ios.js",
   "scripts": {
@@ -22,8 +22,7 @@
   "bugs": {
     "url": "https://github.com/transistorsoft/react-native-background-fetch/issues"
   },
-  "homepage": "https://transistorsoft.github.io/react-native-background-fetch",
-  "dependencies": {},
+  "homepage": "https://transistorsoft.github.io/react-native-background-fetch",  
   "peerDependencies": {
     "react-native": ">=0.8.0"
   },
