@@ -21,8 +21,12 @@ pod 'RNBackgroundFetch', :path => '../node_modules/
      remove this parameter. Just select the line and press the Delete key.
    * Alternative, if you setup your Xcode project yourself, ensure that the
      parent configuration was included with a `$(inherited)` variable.
-- Install the new CocoaPods dependency with `pod install`.  
-   This command must not have output any warning. ;)
+- Install the new CocoaPods dependency with:
+
+```Bash
+$ pod install
+```
+
 - Open `YourProject.xcworkspace`.  Select the root of your project.  Select **Capabilities** tab.  Enable **Background Modes** and enable the mode **`Background fetch`**.![](https://dl.dropboxusercontent.com/u/2319755/react-native-background-fetch/INSTALL/step6.png?dl=1)
 
 ## Troubleshooting with CocoaPods
