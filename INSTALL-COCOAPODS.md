@@ -3,12 +3,17 @@
 If you use already [CocoaPods](https://cocoapods.org/) in your react-native
 project, you can also add the react-native-mapbox-gl project to your Podfile.
 
-**NOTE** The path to `node_modules` depends on your Podfile location, whether in `{root}` of the react-native project (`node_modeules`) or `{root}/ios` (`../node_modules`).  The following instructions assume `{root}/ios`
+**NOTE** The path to `node_modules` depends on your Podfile location, whether in `{root}` of the react-native project (`node_modules`) or `{root}/ios` (`../node_modules`).  The following instructions assume `{root}/ios`
 
 1. Run `npm install --save react-native-background-fetch`
-2. In your `podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
+2. In your `Podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
 3. Ensure you have the Pod `pod React', :path => '../node_modules/react-native'`
-3. Add `pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'`    
+3. Add `pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'`
+```Ruby
+pod 'React', :path => '../node_modules/react-native'
+pod 'RNBackgroundFetch', :path => '../node_modules/
+```
+
 4. Open your Xcode project and ensure that the "Build Settings" parameter
    "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated
    linker options!
