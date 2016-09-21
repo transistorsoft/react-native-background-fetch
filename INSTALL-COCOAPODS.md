@@ -33,7 +33,7 @@ $ pod install
 - Right click your app's root folder.  Select **`Add files to...`**.  Select **Other**.
 ![](https://www.dropbox.com/s/gpsmz1ul1wyrhrs/Screenshot%202016-09-21%2016.17.35.png?dl=1)
 
-= Browse to **`{YourApp}/node_modules/react-native-background-fetch/ios/RNBackgroundFetch`**.  Add the file **`RNBackgroundFetch+AppDelegate.m`**:
+- Browse to **`{YourApp}/node_modules/react-native-background-fetch/ios/RNBackgroundFetch`**.  Add the file **`RNBackgroundFetch+AppDelegate.m`**:
 ![](https://www.dropbox.com/s/uvi6nlx6xrl13fa/Screenshot%202016-09-21%2016.20.42.png?dl=1)
 
 ## Troubleshooting with CocoaPods
