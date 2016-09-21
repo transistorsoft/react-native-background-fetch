@@ -13,6 +13,7 @@ iOS Background Fetch is basically an API which wakes up your app about every 15 
 $ npm install react-native-background-fetch --save
 ```
 
+#### [iOS Cocoapods Setup](INSTALL-COCOAPODS.md)
 #### [iOS Manual Setup](INSTALL.md)
 
 ## Config 
