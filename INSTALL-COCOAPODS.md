@@ -5,25 +5,25 @@ project, you can also add the react-native-mapbox-gl project to your Podfile.
 
 **NOTE** The path to `node_modules` depends on your Podfile location, whether in `{root}` of the react-native project (`node_modules`) or `{root}/ios` (`../node_modules`).  The following instructions assume `{root}/ios`
 
-1. Run `npm install --save react-native-background-fetch`
-2. In your `Podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
-3. Ensure you have the Pod `pod React', :path => '../node_modules/react-native'`
-3. Add `pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'`
+- Run `npm install --save react-native-background-fetch`
+- In your `Podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
+- Ensure you have the Pod `pod React', :path => '../node_modules/react-native'`
+- Add `pod 'RNBackgroundFetch', :path => '../node_modules/react-native-background-fetch/ios'` 
 ```Ruby
 pod 'React', :path => '../node_modules/react-native'
 pod 'RNBackgroundFetch', :path => '../node_modules/
 ```
 
-4. Open your Xcode project and ensure that the "Build Settings" parameter
+- Open your Xcode project and ensure that the "Build Settings" parameter
    "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated
    linker options!
    * If you have used `react-native init` to setup your project you can just
      remove this parameter. Just select the line and press the Delete key.
    * Alternative, if you setup your Xcode project yourself, ensure that the
      parent configuration was included with a `$(inherited)` variable.
-5. Install the new CocoaPods dependency with `pod install`.  
+- Install the new CocoaPods dependency with `pod install`.  
    This command must not have output any warning. ;)
-6. Open `YourProject.xcworkspace`.  Select the root of your project.  Select **Capabilities** tab.  Enable **Background Modes** and enable the mode **`Background fetch`**.![](https://dl.dropboxusercontent.com/u/2319755/react-native-background-fetch/INSTALL/step6.png?dl=1)
+- Open `YourProject.xcworkspace`.  Select the root of your project.  Select **Capabilities** tab.  Enable **Background Modes** and enable the mode **`Background fetch`**.![](https://dl.dropboxusercontent.com/u/2319755/react-native-background-fetch/INSTALL/step6.png?dl=1)
 
 ## Troubleshooting with CocoaPods
 
