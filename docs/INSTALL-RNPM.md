@@ -1,4 +1,4 @@
-# Installation process with rnpm
+# iOS Installation with rnpm
 
 ```shell
 npm install react-native-background-fetch --save
