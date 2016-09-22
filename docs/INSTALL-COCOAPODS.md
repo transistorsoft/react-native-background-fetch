@@ -1,4 +1,4 @@
-# iOS Installation process with CocoaPods
+# iOS Installation with CocoaPods
 
 ```shell
 $ npm install --save react-native-background-fetch

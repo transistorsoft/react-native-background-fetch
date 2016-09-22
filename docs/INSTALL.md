@@ -1,4 +1,4 @@
-# iOS Installation
+# iOS Manual Installation
 
 - `npm install react-native-background-fetch --save`
 
