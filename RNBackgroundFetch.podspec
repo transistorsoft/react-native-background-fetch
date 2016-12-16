@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
 
   s.requires_arc        = true
   s.platform            = :ios, '8.0'
-
+  
+  s.dependency 'React'
   s.preserve_paths      = 'docs', 'CHANGELOG.md', 'LICENSE', 'package.json', 'RNBackgroundFetch.ios.js'
   s.source_files        = 'ios/RNBackgroundFetch/RNBackgroundFetch.h', 'ios/RNBackgroundFetch/RNBackgroundFetch.m'
   s.vendored_frameworks = 'ios/RNBackgroundFetch/TSBackgroundFetch.framework'  
