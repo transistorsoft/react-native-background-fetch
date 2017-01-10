@@ -10,8 +10,8 @@
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
 
 static NSString *const RN_BACKGROUND_FETCH_TAG = @"RNBackgroundFetch";
 
@@ -26,9 +26,9 @@ RCT_EXPORT_MODULE();
 -(instancetype)init
 {
     self = [super init];
-    
+
     configured = NO;
-    
+
     return self;
 }
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
@@ -37,10 +37,10 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         RCTLogInfo(@"- %@ already configured", RN_BACKGROUND_FETCH_TAG);
     }
     RCTLogInfo(@"- %@ configure", RN_BACKGROUND_FETCH_TAG);
-    
+
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager configure:config];
-    
+
     if ([fetchManager start]) {
         configured = YES;
         void (^handler)();
@@ -88,7 +88,7 @@ RCT_EXPORT_METHOD(finish)
 
 - (void)dealloc
 {
-    
+
 }
 
 @end
