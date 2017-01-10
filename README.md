@@ -43,7 +43,7 @@ import BackgroundFetch from "react-native-background-fetch";
 
 var Home = React.createClass({
   componentDidMount: function() {
-
+    // Configure it.
     BackgroundFetch.configure({
       stopOnTerminate: false
     }, function() {
@@ -55,7 +55,21 @@ var Home = React.createClass({
     }, function(error) {
       console.log("[js] RNBackgroundFetch failed to start");
     });
-    
+
+    // Optional: Query the authorization status.
+    BackgroundFetch.status(function(status) {
+      switch(status) {
+        case BackgroundFetch.STATUS_RESTRICTED:
+          console.log("BackgroundFetch restricted");
+          break;
+        case BackgroundFetch.STATUS_DENIED:
+          console.log("BackgroundFetch denied");
+          break;
+        case BackgroundFetch.STATUS_AVAILABLE:
+          console.log("BackgroundFetch is enabled");
+          break;
+      }
+    });
   }
 });
 ```
