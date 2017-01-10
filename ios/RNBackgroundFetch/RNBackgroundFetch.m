@@ -10,16 +10,14 @@
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 #import <UIKit/UIKit.h>
 
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTEventDispatcher.h>
 
 static NSString *const RN_BACKGROUND_FETCH_TAG = @"RNBackgroundFetch";
+static NSString *const EVENT_FETCH = @"fetch";
 
 @implementation RNBackgroundFetch {
     BOOL configured;
 }
-
-@synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE();
 
@@ -31,6 +29,11 @@ RCT_EXPORT_MODULE();
     
     return self;
 }
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[EVENT_FETCH];
+}
+
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
 {
     if (configured) {
@@ -46,7 +49,7 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         void (^handler)();
         handler = ^void(void){
             RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
-            [_bridge.eventDispatcher sendDeviceEventWithName:[self eventName:@"fetch"] body:nil];
+            [self sendEventWithName:EVENT_FETCH body:nil];
         };
         [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
     } else {
@@ -80,6 +83,14 @@ RCT_EXPORT_METHOD(finish)
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:UIBackgroundFetchResultNewData];
 }
+
+RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
+{
+    RCTLogInfo(@"- RNBackgroundFetch status");
+    TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
+    callback(@[@([fetchManager status])]);
+}
+
 
 -(NSString*) eventName:(NSString*)name
 {
