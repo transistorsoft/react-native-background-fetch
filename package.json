@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-fetch",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "iOS BackgroundFetch API implementation for React Native",
   "main": "RNBackgroundFetch.ios.js",
   "scripts": {
@@ -27,6 +27,6 @@
     "react-native": ">=0.8.0"
   },
   "devDependencies": {
-    "react-native": "^0.30.0"
+    "react-native": "^0.40.0"
   }
 }

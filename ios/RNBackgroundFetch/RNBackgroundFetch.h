@@ -9,9 +9,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "RCTBridgeModule.h"
-#import "RCTLog.h"
+#import <React/RCTEventEmitter.h>
+#import <React/RCTLog.h>
 
-@interface RNBackgroundFetch : NSObject <RCTBridgeModule, UIApplicationDelegate>
+@interface RNBackgroundFetch : RCTEventEmitter <UIApplicationDelegate>
 
 @end

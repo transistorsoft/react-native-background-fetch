@@ -6,11 +6,11 @@
 	<dict>
 		<key>Headers/TSBackgroundFetch.h</key>
 		<data>
-		/plH8k3nTSFIPhORF5cd6xcRFAs=
+		6IaHDuPW1C0nWBp03yKGD5PrgTY=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		N2dT5u7RxWyyYlpLYA8Z/dIEvfY=
+		/q6b6t8hcxgtnV2U/r/pxyTm1is=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -23,11 +23,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/plH8k3nTSFIPhORF5cd6xcRFAs=
+			6IaHDuPW1C0nWBp03yKGD5PrgTY=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZYjNUn39Qs/g9uaw8whlBbqtCzIx9p/1F8fQOr33NC0=
+			Q6MbZjcbrHTACLwceQDEESRGhY9/uOOu7bCb71fOAfk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -59,6 +59,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -104,6 +109,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^Info\.plist$</key>
 		<dict>
