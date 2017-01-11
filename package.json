@@ -24,7 +24,7 @@
   },
   "homepage": "https://transistorsoft.github.io/react-native-background-fetch",  
   "peerDependencies": {
-    "react-native": ">=0.8.0"
+    "react-native": ">=0.40.0"
   },
   "devDependencies": {
     "react-native": "^0.40.0"
