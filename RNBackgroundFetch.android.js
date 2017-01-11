@@ -2,7 +2,8 @@ var API = {
   configure: () => {},
   start: () => {},
   stop: () => {},
-  finish: () => {}
+  finish: () => {},
+  status: () => {}
 };
 
 
