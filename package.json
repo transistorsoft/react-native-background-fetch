@@ -21,11 +21,22 @@
   "bugs": {
     "url": "https://github.com/transistorsoft/react-native-background-fetch/issues"
   },
+  "rnpm": {
+    "commands": {
+      "postlink": "node_modules/react-native-background-fetch/scripts/postlink.js",
+      "postunlink": "node_modules/react-native-background-fetch/scripts/postunlink.js"
+    }
+  },
   "homepage": "https://transistorsoft.github.io/react-native-background-fetch",
   "peerDependencies": {
     "react-native": ">=0.28.0"
   },
   "devDependencies": {
     "react-native": "^0.40.0"
+  },
+  "dependencies": {
+    "fast-plist": "^0.1.2",
+    "plist": "^2.0.1",
+    "xcode": "^0.9.1"
   }
 }
