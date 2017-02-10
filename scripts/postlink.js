@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const xcode = require('xcode');
+const PbxFile = require('xcode/lib/pbxFile');
 const helpers = require('./xcode-helpers');
 
 const projectDirectory = process.cwd();
@@ -39,33 +40,55 @@ const pathToAppdelegateExtension = path.relative(
 );
 
 const project = xcode.project(projectConfig.pbxprojPath).parseSync();
-// hacky, but the implementation of the productName getter reads only the first
-// project name, which for RN projects usually is "$(TARGET_NAME)".
-// There are a few issues and PRs at the xcode project open, but it seems a bit
-// stale.
-project.productName = packageManifest.name;
 
-const firstTarget = project.getFirstTarget();
+const file = new PbxFile(pathToFramework);
+file.uuid = project.generateUuid();
+file.fileRef = project.generateUuid();
+file.path = pathToFramework;
+file.target = project.getFirstTarget().uuid;
 
-// addFramework crashes when it can't find a group named "Frameworks"
-if (!project.pbxGroupByName('Frameworks')) {
-    project.addPbxGroup([], 'Frameworks');
+if (!project.hasFile(file.path)) {
+    project.addToPbxBuildFileSection(file);
+    project.addToPbxFileReferenceSection(file);
+    // addToFrameworksPbxGroup crashes when it can't find a group named "Frameworks"
+    if (!project.pbxGroupByName('Frameworks')) {
+        project.addPbxGroup([], 'Frameworks');
+    }
+    project.addToFrameworksPbxGroup(file);
+    project.addToPbxFrameworksBuildPhase(file);
 }
-project.addFramework(pathToFramework, {
-    customFramework: true,
-    target: firstTarget.uuid
-});
+
+helpers.addToFrameworkSearchPaths(
+    project,
+    '$(PROJECT_DIR)/' + path.relative(
+        projectConfig.sourceDir,
+        path.join(moduleDirectory, 'ios')
+    ),
+    true
+);
 
 // extends the projects AppDelegate.m with our completion handler
 const projectGroup = project.findPBXGroupKey({ name: packageManifest.name });
 project.addSourceFile(pathToAppdelegateExtension, {}, projectGroup);
 
-// enable BackgroundModes and add "fetch" as mode
-project.addTargetAttribute('SystemCapabilities', {
-    'com.apple.BackgroundModes': { enabled: true }
-});
+// enable BackgroundModes and add "fetch" as a mode to plist file
+const targetAttributes = helpers.getTargetAttributes(project);
+project.addTargetAttribute('SystemCapabilities', Object.assign(
+    {},
+    targetAttributes,
+    {
+        'com.apple.BackgroundModes': Object.assign(
+            {},
+            (targetAttributes['com.apple.BackgroundModes'] || {}),
+            { enabled: true }
+        )
+    }
+));
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
-plist.UIBackgroundModes = ['fetch'];
+const UIBackgroundModes = plist.UIBackgroundModes || [];
+if (UIBackgroundModes.indexOf('fetch') === -1) {
+    plist.UIBackgroundModes = UIBackgroundModes.concat('fetch');
+}
 
 helpers.writePlist(projectConfig.sourceDir, project, plist);
 fs.writeFileSync(projectConfig.pbxprojPath, project.writeSync());

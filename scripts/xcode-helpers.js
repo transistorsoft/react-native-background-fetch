@@ -58,9 +58,76 @@ function writePlist(sourceDir, project, plist) {
     );
 }
 
+// based on: https://github.com/facebook/react-native/blob/545072b/local-cli/link/ios/mapHeaderSearchPaths.js#L5
+function eachBuildConfiguration(project, predicate, callback) {
+    const config = project.pbxXCBuildConfigurationSection();
+    Object
+        .keys(config)
+        .filter(ref => ref.indexOf('_comment') === -1)
+        .filter(ref => predicate(config[ref]))
+        .forEach(callback);
+}
+
+function hasLCPlusPlus(buildSettings) {
+    return Array.isArray(buildSettings.OTHER_LDFLAGS)
+        && buildSettings.OTHER_LDFLAGS.indexOf('"-lc++"') >= 0;
+}
+
+function addToFrameworkSearchPaths(project, path, recursive) {
+    eachBuildConfiguration(
+        project,
+        hasLCPlusPlus,
+        config => {
+            const frameworkSearchPaths = config.buildSettings.FRAMEWORK_SEARCH_PATHS
+                || ['$(inherited)'];
+
+            const fullPath = path + (recursive ? '/**' : '');
+
+            if (config.buildSettings.FRAMEWORK_SEARCH_PATHS.indexOf(fullPath) === -1) {
+                config.buildSettings.FRAMEWORK_SEARCH_PATHS = frameworkSearchPaths.concat(
+                    fullPath
+                );
+            }
+        }
+    );
+}
+
+function removeFromFrameworkSearchPaths(project, path) {
+    eachBuildConfiguration(
+        project,
+        hasLCPlusPlus,
+        config => {
+            const frameworkSearchPaths = config.buildSettings.FRAMEWORK_SEARCH_PATHS
+                || ['"$(inherited)"'];
+
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = frameworkSearchPaths.filter(
+                searchPath => searchPath !== path && searchPath !== path + '/**'
+            );
+        }
+    );
+}
+
+function getTargetAttributes(project, target) {
+    var attributes = project.getFirstProject()['firstProject']['attributes'];
+    target = target || project.getFirstTarget();
+
+    if (attributes['TargetAttributes'] === undefined) {
+        attributes['TargetAttributes'] = {};
+    }
+
+    if (attributes['TargetAttributes'][target.uuid] === undefined) {
+      attributes['TargetAttributes'][target.uuid] = {};
+    }
+
+    return attributes['TargetAttributes'][target.uuid];
+}
+
 module.exports = {
     getBuildProperty: getBuildProperty,
     getPlistPath: getPlistPath,
     readPlist: readPlist,
-    writePlist: writePlist
+    writePlist: writePlist,
+    getTargetAttributes: getTargetAttributes,
+    addToFrameworkSearchPaths: addToFrameworkSearchPaths,
+    removeFromFrameworkSearchPaths: removeFromFrameworkSearchPaths
 };

@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const xcode = require('xcode');
+const PbxFile = require('xcode/lib/pbxFile');
 const helpers = require('./xcode-helpers');
 
 const projectDirectory = process.cwd();
@@ -39,26 +40,43 @@ const pathToAppdelegateExtension = path.relative(
 );
 
 const project = xcode.project(projectConfig.pbxprojPath).parseSync();
-// hacky, but the implementation of the productName getter reads only the first
-// project name, which for RN projects usually is "$(TARGET_NAME)".
-// There are a few issues and PRs at the xcode project open, but it seems a bit
-// stale.
-project.productName = packageManifest.name;
 
-const firstTarget = project.getFirstTarget();
+const file = new PbxFile(pathToFramework);
+file.target = project.getFirstTarget().uuid;
 
-project.removeFramework(pathToFramework, {
-    customFramework: true,
-    target: firstTarget.uuid
-});
+project.removeFromPbxBuildFileSection(file);
+project.removeFromPbxFileReferenceSection(file);
+project.removeFromFrameworksPbxGroup(file);
+project.removeFromPbxFrameworksBuildPhase(file);
 
-// extends the projects AppDelegate.m with our completion handler
+helpers.removeFromFrameworkSearchPaths(
+    project,
+    '$(PROJECT_DIR)/' + path.relative(
+        projectConfig.sourceDir,
+        path.join(moduleDirectory, 'ios')
+    )
+);
+
+// remove AppDelegate extension
 const projectGroup = project.findPBXGroupKey({ name: packageManifest.name });
 project.removeSourceFile(pathToAppdelegateExtension, {}, projectGroup);
 
-// enable BackgroundModes and add "fetch" as mode
-project.removeTargetAttribute('SystemCapabilities');
+// disable BackgroundModes and remove "fetch" mode from plist file
+const targetAttributes = helpers.getTargetAttributes(project).SystemCapabilities;
+delete targetAttributes['com.apple.BackgroundModes'].enabled;
+if (Object.keys(targetAttributes['com.apple.BackgroundModes']).length === 0) {
+    delete targetAttributes['com.apple.BackgroundModes'];
+}
+project.addTargetAttribute('SystemCapabilities', targetAttributes);
+if (Object.keys(targetAttributes).length === 0) {
+    project.removeTargetAttribute('SystemCapabilities');
+}
+
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
-delete plist.UIBackgroundModes;
+plist.UIBackgroundModes = plist.UIBackgroundModes.filter(mode => mode !== 'fetch');
+if (plist.UIBackgroundModes.length === 0) {
+    delete plist.UIBackgroundModes;
+}
+
 helpers.writePlist(projectConfig.sourceDir, project, plist);
 fs.writeFileSync(projectConfig.pbxprojPath, project.writeSync());
