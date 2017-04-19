@@ -17,7 +17,7 @@ const projectConfig = {
         'ios',
         packageManifest.name + '.xcodeproj',
         'project.pbxproj'
-    )
+    ),
 };
 
 const pathToFramework = path.relative(
@@ -51,18 +51,24 @@ project.removeFromPbxFrameworksBuildPhase(file);
 
 helpers.removeFromFrameworkSearchPaths(
     project,
-    '$(PROJECT_DIR)/' + path.relative(
-        projectConfig.sourceDir,
-        path.join(moduleDirectory, 'ios')
-    )
+    '$(PROJECT_DIR)/' +
+        path.relative(
+            projectConfig.sourceDir,
+            path.join(moduleDirectory, 'ios')
+        )
 );
 
 // remove AppDelegate extension
 const projectGroup = project.findPBXGroupKey({ name: packageManifest.name });
-project.removeSourceFile(pathToAppdelegateExtension, {}, projectGroup);
+project.removeSourceFile(
+    pathToAppdelegateExtension,
+    { target: project.getFirstTarget().uuid },
+    projectGroup
+);
 
 // disable BackgroundModes and remove "fetch" mode from plist file
-const targetAttributes = helpers.getTargetAttributes(project).SystemCapabilities;
+const targetAttributes = helpers.getTargetAttributes(project)
+    .SystemCapabilities;
 delete targetAttributes['com.apple.BackgroundModes'].enabled;
 if (Object.keys(targetAttributes['com.apple.BackgroundModes']).length === 0) {
     delete targetAttributes['com.apple.BackgroundModes'];
@@ -73,7 +79,9 @@ if (Object.keys(targetAttributes).length === 0) {
 }
 
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
-plist.UIBackgroundModes = plist.UIBackgroundModes.filter(mode => mode !== 'fetch');
+plist.UIBackgroundModes = plist.UIBackgroundModes.filter(
+    mode => mode !== 'fetch'
+);
 if (plist.UIBackgroundModes.length === 0) {
     delete plist.UIBackgroundModes;
 }

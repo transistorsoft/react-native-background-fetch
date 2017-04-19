@@ -17,7 +17,7 @@ const projectConfig = {
         'ios',
         packageManifest.name + '.xcodeproj',
         'project.pbxproj'
-    )
+    ),
 };
 
 const pathToFramework = path.relative(
@@ -60,30 +60,34 @@ if (!project.hasFile(file.path)) {
 
 helpers.addToFrameworkSearchPaths(
     project,
-    '$(PROJECT_DIR)/' + path.relative(
-        projectConfig.sourceDir,
-        path.join(moduleDirectory, 'ios')
-    ),
+    '$(PROJECT_DIR)/' +
+        path.relative(
+            projectConfig.sourceDir,
+            path.join(moduleDirectory, 'ios')
+        ),
     true
 );
 
 // extends the projects AppDelegate.m with our completion handler
 const projectGroup = project.findPBXGroupKey({ name: packageManifest.name });
-project.addSourceFile(pathToAppdelegateExtension, {}, projectGroup);
+project.addSourceFile(
+    pathToAppdelegateExtension,
+    { target: project.getFirstTarget().uuid },
+    projectGroup
+);
 
 // enable BackgroundModes and add "fetch" as a mode to plist file
 const targetAttributes = helpers.getTargetAttributes(project);
-project.addTargetAttribute('SystemCapabilities', Object.assign(
-    {},
-    targetAttributes,
-    {
+project.addTargetAttribute(
+    'SystemCapabilities',
+    Object.assign({}, targetAttributes, {
         'com.apple.BackgroundModes': Object.assign(
             {},
-            (targetAttributes['com.apple.BackgroundModes'] || {}),
+            targetAttributes['com.apple.BackgroundModes'] || {},
             { enabled: true }
-        )
-    }
-));
+        ),
+    })
+);
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
 const UIBackgroundModes = plist.UIBackgroundModes || [];
 if (UIBackgroundModes.indexOf('fetch') === -1) {

@@ -26,7 +26,8 @@ function getBuildProperty(project, property) {
                 configurationList.defaultConfigurationName
                 ? buildSection
                 : acc;
-        }
+        },
+        configurationList.buildConfigurations[0]
     );
 
     return defaultBuildConfiguration.buildSettings[property];
@@ -61,50 +62,47 @@ function writePlist(sourceDir, project, plist) {
 // based on: https://github.com/facebook/react-native/blob/545072b/local-cli/link/ios/mapHeaderSearchPaths.js#L5
 function eachBuildConfiguration(project, predicate, callback) {
     const config = project.pbxXCBuildConfigurationSection();
-    Object
-        .keys(config)
+    Object.keys(config)
         .filter(ref => ref.indexOf('_comment') === -1)
         .filter(ref => predicate(config[ref]))
-        .forEach(callback);
+        .forEach(ref => callback(config[ref]));
 }
 
-function hasLCPlusPlus(buildSettings) {
-    return Array.isArray(buildSettings.OTHER_LDFLAGS)
-        && buildSettings.OTHER_LDFLAGS.indexOf('"-lc++"') >= 0;
+function hasLCPlusPlus(config) {
+    return (config.buildSettings.OTHER_LDFLAGS || []).indexOf('"-lc++"') >= 0;
 }
 
 function addToFrameworkSearchPaths(project, path, recursive) {
-    eachBuildConfiguration(
-        project,
-        hasLCPlusPlus,
-        config => {
-            const frameworkSearchPaths = config.buildSettings.FRAMEWORK_SEARCH_PATHS
-                || ['$(inherited)'];
-
-            const fullPath = path + (recursive ? '/**' : '');
-
-            if (config.buildSettings.FRAMEWORK_SEARCH_PATHS.indexOf(fullPath) === -1) {
-                config.buildSettings.FRAMEWORK_SEARCH_PATHS = frameworkSearchPaths.concat(
-                    fullPath
-                );
-            }
+    eachBuildConfiguration(project, hasLCPlusPlus, config => {
+        if (!config.buildSettings.FRAMEWORK_SEARCH_PATHS) {
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = [];
         }
-    );
+        const fullPath = '"' + path + (recursive ? '/**' : '') + '"';
+
+        if (
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS.indexOf(fullPath) === -1
+        ) {
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = config.buildSettings.FRAMEWORK_SEARCH_PATHS.concat(
+                fullPath
+            );
+        }
+    });
 }
 
 function removeFromFrameworkSearchPaths(project, path) {
-    eachBuildConfiguration(
-        project,
-        hasLCPlusPlus,
-        config => {
-            const frameworkSearchPaths = config.buildSettings.FRAMEWORK_SEARCH_PATHS
-                || ['"$(inherited)"'];
-
-            config.buildSettings.FRAMEWORK_SEARCH_PATHS = frameworkSearchPaths.filter(
-                searchPath => searchPath !== path && searchPath !== path + '/**'
-            );
+    eachBuildConfiguration(project, hasLCPlusPlus, config => {
+        if (!config.buildSettings.FRAMEWORK_SEARCH_PATHS) {
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = [];
         }
-    );
+
+        const fullPath = unquote(path) + '/**';
+
+        config.buildSettings.FRAMEWORK_SEARCH_PATHS = config.buildSettings.FRAMEWORK_SEARCH_PATHS.filter(
+            searchPath =>
+                unquote(searchPath) !== unquote(path) &&
+                unquote(searchPath) !== fullPath
+        );
+    });
 }
 
 function getTargetAttributes(project, target) {
@@ -116,10 +114,14 @@ function getTargetAttributes(project, target) {
     }
 
     if (attributes['TargetAttributes'][target.uuid] === undefined) {
-      attributes['TargetAttributes'][target.uuid] = {};
+        attributes['TargetAttributes'][target.uuid] = {};
     }
 
     return attributes['TargetAttributes'][target.uuid];
+}
+
+function unquote(str) {
+    return (str || '').replace(/^"(.*)"$/, '$1');
 }
 
 module.exports = {
@@ -129,5 +131,5 @@ module.exports = {
     writePlist: writePlist,
     getTargetAttributes: getTargetAttributes,
     addToFrameworkSearchPaths: addToFrameworkSearchPaths,
-    removeFromFrameworkSearchPaths: removeFromFrameworkSearchPaths
+    removeFromFrameworkSearchPaths: removeFromFrameworkSearchPaths,
 };
