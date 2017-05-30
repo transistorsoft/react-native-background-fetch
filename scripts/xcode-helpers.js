@@ -68,6 +68,8 @@ function eachBuildConfiguration(project, predicate, callback) {
         .forEach(ref => callback(config[ref]));
 }
 
+// this is being used to determine whether the current target is a react-native
+// project: https://github.com/facebook/react-native/blob/545072b/local-cli/link/ios/mapHeaderSearchPaths.js#L31
 function hasLCPlusPlus(config) {
     return (config.buildSettings.OTHER_LDFLAGS || []).indexOf('"-lc++"') >= 0;
 }
@@ -109,6 +111,8 @@ function removeFromFrameworkSearchPaths(project, path) {
     });
 }
 
+// The node-xcode library doesn't offer a method to get all target attributes,
+// so we'll have to implement it ourselves.
 function getTargetAttributes(project, target) {
     var attributes = project.getFirstProject()['firstProject']['attributes'];
     target = target || project.getFirstTarget();

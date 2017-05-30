@@ -41,6 +41,28 @@ const pathToAppdelegateExtension = path.relative(
 
 const project = xcode.project(projectConfig.pbxprojPath).parseSync();
 
+/**
+ * There is a method in node-xcode that offers similar functionality than what
+ * is implemented below `addFramework` (https://github.com/alunny/node-xcode/blob/ffb938b/lib/pbxProject.js#L300)
+ * but unfortunately it won't work for our use-case because there are two other
+ * methods in node-xcode that are being used by `addFramework` that don't work
+ * as expected:
+ * 1 `addToFrameworksPbxGroup` fails if no group with the name "Frameworks" exists
+ *  https://github.com/alunny/node-xcode/blob/ffb938b/lib/pbxProject.js#L641
+ *  - https://github.com/alunny/node-xcode/issues/43
+ *  - this issue could be worked around by just checking if the group exists and
+ *    creating it if it doesn't exist before executing `addFramework`
+ * 2 `addToFrameworkSearchPaths` doesn't work with react-native:
+ *  https://github.com/alunny/node-xcode/blob/ffb938b/lib/pbxProject.js#L1125
+ *  - https://github.com/alunny/node-xcode/issues/91
+ *  - https://github.com/alunny/node-xcode/pull/99
+ *  - the issue there is that https://github.com/alunny/node-xcode/blob/ffb938b/lib/pbxProject.js#L1133
+ *    in react-native projects the "PRODUCT_NAME" is "$(TARGET_NAME)", so it won't
+ *    be visited by this method.
+ *    And even if the name would be correct it still wouldn't work correctly for
+ *    react-native projects, because not all targets should get the library added
+ *    for example: react-native creates *tests and *tvOs and *tvOstests targets.
+ */
 const file = new PbxFile(pathToFramework);
 file.uuid = project.generateUuid();
 file.fileRef = project.generateUuid();
@@ -76,9 +98,11 @@ project.addSourceFile(
     projectGroup
 );
 
-// enable BackgroundModes and add "fetch" as a mode to plist file
+// enable BackgroundModes in xcode project without overriding any previously
+// defined values in the project file.
+// That's why we deep clone all previously defined target attributes and extend
+// them with our target attributes.
 const targetAttributes = helpers.getTargetAttributes(project);
-
 const systemCapabilities = Object.assign({}, (targetAttributes.SystemCapabilities || {}), {
     'com.apple.BackgroundModes': Object.assign(
         {},
@@ -91,6 +115,8 @@ if (targetAttributes.SystemCapabilities) {
 } else {
     project.addTargetAttribute('SystemCapabilities', systemCapabilities);
 }
+
+// add "fetch" background mode to Info.plist file
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
 const UIBackgroundModes = plist.UIBackgroundModes || [];
 if (UIBackgroundModes.indexOf('fetch') === -1) {
