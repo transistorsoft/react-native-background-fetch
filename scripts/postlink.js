@@ -61,10 +61,10 @@ if (!project.hasFile(file.path)) {
 helpers.addToFrameworkSearchPaths(
     project,
     '$(PROJECT_DIR)/' +
-        path.relative(
-            projectConfig.sourceDir,
-            path.join(moduleDirectory, 'ios')
-        ),
+    path.relative(
+        projectConfig.sourceDir,
+        path.join(moduleDirectory, 'ios')
+    ),
     true
 );
 
@@ -78,16 +78,19 @@ project.addSourceFile(
 
 // enable BackgroundModes and add "fetch" as a mode to plist file
 const targetAttributes = helpers.getTargetAttributes(project);
-project.addTargetAttribute(
-    'SystemCapabilities',
-    Object.assign({}, targetAttributes, {
-        'com.apple.BackgroundModes': Object.assign(
-            {},
-            targetAttributes['com.apple.BackgroundModes'] || {},
-            { enabled: true }
-        ),
-    })
-);
+
+const systemCapabilities = Object.assign({}, (targetAttributes.SystemCapabilities || {}), {
+    'com.apple.BackgroundModes': Object.assign(
+        {},
+        targetAttributes['com.apple.BackgroundModes'] || {},
+        { enabled: true }
+    ),
+});
+if (targetAttributes.SystemCapabilities) {
+    targetAttributes.SystemCapabilities = systemCapabilities;
+} else {
+    project.addTargetAttribute('SystemCapabilities', systemCapabilities);
+}
 const plist = helpers.readPlist(projectConfig.sourceDir, project);
 const UIBackgroundModes = plist.UIBackgroundModes || [];
 if (UIBackgroundModes.indexOf('fetch') === -1) {
