@@ -76,6 +76,8 @@ function addToFrameworkSearchPaths(project, path, recursive) {
     eachBuildConfiguration(project, hasLCPlusPlus, config => {
         if (!config.buildSettings.FRAMEWORK_SEARCH_PATHS) {
             config.buildSettings.FRAMEWORK_SEARCH_PATHS = [];
+        } else if (typeof config.buildSettings.FRAMEWORK_SEARCH_PATHS === 'string') {
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = [config.buildSettings.FRAMEWORK_SEARCH_PATHS];
         }
         const fullPath = '"' + path + (recursive ? '/**' : '') + '"';
 
@@ -93,6 +95,8 @@ function removeFromFrameworkSearchPaths(project, path) {
     eachBuildConfiguration(project, hasLCPlusPlus, config => {
         if (!config.buildSettings.FRAMEWORK_SEARCH_PATHS) {
             config.buildSettings.FRAMEWORK_SEARCH_PATHS = [];
+        } else if (typeof config.buildSettings.FRAMEWORK_SEARCH_PATHS === 'string') {
+            config.buildSettings.FRAMEWORK_SEARCH_PATHS = [config.buildSettings.FRAMEWORK_SEARCH_PATHS];
         }
 
         const fullPath = unquote(path) + '/**';
