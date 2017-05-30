@@ -21,7 +21,7 @@ $ npm install react-native-background-fetch --save
 
 ## Config 
 
-####`@param {Boolean} stopOnTerminate`
+#### `@param {Boolean} stopOnTerminate`
 
 Set `true` to cease background-fetch from operating after user "closes" the app.  Defaults to `true`.
 
