@@ -21,9 +21,15 @@ $ npm install react-native-background-fetch --save
 
 ## Config 
 
+#### `@param {Integer} minimumFetchInterval [15]`
+
+The minimum interval in **minutes** to execute background fetch events.  Defaults to **`15`** minutes.  **Note**:  Background-fetch events will **never** occur at a frequency higher than **every 15 minutes**.  Apple uses a secret algorithm to adjust the frequency of fetch events, presumably based upon usage patterns of the app.  Fetch events *can* occur less often than your configured `minimumFetchInterval`.
+
 #### `@param {Boolean} stopOnTerminate`
 
-Set `true` to cease background-fetch from operating after user "closes" the app.  Defaults to `true`.
+Set `true` to cease background-fetch from operating if iOS terminates the app.  Defaults to `true`.  
+
+:warning: Background-fetch events will **always** terminate if the *user* terminates the app.
 
 ## Methods
 

@@ -40,11 +40,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
 {
-    if (configured) {
-        RCTLogInfo(@"- %@ already configured", RN_BACKGROUND_FETCH_TAG);
-    }
-    RCTLogInfo(@"- %@ configure", RN_BACKGROUND_FETCH_TAG);
-    
+            
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager configure:config];
     
@@ -64,7 +60,6 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
 
 RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
-    RCTLogInfo(@"- %@ start", RN_BACKGROUND_FETCH_TAG);
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     if ([fetchManager start]) {
         success(@[]);
@@ -76,21 +71,18 @@ RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSend
 
 RCT_EXPORT_METHOD(stop)
 {
-    RCTLogInfo(@"- RNBackgroundFetch stop");
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager stop];
 }
 
 RCT_EXPORT_METHOD(finish)
 {
-    RCTLogInfo(@"- RNBackgroundFetch finish");
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:UIBackgroundFetchResultNewData];
 }
 
 RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
 {
-    RCTLogInfo(@"- RNBackgroundFetch status");
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     callback(@[@([fetchManager status])]);
 }
