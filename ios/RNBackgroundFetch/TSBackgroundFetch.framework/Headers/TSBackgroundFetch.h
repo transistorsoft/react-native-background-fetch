@@ -16,7 +16,7 @@
 @property (readonly) BOOL active;
 
 + (TSBackgroundFetch *)sharedInstance;
--(void) performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))handler;
+-(void) performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))handler applicationState:(UIApplicationState)state;
 -(UIBackgroundRefreshStatus) configure:(NSDictionary*)config;
 -(void) addListener:(NSString*)componentName callback:(void (^)(void))callback;
 -(void) removeListener:(NSString*)componentName;
