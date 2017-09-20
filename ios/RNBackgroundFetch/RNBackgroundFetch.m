@@ -42,20 +42,22 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
 {
             
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager configure:config];
-    
-    if ([fetchManager start]) {
-        configured = YES;
-        void (^handler)();
-        handler = ^void(void){
-            RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
-            [self sendEventWithName:EVENT_FETCH body:nil];
-        };
-        [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
-    } else {
-        RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
-        failure(@[@"Failed to start background fetch API"]);
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [fetchManager configure:config];
+
+        if ([fetchManager start]) {
+            configured = YES;
+            void (^handler)();
+            handler = ^void(void){
+                RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
+                [self sendEventWithName:EVENT_FETCH body:nil];
+            };
+            [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
+        } else {
+            RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
+            failure(@[@"Failed to start background fetch API"]);
+        }
+    });
 }
 
 RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
@@ -83,8 +85,10 @@ RCT_EXPORT_METHOD(finish)
 
 RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
 {
-    TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    callback(@[@([fetchManager status])]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
+        callback(@[@([fetchManager status])]);
+    });
 }
 
 
