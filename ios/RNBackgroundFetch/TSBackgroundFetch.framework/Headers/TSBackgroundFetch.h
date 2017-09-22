@@ -17,14 +17,16 @@
 
 + (TSBackgroundFetch *)sharedInstance;
 -(void) performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))handler applicationState:(UIApplicationState)state;
--(UIBackgroundRefreshStatus) configure:(NSDictionary*)config;
+-(void) configure:(NSDictionary*)config callback:(void(^)(UIBackgroundRefreshStatus status))callback;
+-(void) configure:(NSDictionary*)config;
 -(void) addListener:(NSString*)componentName callback:(void (^)(void))callback;
 -(void) removeListener:(NSString*)componentName;
 -(BOOL) hasListener:(NSString*)componentName;
--(BOOL) start;
+-(void) start:(void(^)(UIBackgroundRefreshStatus status))callback;
+-(void) start;
 -(void) stop;
 -(void) finish:(NSString*)tag result:(UIBackgroundFetchResult) result;
--(UIBackgroundRefreshStatus) status;
+-(void) status:(void(^)(UIBackgroundRefreshStatus status))callback;
 
 @end
 
