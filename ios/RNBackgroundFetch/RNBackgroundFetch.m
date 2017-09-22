@@ -28,9 +28,9 @@ RCT_EXPORT_MODULE();
 -(instancetype)init
 {
     self = [super init];
-    
+
     configured = NO;
-    
+
     return self;
 }
 
@@ -40,33 +40,38 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
 {
-            
+
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager configure:config];
-    
-    if ([fetchManager start]) {
+
+    [fetchManager configure:config callback:^(UIBackgroundRefreshStatus status) {
+        if (status != UIBackgroundRefreshStatusAvailable) {
+            RCTLogInfo(@"- %@ failed to start, status: %lu", RN_BACKGROUND_FETCH_TAG, status);
+            failure(@[@(status)]);
+            return;
+        }
         configured = YES;
+
         void (^handler)();
         handler = ^void(void){
             RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
             [self sendEventWithName:EVENT_FETCH body:nil];
         };
         [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
-    } else {
-        RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
-        failure(@[@"Failed to start background fetch API"]);
-    }
+        [fetchManager start];
+    }];
 }
 
 RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    if ([fetchManager start]) {
-        success(@[]);
-    } else {
-        RCTLogInfo(@"- %@ failed to start", RN_BACKGROUND_FETCH_TAG);
-        failure(@[@"Failed to start background fetch API"]);
-    }
+    [fetchManager start:^(UIBackgroundRefreshStatus status) {
+        if (status == UIBackgroundRefreshStatusAvailable) {
+            success(@[]);
+        } else {
+            RCTLogInfo(@"- %@ failed to start, status: %lu", RN_BACKGROUND_FETCH_TAG, status);
+            failure(@[@(status)]);
+        }
+    }];
 }
 
 RCT_EXPORT_METHOD(stop)
@@ -83,8 +88,9 @@ RCT_EXPORT_METHOD(finish)
 
 RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
 {
-    TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    callback(@[@([fetchManager status])]);
+    [[TSBackgroundFetch sharedInstance] status:^(UIBackgroundRefreshStatus status) {
+        callback(@[@(status)]);
+    }];
 }
 
 
@@ -95,7 +101,7 @@ RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
 
 - (void)dealloc
 {
-    
+
 }
 
 @end
