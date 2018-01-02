@@ -47,4 +47,4 @@ BackgroundFetch implements an `AppDelegate` method `didPerformFetchWithCompletio
 - Expand the **`RNBackgroundFetch`** project and drag/drop the file **`RNBackgroundFetch+AppDelegate.m`** and place the file to exist **in the same folder** as your app's **`AppDelegate.m`**.
 ![](https://dl.dropboxusercontent.com/u/2319755/react-native-background-fetch/INSTALL/step7.png?dl=1)
 
-You can now [import and build](README.md#example)
+You can now [import and build](../README.md#example)
