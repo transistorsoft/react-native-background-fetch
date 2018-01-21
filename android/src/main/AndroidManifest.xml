@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.transistorsoft.rnbackgroundfetch">
+
+    <application>
+        <!-- HeadlessJS For android sdk 21+ uses new JobScheduler API -->
+        <service android:name="com.transistorsoft.rnbackgroundfetch.HeadlessJobService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true" />
+        <!-- HeadlessJS For Android sdk <21 uses old AlarmManager API -->
+        <receiver android:name="com.transistorsoft.rnbackgroundfetch.HeadlessBroadcastReceiver">
+            <intent-filter>
+                <action android:name="${applicationId}.event.BACKGROUND_FETCH" />
+            </intent-filter>
+        </receiver>
+    </application>
+    
+</manifest>
