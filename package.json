@@ -1,7 +1,7 @@
 {
   "name": "react-native-background-fetch",
-  "version": "2.2.1",
-  "description": "iOS BackgroundFetch API implementation for React Native",
+  "version": "2.3.0",
+  "description": "iOS & Android BackgroundFetch API implementation for React Native",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,7 +32,7 @@
     "react-native": ">=0.28.0"
   },
   "devDependencies": {
-    "react-native": "^0.40.0"
+    "react-native": "^0.52.0"
   },
   "dependencies": {
     "fast-plist": "^0.1.2",
