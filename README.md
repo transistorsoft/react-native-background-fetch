@@ -109,7 +109,7 @@ export default class App extends Component {
     BackgroundFetch.configure({
       minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
       stopOnTerminate: false,   // <-- Android-only,
-      enableHeadless: true,     // <-- Android-only
+      startOnBoot: true         // <-- Android-only
     }, () => {
       console.log("[js] Received background-fetch event");
       // Required: Signal completion of your task to native code
