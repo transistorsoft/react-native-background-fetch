@@ -7,7 +7,7 @@ By [**Transistor Software**](http://transistorsoft.com), creators of [**React Na
 
 ------------------------------------------------------------------------------
 
-Background Fetch is a *very* simple plugin which will awaken an app in the background about **every 15 minutes**, providing a short period of background running-time.  This plugin will execute your provided `callbackFn` whenever a background-fetch event occurs.  
+Background Fetch is a *very* simple plugin which will awaken an app in the background about **every 15 minutes**, providing a short period of background running-time.  This plugin will execute your provided `callbackFn` whenever a background-fetch event occurs.
 
 There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
 
@@ -28,7 +28,7 @@ $ npm install react-native-background-fetch --save
 - [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)
 - [Manual Setup](docs/INSTALL-MANUAL-ANDROID.md)
 
-## Config 
+## Config
 
 ### Common Options
 
@@ -72,7 +72,7 @@ let MyHeadlessTask = async (event) => {
 }
 
 // Simulate a long-running task (eg: HTTP request)
-function doAction() { 
+function doAction() {
   let timeout = 5000;
   return new Promise(resolve => {
     setTimeout(() => {
@@ -111,6 +111,8 @@ export default class App extends Component {
       stopOnTerminate: false,   // <-- Android-only,
       startOnBoot: true         // <-- Android-only
     }, () => {
+      // If you're doing async work, use async/await syntax or return a promise
+      // otherwise the fetch will terminate immediately
       console.log("[js] Received background-fetch event");
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
