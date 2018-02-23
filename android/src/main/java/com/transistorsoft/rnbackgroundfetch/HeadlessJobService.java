@@ -42,7 +42,9 @@ public class HeadlessJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters params) {
         Log.d(BackgroundFetch.TAG, "JobService onStopJob");
-        mHeadlessTask.finish();
+        if (mHeadlessTask != null) {
+            mHeadlessTask.finish();
+        }
         jobFinished(params, false);
         return true;
     }
