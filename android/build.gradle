@@ -1,12 +1,16 @@
 apply plugin: 'com.android.library'
 
+def DEFAULT_COMPILE_SDK_VERSION     = 26
+def DEFAULT_BUILD_TOOLS_VERSION     = "26.0.2"
+def DEFAULT_TARGET_SDK_VERSION      = 26
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
     }
@@ -14,12 +18,12 @@ android {
 
 repositories{
     jcenter()
-    flatDir{
-        dirs 'libs'
-    }    
+    maven {
+        url './libs'
+    }
 }
 
 dependencies {
     compile 'com.facebook.react:react-native:+'    
-    compile(name:'tsbackgroundfetch', ext:'aar')    
+    compile(group: 'com.transistorsoft', name:'tsbackgroundfetch', version: '+')
 }

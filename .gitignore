@@ -39,4 +39,4 @@ jspm_packages
 .DS_Store
 
 android/build
-
+android/*.iml
