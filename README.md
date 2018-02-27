@@ -28,6 +28,16 @@ $ npm install react-native-background-fetch --save
 - [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)
 - [Manual Setup](docs/INSTALL-MANUAL-ANDROID.md)
 
+### :information_source: Solving Android Gradle Conflicts.
+
+Once of the most common build-issues with Android apps are gradle conflicts between modules specifying different versions of:
+- `compileSdkVersion`
+- `buildToolsVersion`
+- Google `play-services` / `firebase` version.
+- Google support libraries (ie `appcompat-v4`, `appcompat-v7`)
+
+For more information, see the Wiki [Solving Android Gradle Conflicts](../../wiki/Solving-Android-Gradle-Conflicts)
+
 ## Config 
 
 ### Common Options
