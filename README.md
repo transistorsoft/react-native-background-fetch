@@ -38,7 +38,7 @@ Once of the most common build-issues with Android apps are gradle conflicts betw
 
 For more information, see the Wiki [Solving Android Gradle Conflicts](../../wiki/Solving-Android-Gradle-Conflicts)
 
-## Config 
+## Config
 
 ### Common Options
 
@@ -77,12 +77,12 @@ let MyHeadlessTask = async (event) => {
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish();
+  BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
   console.log('- BackgroundFetch HeadlessTask finished');
 }
 
 // Simulate a long-running task (eg: HTTP request)
-function doAction() { 
+function doAction() {
   let timeout = 5000;
   return new Promise(resolve => {
     setTimeout(() => {
@@ -103,7 +103,7 @@ AppRegistry.registerHeadlessTask('BackgroundFetch', () => MyHeadlessTask);
 |---|---|---|
 | `configure` | `{config}`, `callbackFn`, `failureFn` | Configures the plugin's fetch `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min).  The `failureFn` will be called if the device doesn't support background-fetch. |
 | `status` | `callbackFn` | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
-| `finish` | *none* | You **MUST** call this method in your fetch `callbackFn` provided to `#configure` in order to signal to iOS that your fetch action is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
+| `finish` | `fetchResult` | Valid values for `fetchResult (Integer)` include `BackgroundFetch.FETCH_RESULT_NEW_DATA` (0), `BackgroundFetch.FETCH_RESULT_NO_DATA` (1), and `BackgroundFetch.FETCH_RESULT_FAILED` (2).  You **MUST** call this method in your fetch `callbackFn` provided to `#configure` in order to signal to iOS that your fetch action is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
 | `start` | `successFn`, `failureFn` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
 | `stop` | `successFn`, `failureFn` | Stop the background-fetch API from firing fetch events.  Your `callbackFn` provided to `#configure` will no longer be executed. |
 
@@ -125,7 +125,7 @@ export default class App extends Component {
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
       // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish();
+      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
     }, (error) => {
       console.log("[js] RNBackgroundFetch failed to start");
     });
@@ -207,4 +207,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
