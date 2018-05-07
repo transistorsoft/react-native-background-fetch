@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [2.4.2] &mdash; 2018-05-07
+- [Added] Implement ability to provide `UIBackgroundFetchResult` to `#finish` rather than hard-coded `UIBackgroundFetchResultNewData`
 ## [2.4.1] &mdash; 2018-03-18
 - [Fixed] react-native link was broken for iOS due to unused aggregate target.  Remove unused targets.
 ## [2.4.0] &mdash; 2018-02-27

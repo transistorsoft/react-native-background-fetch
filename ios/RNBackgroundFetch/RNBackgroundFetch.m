@@ -56,7 +56,7 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         }
         configured = YES;
 
-        void (^handler)();
+        void (^handler)(void);
         handler = ^void(void){
             RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
             [self sendEventWithName:EVENT_FETCH body:nil];
@@ -85,10 +85,16 @@ RCT_EXPORT_METHOD(stop)
     [fetchManager stop];
 }
 
-RCT_EXPORT_METHOD(finish)
+RCT_EXPORT_METHOD(finish:(NSInteger)fetchResult)
 {
+    UIBackgroundFetchResult result = UIBackgroundFetchResultNewData;
+    if (fetchResult == UIBackgroundFetchResultNewData
+     || fetchResult == UIBackgroundFetchResultNoData
+     || fetchResult == UIBackgroundFetchResultFailed) {
+        result = fetchResult;
+    }
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:UIBackgroundFetchResultNewData];
+    [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:result];
 }
 
 RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)

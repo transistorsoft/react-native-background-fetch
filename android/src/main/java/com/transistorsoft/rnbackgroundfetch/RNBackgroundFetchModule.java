@@ -20,7 +20,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         super(reactContext);
         reactContext.addLifecycleEventListener(this);
     }
-    
+
     @Override
     public String getName() {
         return TAG;
@@ -80,7 +80,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
-    public void finish() {
+    public void finish(Integer fetchResult) {
         BackgroundFetch adapter = getAdapter();
         adapter.finish();
     }
@@ -115,8 +115,8 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         if (activity == null) {
             return;
         }
-        Intent intent       = activity.getIntent();
-        String action       = intent.getAction();
+        Intent intent = activity.getIntent();
+        String action = intent.getAction();
 
         if ((action != null) && (BackgroundFetch.ACTION_FORCE_RELOAD.equalsIgnoreCase(action))) {
             isForceReload = true;

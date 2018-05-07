@@ -40,3 +40,6 @@ jspm_packages
 
 android/build
 android/*.iml
+
+xcuserdata/
+android/.gradle/
