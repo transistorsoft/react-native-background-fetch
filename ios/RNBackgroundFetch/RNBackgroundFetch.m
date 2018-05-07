@@ -56,7 +56,7 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         }
         configured = YES;
 
-        void (^handler)();
+        void (^handler)(void);
         handler = ^void(void){
             RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
             [self sendEventWithName:EVENT_FETCH body:nil];
