@@ -1,4 +1,8 @@
-import { NativeModules, NativeEventEmitter } from "react-native";
+import {
+  NativeModules,
+  NativeEventEmitter,
+  AppRegistry
+} from "react-native";
 
 const RNBackgroundFetch = NativeModules.RNBackgroundFetch;
 const EventEmitter = new NativeEventEmitter(RNBackgroundFetch);
@@ -20,10 +24,18 @@ class API {
     if (typeof(callback) !== 'function') {
       throw "RNBackgroundFetch requires a fetch callback at 2nd argument";
     }
+    EventEmitter.removeAllListeners('fetch');
     config = config || {};
     failure = failure || function() {};
     RNBackgroundFetch.configure(config, failure);
     return this.addListener(EVENT_FETCH, callback);
+  }
+
+  /**
+  * Register HeadlessTask
+  */
+  static registerHeadlessTask(task) {
+    AppRegistry.registerHeadlessTask("BackgroundFetch", () => task);
   }
 
   static on(event, callback) {

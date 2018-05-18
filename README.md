@@ -7,7 +7,7 @@ By [**Transistor Software**](http://transistorsoft.com), creators of [**React Na
 
 ------------------------------------------------------------------------------
 
-Background Fetch is a *very* simple plugin which will awaken an app in the background about **every 15 minutes**, providing a short period of background running-time.  This plugin will execute your provided `callbackFn` whenever a background-fetch event occurs.  
+Background Fetch is a *very* simple plugin which will awaken an app in the background about **every 15 minutes**, providing a short period of background running-time.  This plugin will execute your provided `callbackFn` whenever a background-fetch event occurs.
 
 There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
 
@@ -71,29 +71,22 @@ Set `true` to enable React Native's [Headless JS](https://facebook.github.io/rea
 import BackgroundFetch from "react-native-background-fetch";
 
 let MyHeadlessTask = async (event) => {
-  console.log('- BackgroundFetch HeadlessTask start');
+  console.log('[BackgroundFetch HeadlessTask] start');
+
+  // Perform an example HTTP request.
   // Important:  await asychronous tasks when using HeadlessJS.
-  await doAction();
+  let response = await fetch('https://facebook.github.io/react-native/movies.json');
+  let responseJson = await response.json();
+  console.log('[BackgroundFetch HeadlessTask response: ', responseJson);
+
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
-  console.log('- BackgroundFetch HeadlessTask finished');
-}
-
-// Simulate a long-running task (eg: HTTP request)
-function doAction() {
-  let timeout = 5000;
-  return new Promise(resolve => {
-    setTimeout(() => {
-      console.log('*** TIMEOUT ***');
-      resolve();
-    }, timeout);
-  });
+  BackgroundFetch.finish();
 }
 
 // Register your BackgroundFetch HeadlessTask
-AppRegistry.registerHeadlessTask('BackgroundFetch', () => MyHeadlessTask);
+BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
 ```
 
 
