@@ -1,5 +1,7 @@
 # CHANGELOG
-## [2.4.3] &mdash; 2018-05-18
+
+## [2.4.3] &mdash; 2018-05-23
+- [Fixed] Fix link error when iOS and npm project name are diferent
 - [Fixed] Clear event-listeners when `#configure` is called.  When used with `react-native-background-geolocation` in "Headless Mode", this plugin could accumulate event-listeners with each reboot after terminate.
 - [Added] Add convenience method `BackgroundGeolocation#registerHeadlessTask`, to be used instead of `AppRegistry#registerHeadlessTask`.
 
