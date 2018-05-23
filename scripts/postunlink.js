@@ -8,14 +8,15 @@ const helpers = require('./xcode-helpers');
 
 const projectDirectory = process.cwd();
 const moduleDirectory = path.resolve(__dirname, '..');
-const packageManifest = require(projectDirectory + '/package.json');
+const sourceDirectory = path.join(projectDirectory, 'ios');
+const xcodeProjectDirectory = helpers.findProject(sourceDirectory);
 
 const projectConfig = {
-    sourceDir: path.join(projectDirectory, 'ios'),
+    sourceDir: sourceDirectory,
     pbxprojPath: path.join(
         projectDirectory,
         'ios',
-        packageManifest.name + '.xcodeproj',
+        xcodeProjectDirectory,
         'project.pbxproj'
     ),
 };
@@ -61,7 +62,8 @@ helpers.removeFromFrameworkSearchPaths(
 );
 
 // remove AppDelegate extension
-const projectGroup = project.findPBXGroupKey({ name: packageManifest.name });
+const groupName = xcodeProjectDirectory.replace('.xcodeproj', '');
+const projectGroup = project.findPBXGroupKey({ name: groupName });
 project.removeSourceFile(
     pathToAppdelegateExtension,
     { target: project.getFirstTarget().uuid },
