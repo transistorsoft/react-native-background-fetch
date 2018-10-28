@@ -23,8 +23,8 @@
   },
   "rnpm": {
     "commands": {
-      "postlink": "node_modules/react-native-background-fetch/scripts/postlink.js",
-      "postunlink": "node_modules/react-native-background-fetch/scripts/postunlink.js"
+      "postlink": "node node_modules/react-native-background-fetch/scripts/postlink.js",
+      "postunlink": "node node_modules/react-native-background-fetch/scripts/postunlink.js"
     }
   },
   "homepage": "https://transistorsoft.github.io/react-native-background-fetch",
