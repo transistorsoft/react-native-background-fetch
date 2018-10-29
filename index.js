@@ -1,3 +1,5 @@
+'use strict'
+
 import {
   NativeModules,
   NativeEventEmitter,
@@ -19,7 +21,15 @@ const FETCH_RESULT_NEW_DATA = 0;
 const FETCH_RESULT_NO_DATA  = 1;
 const FETCH_RESULT_FAILED   = 2;
 
-class API {
+export default class BackgroundFetch {
+  static get STATUS_RESTRICTED() { return STATUS_RESTRICTED; }
+  static get STATUS_DENIED() { return STATUS_DENIED; }
+  static get STATUS_AVAILABLE() { return STATUS_AVAILABLE; }
+
+  static get FETCH_RESULT_NEW_DATA() { return FETCH_RESULT_NEW_DATA; }
+  static get FETCH_RESULT_NO_DATA() { return FETCH_RESULT_NO_DATA; }
+  static get FETCH_RESULT_FAILED() { return FETCH_RESULT_FAILED; }
+
   static configure(config, callback, failure) {
     if (typeof(callback) !== 'function') {
       throw "RNBackgroundFetch requires a fetch callback at 2nd argument";
@@ -36,6 +46,10 @@ class API {
   */
   static registerHeadlessTask(task) {
     AppRegistry.registerHeadlessTask("BackgroundFetch", () => task);
+  }
+
+  static onFetch(callback) {
+    this.addListener('fetch', callback);
   }
 
   static on(event, callback) {
@@ -72,12 +86,3 @@ class API {
   }
 }
 
-API.STATUS_RESTRICTED = STATUS_RESTRICTED;
-API.STATUS_DENIED     = STATUS_DENIED;
-API.STATUS_AVAILABLE  = STATUS_AVAILABLE;
-
-API.FETCH_RESULT_NEW_DATA = FETCH_RESULT_NEW_DATA;
-API.FETCH_RESULT_NO_DATA  = FETCH_RESULT_NO_DATA;
-API.FETCH_RESULT_FAILED   = FETCH_RESULT_FAILED;
-
-module.exports = API;
