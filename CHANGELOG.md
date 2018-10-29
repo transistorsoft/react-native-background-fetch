@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [2.4.4] &mdash; 2018-10-29
+- [Fixed] react-native link scripts for Windows (PR #114)
+- [Added] Typescript definitions.
+
 ## [2.4.3] &mdash; 2018-05-23
 - [Fixed] Fix link error when iOS and npm project name are diferent
 - [Fixed] Clear event-listeners when `#configure` is called.  When used with `react-native-background-geolocation` in "Headless Mode", this plugin could accumulate event-listeners with each reboot after terminate.
