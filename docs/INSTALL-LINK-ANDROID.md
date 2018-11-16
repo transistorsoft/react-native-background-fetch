@@ -14,16 +14,12 @@ $ react-native link react-native-background-fetch
 allprojects {
     repositories {
         mavenLocal()
+        google()
         jcenter()        
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-        // For latest Google Apis
-+       maven {
-+           url 'https://maven.google.com'
-+       }
-
 +       maven {
 +           url "$rootDir/../node_modules/react-native-background-fetch/android/libs"
 +       }
