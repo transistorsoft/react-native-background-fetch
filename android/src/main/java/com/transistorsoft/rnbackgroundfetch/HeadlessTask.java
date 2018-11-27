@@ -89,11 +89,17 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
         final HeadlessJsTaskContext headlessJsTaskContext = HeadlessJsTaskContext.getInstance(reactContext);
         headlessJsTaskContext.addTaskEventListener(this);
         mActiveTaskContext = headlessJsTaskContext;
-        UiThreadUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int taskId = headlessJsTaskContext.startTask(taskConfig);
-            }
-        });
+        try {
+            UiThreadUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int taskId = headlessJsTaskContext.startTask(taskConfig);
+                }
+            });
+        } catch (IllegalStateException exception) {
+            Log.e(BackgroundFetch.TAG, "Headless task attempted to run in the foreground.  Task ignored.");
+            return;  // <-- Do nothing.  Just return
+        }
+
     }
 }
