@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.4.5] &mdash; 2018-11-28
+- [Fixed] Wrap Android HeadlessTask executor in try/catch to swallow errors if run while app is in foreground.
+
 ## [2.4.4] &mdash; 2018-10-29
 - [Fixed] react-native link scripts for Windows (PR #114)
 - [Added] Typescript definitions.
