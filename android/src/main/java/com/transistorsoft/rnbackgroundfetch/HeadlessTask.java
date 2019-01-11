@@ -14,6 +14,7 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig;
 import com.facebook.react.jstasks.HeadlessJsTaskContext;
 import com.facebook.react.jstasks.HeadlessJsTaskEventListener;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
+import com.facebook.react.common.LifecycleState;
 
 /**
  * Created by chris on 2018-01-17.
@@ -86,6 +87,9 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
     }
 
     private void invokeStartTask(ReactContext reactContext, final HeadlessJsTaskConfig taskConfig) {
+        if (reactContext.getLifecycleState() == LifecycleState.RESUMED) {
+            return;
+        }
         final HeadlessJsTaskContext headlessJsTaskContext = HeadlessJsTaskContext.getInstance(reactContext);
         headlessJsTaskContext.addTaskEventListener(this);
         mActiveTaskContext = headlessJsTaskContext;
