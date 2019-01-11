@@ -1,4 +1,6 @@
 # CHANGELOG
+## [2.4.6] -- 2019-01-11
+- [Added] Android:  Double check that app isn't in foreground before executing headless task (thanks to @macgregorT).
 
 ## [2.4.5] &mdash; 2018-11-28
 - [Fixed] Wrap Android HeadlessTask executor in try/catch to swallow errors if run while app is in foreground.
