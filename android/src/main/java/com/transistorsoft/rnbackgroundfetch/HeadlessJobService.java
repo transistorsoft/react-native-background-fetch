@@ -53,7 +53,7 @@ public class HeadlessJobService extends JobService {
             jobFinished(params, false);
         } catch (NullPointerException e) {
             Log.e(BackgroundFetch.TAG, "Job was shutdown already?");
-            return true
+            return true;
         }
         return true;
     }
