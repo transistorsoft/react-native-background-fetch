@@ -1,10 +1,20 @@
 # iOS Installation with `react-native link`
 
-```shell
-$ npm install react-native-background-fetch --save
+No manual steps required.
+
+### With `yarn`
+
+```bash
+$ yarn add react-native-background-fetch
 
 $ react-native link react-native-background-fetch
 ```
 
-Easy.
+### With `npm`
+```bash
+$ npm install --save react-native-background-fetch
+
+$ react-native link react-native-background-fetch
+```
+
 
