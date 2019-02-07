@@ -13,10 +13,21 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 
 The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
 
-## Installing the plugin ##
+## Installing the plugin
 
-```Bash
-$ npm install react-native-background-fetch --save
+### With `yarn`
+
+```bash
+$ yarn add react-native-background-fetch
+
+$ react-native link react-native-background-fetch
+```
+
+### With `npm`
+```bash
+$ npm install --save react-native-background-fetch
+
+$ react-native link react-native-background-fetch
 ```
 
 ## iOS Setup
