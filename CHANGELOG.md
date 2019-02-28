@@ -1,4 +1,10 @@
 # CHANGELOG
+## [2.5.1] -- 2019-02-27
+- [Changed] Remove unnecessary gradle directive `buildToolsVersion`.
+
+## [2.5.0] -- 2019-02-07
+- [Changed] Use updated gradle method `implementation` instead of deprecated `compile`.
+
 ## [2.4.6] -- 2019-01-11
 - [Added] Android:  Double check that app isn't in foreground before executing headless task (thanks to @macgregorT).
 
