@@ -30,7 +30,7 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
         try {
             ReactApplication reactApplication = ((ReactApplication) context.getApplicationContext());
             mReactNativeHost = reactApplication.getReactNativeHost();
-        } catch (AssertionError e) {
+        } catch (AssertionError | ClassCastException e) {
             Log.e(BackgroundFetch.TAG, "Failed to fetch ReactApplication.  Task ignored.");
             return;  // <-- Do nothing.  Just return
         }
