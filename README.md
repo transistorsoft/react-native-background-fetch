@@ -39,15 +39,46 @@ $ react-native link react-native-background-fetch
 - [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)
 - [Manual Setup](docs/INSTALL-MANUAL-ANDROID.md)
 
-### :information_source: Solving Android Gradle Conflicts.
+## Example ##
 
-Once of the most common build-issues with Android apps are gradle conflicts between modules specifying different versions of:
-- `compileSdkVersion`
-- `buildToolsVersion`
-- Google `play-services` / `firebase` version.
-- Google support libraries (ie `appcompat-v4`, `appcompat-v7`)
+```javascript
 
-For more information, see the Wiki [Solving Android Gradle Conflicts](../../wiki/Solving-Android-Gradle-Conflicts)
+import BackgroundFetch from "react-native-background-fetch";
+
+export default class App extends Component {
+  componentDidMount() {
+    // Configure it.
+    BackgroundFetch.configure({
+      minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
+      stopOnTerminate: false,   // <-- Android-only,
+      startOnBoot: true         // <-- Android-only
+    }, () => {
+      console.log("[js] Received background-fetch event");
+      // Required: Signal completion of your task to native code
+      // If you fail to do this, the OS can terminate your app
+      // or assign battery-blame for consuming too much background-time
+      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+    }, (error) => {
+      console.log("[js] RNBackgroundFetch failed to start");
+    });
+
+    // Optional: Query the authorization status.
+    BackgroundFetch.status((status) => {
+      switch(status) {
+        case BackgroundFetch.STATUS_RESTRICTED:
+          console.log("BackgroundFetch restricted");
+          break;
+        case BackgroundFetch.STATUS_DENIED:
+          console.log("BackgroundFetch denied");
+          break;
+        case BackgroundFetch.STATUS_AVAILABLE:
+          console.log("BackgroundFetch is enabled");
+          break;
+      }
+    });
+  }
+};
+```
 
 ## Config
 
@@ -111,46 +142,7 @@ BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
 | `start` | `successFn`, `failureFn` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
 | `stop` | `successFn`, `failureFn` | Stop the background-fetch API from firing fetch events.  Your `callbackFn` provided to `#configure` will no longer be executed. |
 
-## Example ##
 
-```javascript
-
-import BackgroundFetch from "react-native-background-fetch";
-
-export default class App extends Component {
-  componentDidMount() {
-    // Configure it.
-    BackgroundFetch.configure({
-      minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
-      stopOnTerminate: false,   // <-- Android-only,
-      startOnBoot: true         // <-- Android-only
-    }, () => {
-      console.log("[js] Received background-fetch event");
-      // Required: Signal completion of your task to native code
-      // If you fail to do this, the OS can terminate your app
-      // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
-    }, (error) => {
-      console.log("[js] RNBackgroundFetch failed to start");
-    });
-
-    // Optional: Query the authorization status.
-    BackgroundFetch.status((status) => {
-      switch(status) {
-        case BackgroundFetch.STATUS_RESTRICTED:
-          console.log("BackgroundFetch restricted");
-          break;
-        case BackgroundFetch.STATUS_DENIED:
-          console.log("BackgroundFetch denied");
-          break;
-        case BackgroundFetch.STATUS_AVAILABLE:
-          console.log("BackgroundFetch is enabled");
-          break;
-      }
-    });
-  }
-};
-```
 
 ## Debugging
 
