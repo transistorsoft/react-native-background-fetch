@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## [2.5.2] -- 2019-04-10
+- [Fixed] Fixed `react-native link` scripts to detect when installing into an app already configured for Cocoapods.
+
 ## [2.5.1] -- 2019-02-27
 - [Changed] Remove unnecessary gradle directive `buildToolsVersion`.
 

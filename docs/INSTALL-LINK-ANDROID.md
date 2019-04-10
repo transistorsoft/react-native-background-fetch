@@ -1,23 +1,24 @@
 # Android `react-native link` Installation
 
-## With `yarn`
+### With `yarn`
 
 ```bash
 $ yarn add react-native-background-fetch
-
-$ react-native link react-native-background-fetch
 ```
 
-## With `npm`
+### With `npm`
 ```bash
 $ npm install --save react-native-background-fetch
+```
 
+### `react-native link`
+```bash
 $ react-native link react-native-background-fetch
 ```
 
-## Gradle Configuration
+### Gradle Configuration
 
-### :open_file_folder: **`android/build.gradle`**
+#### :open_file_folder: **`android/build.gradle`**
 
 ```diff
 allprojects {
