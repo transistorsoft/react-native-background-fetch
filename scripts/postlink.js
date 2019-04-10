@@ -81,15 +81,20 @@ if (!project.hasFile(file.path)) {
     project.addToPbxFrameworksBuildPhase(file);
 }
 
-helpers.addToFrameworkSearchPaths(
-    project,
-    '$(PROJECT_DIR)/' +
-    path.relative(
-        projectConfig.sourceDir,
-        path.join(moduleDirectory, 'ios')
-    ),
-    true
-);
+const podFile = path.join(sourceDirectory, 'Podfile');
+const hasPodfile = fs.existsSync(podFile);
+
+if (!hasPodfile) {
+    helpers.addToFrameworkSearchPaths(
+        project,
+        '$(PROJECT_DIR)/' +
+        path.relative(
+            projectConfig.sourceDir,
+            path.join(moduleDirectory, 'ios')
+        ),
+        true
+    );
+}
 
 // extends the projects AppDelegate.m with our completion handler
 const groupName = xcodeProjectDirectory.replace('.xcodeproj', '');
@@ -127,3 +132,4 @@ if (UIBackgroundModes.indexOf('fetch') === -1) {
 
 helpers.writePlist(projectConfig.sourceDir, project, plist);
 fs.writeFileSync(projectConfig.pbxprojPath, project.writeSync());
+

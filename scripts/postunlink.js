@@ -40,6 +40,7 @@ const pathToAppdelegateExtension = path.relative(
     )
 );
 
+
 const project = xcode.project(projectConfig.pbxprojPath).parseSync();
 
 const file = new PbxFile(pathToFramework);
@@ -52,14 +53,19 @@ if (project.pbxGroupByName('Frameworks')) {
 }
 project.removeFromPbxFrameworksBuildPhase(file);
 
-helpers.removeFromFrameworkSearchPaths(
-    project,
-    '$(PROJECT_DIR)/' +
-    path.relative(
-        projectConfig.sourceDir,
-        path.join(moduleDirectory, 'ios')
-    )
-);
+const podFile = path.join(sourceDirectory, 'Podfile');
+const hasPodfile = fs.existsSync(podFile);
+
+if (!hasPodfile) {
+    helpers.removeFromFrameworkSearchPaths(
+        project,
+        '$(PROJECT_DIR)/' +
+        path.relative(
+            projectConfig.sourceDir,
+            path.join(moduleDirectory, 'ios')
+        )
+    );
+}
 
 // remove AppDelegate extension
 const groupName = xcodeProjectDirectory.replace('.xcodeproj', '');
