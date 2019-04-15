@@ -19,15 +19,11 @@ The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-nati
 
 ```bash
 $ yarn add react-native-background-fetch
-
-$ react-native link react-native-background-fetch
 ```
 
 ### With `npm`
 ```bash
 $ npm install --save react-native-background-fetch
-
-$ react-native link react-native-background-fetch
 ```
 
 ## iOS Setup

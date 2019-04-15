@@ -133,3 +133,48 @@ if (UIBackgroundModes.indexOf('fetch') === -1) {
 helpers.writePlist(projectConfig.sourceDir, project, plist);
 fs.writeFileSync(projectConfig.pbxprojPath, project.writeSync());
 
+////
+// Android
+// 1. Add maven url
+//     maven {
+//         url "$rootDir/../node_modules/react-native-background-fetch/android/libs"
+//     }
+//
+const androidSrcDir = path.join(projectDirectory, 'android');
+const projectGradleFile = path.join(androidSrcDir, 'build.gradle');
+const moduleName = moduleDirectory.split('/').pop();
+const pluginGradleFile = path.join(projectDirectory, 'node_modules', moduleName, "android", "build.gradle");
+
+const mavenUrl = [
+    '\t\tmaven {',
+    '\t\t\turl "$rootDir/../node_modules/' + moduleName + '/android/libs"',
+    '\t\t}',
+].join("\n");
+
+const repositoriesRE = new RegExp("(allprojects\\s?\\{\\n[\\s?\\t]+repositories\\s?\\{)", "gm");
+const moduleRE = new RegExp(moduleName + "\\/android", "gm");
+
+// Open project build.gradle.  Add maven tslocationmanager maven url.
+fs.readFile(projectGradleFile, 'utf8', function (err, data) {
+  if (err) {
+    return console.log(err);
+  }
+  if (moduleRE.test(data)) {
+      return;
+  }
+  if (!repositoriesRE.test(data)) {
+      console.error("[" + moduleName + "] FAILED TO LINK MAVEN URL in android/build.gradle");
+      console.error("Ensure your android/build.gradle contains the following maven url:");
+      console.error("allprojects {\n\trepositories {\n" + mavenUrl + "\n\t}\n}");
+
+      return;
+  }
+  // Write maven url.
+  data = data.replace(repositoriesRE, "$1\n" + mavenUrl);
+
+  fs.writeFile(projectGradleFile, data, 'utf8', function (err) {
+     if (err) return console.log(err);
+  });
+});
+
+

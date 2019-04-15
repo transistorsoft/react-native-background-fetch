@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.5.3]
+- [Added] Added android implementation for `react-native link` script to automatically add the required `maven url`.  No more extras steps required -- simply:  `react-native link react-native-background-fetch`.
+
 ## [2.5.2] -- 2019-04-10
 - [Fixed] Fixed `react-native link` scripts to detect when installing into an app already configured for Cocoapods.
 
