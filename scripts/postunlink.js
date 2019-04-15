@@ -101,3 +101,29 @@ if (Array.isArray(plist.UIBackgroundModes)) {
 
 helpers.writePlist(projectConfig.sourceDir, project, plist);
 fs.writeFileSync(projectConfig.pbxprojPath, project.writeSync());
+
+////
+// Android
+// - Remove maven url
+//     maven {
+//         url "$rootDir/../node_modules/react-native-background-geolocation/android/libs"
+//     }
+//
+const androidSrcDir = path.join(projectDirectory, 'android');
+const gradleFile = path.join(androidSrcDir, 'build.gradle');
+const moduleName = moduleDirectory.split('/').pop();
+
+fs.readFile(gradleFile, 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  var re = new RegExp("[\\t?\\s?]+maven\\s?\\{[\\n?\\s?\\t?]+url.*" + moduleName + "\\/.*[\\n?\\t?\\s?]+\\}", "gm");
+
+  if (data.match(re)) {
+      fs.writeFile(gradleFile, data.replace(re, ''), 'utf8', function (err) {
+         if (err) return console.log(err);
+      });
+  }
+
+});
+

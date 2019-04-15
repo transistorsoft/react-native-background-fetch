@@ -4,8 +4,6 @@
 
 ```bash
 $ yarn add react-native-background-fetch
-
-$ react-native link react-native-background-fetch
 ```
 
 ## With `npm`
