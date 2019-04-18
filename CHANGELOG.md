@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.5.4] -- 2019-04-18
+- [Fixed] Windows issue in new react-native link script for Android
+
 ## [2.5.3] -- 2019-04-15
 - [Added] Added android implementation for `react-native link` script to automatically add the required `maven url`.  No more extras steps required -- simply:  `react-native link react-native-background-fetch`.
 
