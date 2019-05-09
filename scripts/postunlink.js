@@ -42,6 +42,8 @@ const pathToAppdelegateExtension = path.relative(
 
 
 const project = xcode.project(projectConfig.pbxprojPath).parseSync();
+// Monkey-patch XCode to search PBXGroups with ignore-case.
+project.findPBXGroupKeyAndType = helpers.findPBXGroupKeyAndType;
 
 const file = new PbxFile(pathToFramework);
 file.target = project.getFirstTarget().uuid;

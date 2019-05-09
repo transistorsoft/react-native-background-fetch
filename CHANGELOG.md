@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.5.6] &mdash; 2019-05-09
+- [Fixed] Monkey patch xcode npm module to ignore case in `findPBXGroupKeyAndType`.  Some projects physical folder name might be "foo" but the XCode group-name might be "Foo".
+
 ## [2.5.5] &mdash; 2019-05-09
 - [Fixed] react-native link script failed for Expo apps.  Failed to find projectGroup by name.  Finds it by path or name now.
 

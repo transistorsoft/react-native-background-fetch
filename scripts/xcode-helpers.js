@@ -93,11 +93,11 @@ function findProject(folder) {
         .sort((projectA, projectB) => {
             return path.dirname(projectA) === IOS_BASE ? -1 : 1;
         });
-  
+
     if (projects.length === 0) {
         return null;
     }
-  
+
     return projects[0];
 };
 
@@ -159,6 +159,53 @@ function unquote(str) {
     return (str || '').replace(/^"(.*)"$/, '$1');
 }
 
+/**
+* Monkey-patch xcode module to ignore case when comparing group.name / group.path
+*/
+function findPBXGroupKeyAndType() {
+    COMMENT_KEY = /_comment$/;
+
+    return function(criteria, groupType) {
+        var groups = this.hash.project.objects[groupType];
+        var target;
+
+        if (criteria) {
+            if (criteria.name) {
+                criteria.name = criteria.name.toLowerCase();
+            }
+            if (criteria.path) {
+                criteria.path = criteria.path.toLowerCase();
+            }
+        }
+        for (var key in groups) {
+            // only look for comments
+            if (COMMENT_KEY.test(key)) continue;
+
+            var group = groups[key];
+            if (criteria && criteria.path && criteria.name) {
+                if ((group.path && (criteria.path === group.path.toLowerCase())) && (group.name && (criteria.name === group.name.toLowerCase())) ) {
+                    target = key;
+                    break
+                }
+            }
+            else if (criteria && criteria.path) {
+                if (group.path && (criteria.path === group.path.toLowerCase())) {
+                    target = key;
+                    break
+                }
+            }
+            else if (criteria && criteria.name) {
+                if (group.name && (criteria.name === group.name.toLowerCase())) {
+                    target = key;
+                    break
+                }
+            }
+        }
+        return target;
+    }
+}
+
+
 module.exports = {
     getBuildProperty: getBuildProperty,
     getPlistPath: getPlistPath,
@@ -168,4 +215,5 @@ module.exports = {
     addToFrameworkSearchPaths: addToFrameworkSearchPaths,
     removeFromFrameworkSearchPaths: removeFromFrameworkSearchPaths,
     findProject: findProject,
+    findPBXGroupKeyAndType: findPBXGroupKeyAndType()
 };
