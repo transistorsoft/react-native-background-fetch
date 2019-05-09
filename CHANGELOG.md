@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.5.5] -- 2019-05-09
+- [Fixed] react-native link script failed for Expo apps.  Failed to find projectGroup by name.  Finds it by path or name now.
+
 ## [2.5.4] -- 2019-04-18
 - [Fixed] Windows issue in new react-native link script for Android
 

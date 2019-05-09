@@ -96,15 +96,6 @@ if (!hasPodfile) {
     );
 }
 
-// extends the projects AppDelegate.m with our completion handler
-const groupName = xcodeProjectDirectory.replace('.xcodeproj', '');
-const projectGroup = project.findPBXGroupKey({ name: groupName });
-project.addSourceFile(
-    pathToAppdelegateExtension,
-    { target: project.getFirstTarget().uuid },
-    projectGroup
-);
-
 // enable BackgroundModes in xcode project without overriding any previously
 // defined values in the project file.
 // That's why we deep clone all previously defined target attributes and extend
@@ -128,6 +119,27 @@ const plist = helpers.readPlist(projectConfig.sourceDir, project);
 const UIBackgroundModes = plist.UIBackgroundModes || [];
 if (UIBackgroundModes.indexOf('fetch') === -1) {
     plist.UIBackgroundModes = UIBackgroundModes.concat('fetch');
+}
+
+// Add RNBackgroundFetch+AppDelegate.m extension.
+const groupName = xcodeProjectDirectory.replace('.xcodeproj', '');
+var projectGroup = project.findPBXGroupKey({ name: groupName }) || project.findPBXGroupKey({path: groupName});
+
+if (projectGroup) {
+  project.addSourceFile(
+    pathToAppdelegateExtension,
+    { target: project.getFirstTarget().uuid },
+    projectGroup
+  );
+} else {
+  var red = "\x1b[31m";
+  var yellow = "\x1b[33m"
+  var colorReset = '\x1b[0m';
+  console.log(yellow, project.hash.project.objects.PBXGroup);
+  console.error(red, '[react-native-background-fetch] LINK ERROR: Failed to find projectGroup PBXGroup: ', groupName);
+  console.error(red, '[react-native-background-fetch] Failed to add RNBackgroundFetch+AppDelegate.m.  See Manual Setup instructions to add this file to your project.');
+  console.error(red, '[react-native-bacgkround-fetch] Please post an issue at Github, including all the output above');
+  console.error(colorReset);
 }
 
 helpers.writePlist(projectConfig.sourceDir, project, plist);
