@@ -1,24 +1,24 @@
 # CHANGELOG
 
-## [2.5.5] -- 2019-05-09
+## [2.5.5] &mdash; 2019-05-09
 - [Fixed] react-native link script failed for Expo apps.  Failed to find projectGroup by name.  Finds it by path or name now.
 
-## [2.5.4] -- 2019-04-18
+## [2.5.4] &mdash; 2019-04-18
 - [Fixed] Windows issue in new react-native link script for Android
 
-## [2.5.3] -- 2019-04-15
-- [Added] Added android implementation for `react-native link` script to automatically add the required `maven url`.  No more extras steps required -- simply:  `react-native link react-native-background-fetch`.
+## [2.5.3] &mdash; 2019-04-15
+- [Added] Added android implementation for `react-native link` script to automatically add the required `maven url`.  No more extras steps required &mdash; simply:  `react-native link react-native-background-fetch`.
 
-## [2.5.2] -- 2019-04-10
+## [2.5.2] &mdash; 2019-04-10
 - [Fixed] Fixed `react-native link` scripts to detect when installing into an app already configured for Cocoapods.
 
-## [2.5.1] -- 2019-02-27
+## [2.5.1] &mdash; 2019-02-27
 - [Changed] Remove unnecessary gradle directive `buildToolsVersion`.
 
-## [2.5.0] -- 2019-02-07
+## [2.5.0] &mdash; 2019-02-07
 - [Changed] Use updated gradle method `implementation` instead of deprecated `compile`.
 
-## [2.4.6] -- 2019-01-11
+## [2.4.6] &mdash; 2019-01-11
 - [Added] Android:  Double check that app isn't in foreground before executing headless task (thanks to @macgregorT).
 
 ## [2.4.5] &mdash; 2018-11-28
