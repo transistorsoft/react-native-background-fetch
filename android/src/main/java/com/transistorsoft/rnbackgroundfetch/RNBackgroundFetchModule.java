@@ -46,6 +46,22 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         if (options.hasKey("enableHeadless") && options.getBoolean("enableHeadless")) {
             config.setJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS);
         }
+        if (options.hasKey("requiredNetworkType")) {
+            config.setRequiredNetworkType(options.getInt("requiredNetworkType"));
+        }
+        if (options.hasKey("requiresBatteryNotLow")) {
+            config.setRequiresBatteryNotLow(options.getBoolean("requiresBatteryNotLow"));
+        }
+        if (options.hasKey("requiresCharging")) {
+            config.setRequiresCharging(options.getBoolean("requiresCharging"));
+        }
+        if (options.hasKey("requiresDeviceIdle")) {
+            config.setRequiresDeviceIdle(options.getBoolean("requiresDeviceIdle"));
+        }
+        if (options.hasKey("requiresStorageNotLow")) {
+            config.setRequiresStorageNotLow(options.getBoolean("requiresStorageNotLow"));
+        }
+
         BackgroundFetch.Callback callback = new BackgroundFetch.Callback() {
             @Override
             public void onFetch() {

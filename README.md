@@ -45,9 +45,15 @@ export default class App extends Component {
   componentDidMount() {
     // Configure it.
     BackgroundFetch.configure({
-      minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
-      stopOnTerminate: false,   // <-- Android-only,
-      startOnBoot: true         // <-- Android-only
+      minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
+      // Android options
+      stopOnTerminate: false,
+      startOnBoot: true,
+      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
+      requiresCharging: false,      // Default
+      requiresDeviceIdle: false,    // Default
+      requiresBatteryNotLow: false, // Default
+      requiresStorageNotLow: false  // Default
     }, () => {
       console.log("[js] Received background-fetch event");
       // Required: Signal completion of your task to native code
@@ -103,6 +109,46 @@ Set `true` to automatically relaunch the application (if it was terminated) &mda
 #### `@config {Boolean} enableHeadless [false]`
 
 Set `true` to enable React Native's [Headless JS](https://facebook.github.io/react-native/docs/headless-js-android.html) mechanism, for handling fetch events after app termination.
+
+#### `@config {integer} requiredNetworkType [BackgroundFetch.NETWORK_TYPE_NONE]`
+
+Set basic description of the kind of network your job requires.
+
+If your job doesn't need a network connection, you don't need use this options as the default value is `BackgroundFetch.NETWORK_TYPE_NONE`.
+
+| NetworkType                           | Description                                                         |
+|---------------------------------------|---------------------------------------------------------------------|
+| `BackgroundFetch.NETWORK_TYPE_NONE`     | This job doesn't care about network constraints, either any or none.|
+| `BackgroundFetch.NETWORK_TYPE_ANY`      | This job requires network connectivity.                             |
+| `BackgroundFetch.NETWORK_TYPE_CELLULAR` | This job requires network connectivity that is a cellular network.  |
+| `BackgroundFetch.NETWORK_TYPE_UNMETERED` | This job requires network connectivity that is unmetered.          |
+| `BackgroundFetch.NETWORK_TYPE_NOT_ROAMING` | This job requires network connectivity that is not roaming.      |
+
+#### `@config {Boolean} requiresBatteryNotLow [false]`
+
+Specify that to run this job, the device's battery level must not be low.
+
+This defaults to false. If true, the job will only run when the battery level is not low, which is generally the point where the user is given a "low battery" warning.
+
+#### `@config {Boolean} requiresStorageNotLow [false]`
+
+Specify that to run this job, the device's available storage must not be low.
+
+This defaults to false. If true, the job will only run when the device is not in a low storage state, which is generally the point where the user is given a "low storage" warning.
+
+#### `@config {Boolean} requiresCharging [false]`
+
+Specify that to run this job, the device must be charging (or be a non-battery-powered device connected to permanent power, such as Android TV devices). This defaults to false.
+
+#### `@config {Boolean} requiresDeviceIdle [false]`
+
+When set true, ensure that this job will not run if the device is in active use.
+
+The default state is false: that is, the for the job to be runnable even when someone is interacting with the device.
+
+This state is a loose definition provided by the system. In general, it means that the device is not currently being used interactively, and has not been in use for some time. As such, it is a good time to perform resource heavy jobs. Bear in mind that battery usage will still be attributed to your application, and surfaced to the user in battery stats.
+
+-----------------------------------------------------------------------------------------------------
 
 * :open_file_folder: **`index.js`**
 ```javascript
