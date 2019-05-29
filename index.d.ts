@@ -20,6 +20,38 @@ declare module "react-native-background-fetch" {
 		* [Android only] Set true to enable Headless mechanism for handling fetch events after app termination.
 		*/
 		enableHeadless?:boolean;
+		/**
+		* [Android only] Set detailed description of the kind of network your job requires.
+		*
+		* If your job doesn't need a network connection, you don't need to use this option, as the default is [[BackgroundFetch.NEWORK_TYPE_NONE]].
+		*
+		* Calling this method defines network as a strict requirement for your job. If the network requested is not available your job will never run.
+		*/
+		requiredNetworkType?:NetworkType;
+		/**
+		* [Android only] Specify that to run this job, the device's battery level must not be low.
+		*
+		* This defaults to false. If true, the job will only run when the battery level is not low, which is generally the point where the user is given a "low battery" warning.
+		*/
+		requiresBatteryNotLow?:boolean;
+		/**
+		* [Android only] Specify that to run this job, the device's available storage must not be low.
+		*
+		* This defaults to false. If true, the job will only run when the device is not in a low storage state, which is generally the point where the user is given a "low storage" warning.
+		*/
+		requiresStorageNotLow?:boolean;
+		/**
+		* [Android only] Specify that to run this job, the device must be charging (or be a non-battery-powered device connected to permanent power, such as Android TV devices). This defaults to false.
+		*/
+		requiresCharging?:boolean;
+		/**
+		* [Android only] When set true, ensure that this job will not run if the device is in active use.
+		*
+		* The default state is false: that is, the for the job to be runnable even when someone is interacting with the device.
+		*
+		* This state is a loose definition provided by the system. In general, it means that the device is not currently being used interactively, and has not been in use for some time. As such, it is a good time to perform resource heavy jobs. Bear in mind that battery usage will still be attributed to your application, and surfaced to the user in battery stats.
+		*/
+		requiresDeviceIdle?:boolean;
 	}
 
 	/**
@@ -41,6 +73,16 @@ declare module "react-native-background-fetch" {
 	type BackgroundFetchStatus = 0 | 1 | 2;
 
 	/**
+	* | NetworkType                           | Description                                                   |
+	* |---------------------------------------|---------------------------------------------------------------|
+	* | BackgroundFetch.NETWORK_TYPE_NONE     | This job doesn't care about network constraints, either any or none.                         |
+	* | BackgroundFetch.NETWORK_TYPE_ANY  	  | This job requires network connectivity.                          |
+	* | BackgroundFetch.NETWORK_TYPE_CELLULAR | This job requires network connectivity that is a cellular network. |
+	* | BackgroundFetch.NETWORK_TYPE_UNMETERED | This job requires network connectivity that is unmetered. |
+	* | BackgroundFetch.NETWORK_TYPE_NOT_ROAMING | This job requires network connectivity that is not roaming. |
+	*/
+	type NetworkType = 0 | 1 | 2 | 3 | 4;
+	/**
 	* BackgroundFetch is a module to receive periodic callbacks (min every 15 min) while your app is running in the background or terminated.
 	*/
 	export default class BackgroundFetch {
@@ -56,7 +98,6 @@ declare module "react-native-background-fetch" {
 		* Background fetch is available and enabled.
 		*/
 		static STATUS_AVAILABLE: BackgroundFetchStatus;
-
 		/**
 		* New data was successfully downloaded.
 		*/
@@ -69,6 +110,26 @@ declare module "react-native-background-fetch" {
 		* An attempt to download data was made but that attempt failed.
 		*/
 		static FETCH_RESULT_FAILED: BackgroundFetchResult;
+		/**
+		* This job doesn't care about network constraints, either any or none.
+		*/
+		static NETWORK_TYPE_NONE: NetworkType;
+		/**
+		* This job requires network connectivity.
+		*/
+		static NETWORK_TYPE_ANY: NetworkType;
+		/**
+		* This job requires network connectivity that is a cellular network.
+		*/
+		static NETWORK_TYPE_CELLULAR: NetworkType;
+		/**
+		* This job requires network connectivity that is unmetered.
+		*/
+		static NETWORK_TYPE_UNMETERED: NetworkType;
+		/**
+		* This job requires network connectivity that is not roaming.
+		*/
+		static NETWORK_TYPE_NOT_ROAMING: NetworkType;
 
 		/**
 		* Initial configuration of BackgroundFetch, including config-options and Fetch-callback.  The [[start]] method will automatically be executed.

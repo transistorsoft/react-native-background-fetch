@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.6.0] &mdash; 2019-05-29
+- [Added] Added extra Android `JobInfo` constraints `requiredNetworkType`, `requiresCharing`, `requiresBatteryNotLow`, `requiresStorageNotLow`, `requiresDeviceIdle`.
+
 ## [2.5.6] &mdash; 2019-05-09
 - [Fixed] Monkey patch xcode npm module to ignore case in `findPBXGroupKeyAndType`.  Some projects physical folder name might be "foo" but the XCode group-name might be "Foo".
 
