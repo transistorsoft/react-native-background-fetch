@@ -108,7 +108,7 @@ Set `true` to enable React Native's [Headless JS](https://facebook.github.io/rea
 ```javascript
 import BackgroundFetch from "react-native-background-fetch";
 
-let MyHeadlessTask = async (event) => {
+let MyHeadlessTask = async () => {
   console.log('[BackgroundFetch HeadlessTask] start');
 
   // Perform an example HTTP request.
