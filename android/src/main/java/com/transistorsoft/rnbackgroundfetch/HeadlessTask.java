@@ -30,7 +30,7 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
         try {
             ReactApplication reactApplication = ((ReactApplication) context.getApplicationContext());
             mReactNativeHost = reactApplication.getReactNativeHost();
-        } catch (AssertionError e) {
+        } catch (AssertionError | ClassCastException e) {
             Log.e(BackgroundFetch.TAG, "Failed to fetch ReactApplication.  Task ignored.");
             return;  // <-- Do nothing.  Just return
         }
@@ -97,7 +97,12 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
             UiThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    int taskId = headlessJsTaskContext.startTask(taskConfig);
+                    try {
+                        int taskId = headlessJsTaskContext.startTask(taskConfig);
+                    } catch (IllegalStateException exception) {
+                        Log.e(BackgroundFetch.TAG, "Headless task attempted to run in the foreground.  Task ignored.");
+                        return;  // <-- Do nothing.  Just return
+                    }
                 }
             });
         } catch (IllegalStateException exception) {
