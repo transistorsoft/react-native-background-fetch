@@ -1,7 +1,9 @@
 # CHANGELOG
 
-## [2.6.0] &mdash; 2019-05-29
+## [2.6.0] &mdash; 2019-05-30
 - [Added] Added extra Android `JobInfo` constraints `requiredNetworkType`, `requiresCharing`, `requiresBatteryNotLow`, `requiresStorageNotLow`, `requiresDeviceIdle`.
+- [Fixed] Merge PR [transistor-background-fetch](https://github.com/transistorsoft/transistor-background-fetch/pull/4)
+- [Fixed] Merge PR [transistor-background-fetch](https://github.com/transistorsoft/transistor-background-fetch/pull/2)
 
 ## [2.5.6] &mdash; 2019-05-09
 - [Fixed] Monkey patch xcode npm module to ignore case in `findPBXGroupKeyAndType`.  Some projects physical folder name might be "foo" but the XCode group-name might be "Foo".
