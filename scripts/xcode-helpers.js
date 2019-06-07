@@ -80,7 +80,7 @@ function findProject(folder) {
     const GLOB_PATTERN = '**/*.xcodeproj';
     const TEST_PROJECTS = /test|example|sample/i;
     const IOS_BASE = 'ios';
-    const GLOB_EXCLUDE_PATTERN = ['**/@(Pods|node_modules)/**'];
+    const GLOB_EXCLUDE_PATTERN = ['**/@(Carthage|Pods|node_modules)/**'];
 
     const projects = glob
         .sync(GLOB_PATTERN, {
