@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.6.1] &mdash; 2019-07-04
+- [Added] New `react-native.config.js` wanted by `react-native > 0.60.0`.  https://github.com/react-native-community/cli/blob/master/docs/dependencies.md
+
 ## [2.6.0] &mdash; 2019-05-30
 - [Added] Added extra Android `JobInfo` constraints `requiredNetworkType`, `requiresCharing`, `requiresBatteryNotLow`, `requiresStorageNotLow`, `requiresDeviceIdle`.
 - [Fixed] Merge PR [transistor-background-fetch](https://github.com/transistorsoft/transistor-background-fetch/pull/4)
