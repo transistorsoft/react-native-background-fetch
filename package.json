@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-fetch",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "iOS & Android BackgroundFetch API implementation for React Native",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
