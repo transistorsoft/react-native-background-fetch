@@ -110,6 +110,30 @@ Set `true` to automatically relaunch the application (if it was terminated) &mda
 
 Set `true` to enable React Native's [Headless JS](https://facebook.github.io/react-native/docs/headless-js-android.html) mechanism, for handling fetch events after app termination.
 
+* :open_file_folder: **`index.js`**
+```javascript
+import BackgroundFetch from "react-native-background-fetch";
+
+let MyHeadlessTask = async () => {
+  console.log('[BackgroundFetch HeadlessTask] start');
+
+  // Perform an example HTTP request.
+  // Important:  await asychronous tasks when using HeadlessJS.
+  let response = await fetch('https://facebook.github.io/react-native/movies.json');
+  let responseJson = await response.json();
+  console.log('[BackgroundFetch HeadlessTask response: ', responseJson);
+
+  // Required:  Signal to native code that your task is complete.
+  // If you don't do this, your app could be terminated and/or assigned
+  // battery-blame for consuming too much time in background.
+  BackgroundFetch.finish();
+}
+
+// Register your BackgroundFetch HeadlessTask
+BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
+```
+
+
 #### `@config {integer} requiredNetworkType [BackgroundFetch.NETWORK_TYPE_NONE]`
 
 Set basic description of the kind of network your job requires.
@@ -149,30 +173,6 @@ The default state is false: that is, the for the job to be runnable even when so
 This state is a loose definition provided by the system. In general, it means that the device is not currently being used interactively, and has not been in use for some time. As such, it is a good time to perform resource heavy jobs. Bear in mind that battery usage will still be attributed to your application, and surfaced to the user in battery stats.
 
 -----------------------------------------------------------------------------------------------------
-
-* :open_file_folder: **`index.js`**
-```javascript
-import BackgroundFetch from "react-native-background-fetch";
-
-let MyHeadlessTask = async () => {
-  console.log('[BackgroundFetch HeadlessTask] start');
-
-  // Perform an example HTTP request.
-  // Important:  await asychronous tasks when using HeadlessJS.
-  let response = await fetch('https://facebook.github.io/react-native/movies.json');
-  let responseJson = await response.json();
-  console.log('[BackgroundFetch HeadlessTask response: ', responseJson);
-
-  // Required:  Signal to native code that your task is complete.
-  // If you don't do this, your app could be terminated and/or assigned
-  // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish();
-}
-
-// Register your BackgroundFetch HeadlessTask
-BackgroundFetch.registerHeadlessTask(MyHeadlessTask);
-```
-
 
 ## Methods
 
