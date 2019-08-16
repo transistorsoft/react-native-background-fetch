@@ -20,3 +20,9 @@ BackgroundFetch implements an `AppDelegate` method `didPerformFetchWithCompletio
 **`node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m`**
 ![](https://dl.dropbox.com/s/r4f564giaz257fw/autolinking-step2.png?dl=1)
 
+## `pod install`
+
+```bash
+$ cd ios
+$ pod install
+```
