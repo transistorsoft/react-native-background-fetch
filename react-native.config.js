@@ -5,11 +5,6 @@ module.exports = {
       ios: {},
       android: {}, // projects are grouped into "platforms"
     },
-    assets: [],
-    // hooks are considered anti-pattern, please avoid them
-    hooks: {
-      "postlink": "node node_modules/react-native-background-fetch/scripts/postlink.js",
-      "postunlink": "node node_modules/react-native-background-fetch/scripts/postunlink.js"
-    },
+    assets: []
   },
 };

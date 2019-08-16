@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [2.7.0] &mdash; 2019-08-16
+- [Added] Auto-linking support for `react-native >= 0.60`.  See the *Auto-linking* setup in the README for more information.
+
+:warning: If you have a previous version of **`react-native-background-fetch < 2.7.0`** installed into **`react-native >= 0.60`**, you should first `unlink` your previous version as `react-native link` is no longer required.
+
+```bash
+$ react-native unlink react-native-background-fetch
+```
+
 ## [2.6.1] &mdash; 2019-07-04
 - [Added] New `react-native.config.js` wanted by `react-native > 0.60.0`.  https://github.com/react-native-community/cli/blob/master/docs/dependencies.md
 

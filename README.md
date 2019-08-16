@@ -15,6 +15,16 @@ The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-nati
 
 ## Installing the plugin
 
+-------------------------------------------------------------
+
+:warning: If you have a previous version of **`react-native-background-fetch < 2.7.0`** installed into **`react-native >= 0.60`**, you should first `unlink` your previous version as `react-native link` is no longer required.
+
+```bash
+$ react-native unlink react-native-background-fetch
+```
+
+-------------------------------------------------------------
+
 ### With `yarn`
 
 ```bash
@@ -26,12 +36,23 @@ $ yarn add react-native-background-fetch
 $ npm install --save react-native-background-fetch
 ```
 
+
 ## iOS Setup
+
+### `react-native >= 0.60`
+- [Auto-linking Setup](docs/INSTALL-AUTO-IOS.md)
+
+### `react-native < 0.60`
 - [`react-native link` Setup](docs/INSTALL-LINK-IOS.md)
 - [Cocoapods Setup](docs/INSTALL-COCOAPODS-IOS.md)
 - [Manual Setup](docs/INSTALL-MANUAL-IOS.md)
 
 ## Android Setup
+
+### `react-native >= 0.60`
+- No other steps required.
+
+### `react-native < 0.60`
 - [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)
 - [Manual Setup](docs/INSTALL-MANUAL-ANDROID.md)
 
