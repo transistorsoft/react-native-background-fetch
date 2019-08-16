@@ -1,5 +1,5 @@
 # iOS Auto-linking Setup
-## `react-native >= 0.60`
+### `react-native >= 0.60`
 
 ### With `yarn`
 
