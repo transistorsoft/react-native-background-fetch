@@ -142,7 +142,7 @@ let MyHeadlessTask = async () => {
   // Important:  await asychronous tasks when using HeadlessJS.
   let response = await fetch('https://facebook.github.io/react-native/movies.json');
   let responseJson = await response.json();
-  console.log('[BackgroundFetch HeadlessTask response: ', responseJson);
+  console.log('[BackgroundFetch HeadlessTask] response: ', responseJson);
 
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
