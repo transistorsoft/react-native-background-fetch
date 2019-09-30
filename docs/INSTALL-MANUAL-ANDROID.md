@@ -36,7 +36,7 @@ allprojects {
             url "$rootDir/../node_modules/react-native/android"
         }
 +       maven {
-+           url "$rootDir/../node_modules/react-native-background-fetch/android/libs"
++           url "$rootDir/../node_modules/react-native-background-fetch/android"
 +       }
     }
 }
