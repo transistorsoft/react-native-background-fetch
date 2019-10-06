@@ -26,7 +26,7 @@ repositories{
 }
 
 dependencies {
-    compileOnly 'com.facebook.react:react-native:+'
+    implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
     //implementation(group: 'com.transistorsoft', name:'tsbackgroundfetch', version: '+')
     // tsbackgroundfetch.aar
     implementation fileTree(include: ['*.aar'], dir: 'libs')
