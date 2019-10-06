@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [2.7.1] &mdash; 2019-10-06
+- [Fixed] Resolve StrictMode violations; typically from accessing SharedPreferences on main-thread.
+
 ## [2.7.0] &mdash; 2019-08-16
 - [Added] Auto-linking support for `react-native >= 0.60`.  See the *Auto-linking* setup in the README for more information.
 
