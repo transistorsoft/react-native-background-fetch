@@ -19,4 +19,11 @@ $ npm install --save react-native-background-fetch
 $ react-native link react-native-background-fetch
 ```
 
+### `pod install`
+
+```bash
+$ cd ios
+$ pod install
+```
+
 
