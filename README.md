@@ -106,7 +106,7 @@ export default class App extends Component {
 
 ### Executing Custom Tasks
 
-In addition to the default background-fetch task defined by `BackgroundFetch.configure`, you may also execute your own arbitrary "oneshot" or periodic tasks (iOS requires additional [Setup Instructions](#iOS-Setup)).  However, all events will be fired into the Callback provivded to **`BackgroundFetch#configure`**:
+In addition to the default background-fetch task defined by `BackgroundFetch.configure`, you may also execute your own arbitrary "oneshot" or periodic tasks (iOS requires additional [Setup Instructions](#iOS-Setup)).  However, all events will be fired into the Callback provided to **`BackgroundFetch#configure`**:
 
 __:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged into power.  Hopefully Apple changes this in the future.
 
