@@ -17,6 +17,13 @@ $ npm install --save react-native-background-fetch
 $ react-native link react-native-background-fetch
 ```
 
+### `pod install`
+
+```bash
+$ cd ios
+$ pod install
+```
+
 ## Configure Background Capabilities
 
 - Select the root of your project.  Select **Capabilities** tab.  Enable **Background Modes** and enable the following mode:
@@ -67,7 +74,6 @@ The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/background
 }
 
 ```
-
 
 ## BackgroundFetch AppDelegate extension
 

@@ -279,7 +279,7 @@ This state is a loose definition provided by the system. In general, it means th
 
 ### iOS
 
-- Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`**
+- Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`** (_Note:_ You are FORCING a background fetch to be run. This will run the `successFn` even if the `#stop` method has been called. In practice, iOS won't fire fetch events after you've called `#stop`)
 - iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, your can be **sure** that everything is working fine.  You just need to wait.
 
 ### Android
