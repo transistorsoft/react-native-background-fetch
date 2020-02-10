@@ -68,6 +68,7 @@ export default class App extends Component {
     BackgroundFetch.configure({
       minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
       // Android options
+      forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
       stopOnTerminate: false,
       startOnBoot: true,
       requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
@@ -75,12 +76,12 @@ export default class App extends Component {
       requiresDeviceIdle: false,    // Default
       requiresBatteryNotLow: false, // Default
       requiresStorageNotLow: false  // Default
-    }, () => {
-      console.log("[js] Received background-fetch event");
+    }, async (taskId) => {
+      console.log("[js] Received background-fetch event: ", taskId);
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
       // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+      BackgroundFetch.finish(taskId);
     }, (error) => {
       console.log("[js] RNBackgroundFetch failed to start");
     });
@@ -103,6 +104,40 @@ export default class App extends Component {
 };
 ```
 
+### Executing Custom Tasks
+
+In addition to the default background-fetch task defined by `BackgroundFetch.configure`, you may also execute your own arbitrary "oneshot" or periodic tasks (iOS requires additional [Setup Instructions](#iOS-Setup)).  However, all events will be fired into the Callback provivded to **`BackgroundFetch#configure`**:
+
+__:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged into power.  Hopefully Apple changes this in the future.
+
+```dart
+// Step 1:  Configure BackgroundFetch as usual.
+BackgroundFetch.configure({
+  minimumFetchInterval: 15
+), async (taskId) => {
+  // This is the fetch-event callback.
+  console.log("[BackgroundFetch] taskId: ", taskId);
+
+  // Use a switch statement to route task-handling.
+  switch (taskId) {
+    case 'com.foo.customtask':
+      print("Received custom task");
+      break;
+    default:
+      print("Default fetch task");
+  }
+  // Finish, providing received taskId.
+  BackgroundFetch.finish(taskId);
+});
+
+// Step 2:  Schedule a custom "oneshot" task "com.foo.customtask" to execute 5000ms from now.
+BackgroundFetch.scheduleTask({
+  taskId: "com.foo.customtask",
+  forceAlarmManager: true,
+  delay: 5000  // <-- milliseconds
+});
+```
+
 ## Config
 
 ### Common Options
@@ -110,6 +145,14 @@ export default class App extends Component {
 #### `@param {Integer} minimumFetchInterval [15]`
 
 The minimum interval in **minutes** to execute background fetch events.  Defaults to **`15`** minutes.  **Note**:  Background-fetch events will **never** occur at a frequency higher than **every 15 minutes**.  Apple uses a secret algorithm to adjust the frequency of fetch events, presumably based upon usage patterns of the app.  Fetch events *can* occur less often than your configured `minimumFetchInterval`.
+
+#### `@param {Integer} delay (milliseconds)`
+
+:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  The minimum number of milliseconds in future that task should execute.
+
+#### `@param {Boolean} periodic [false]`
+
+:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  Defaults to `false`.  Set true to execute the task repeatedly.  When `false`, the task will execute **just once**.
 
 ### Android Options
 
@@ -123,9 +166,31 @@ Set `true` to initiate background-fetch events when the device is rebooted.  Def
 
 :exclamation: **NOTE:** `startOnBoot` requires `stopOnTerminate: false`.
 
-#### `@config {Boolean} forceReload [false]`
+#### `@config {Boolean} forceAlarmManager [false]`
 
-Set `true` to automatically relaunch the application (if it was terminated) &mdash; the application will launch to the foreground then immediately minimize.  Defaults to `false`.
+By default, the plugin will use Android's `JobScheduler` when possible.  The `JobScheduler` API prioritizes for battery-life, throttling task-execution based upon device usage and battery level.
+
+Configuring `forceAlarmManager: true` will bypass `JobScheduler` to use Android's older `AlarmManager` API, resulting in more accurate task-execution at the cost of **higher battery usage**.
+
+```javascript
+BackgroundFetch.configure({
+  minimumFetchInterval: 15,
+  forceAlarmManager: true
+}, async (taskId) => {
+  console.log("[BackgroundFetch] taskId: ", taskId);
+  BackgroundFetch.finish(taskId);
+});
+.
+.
+.
+// And with with #scheduleTask
+BackgroundFetch.scheduleTask({
+  taskId: 'com.foo.customtask',
+  delay: 5000,       // milliseconds
+  forceAlarmManager: true
+  periodic: false
+});
+```
 
 #### `@config {Boolean} enableHeadless [false]`
 
@@ -135,8 +200,10 @@ Set `true` to enable React Native's [Headless JS](https://facebook.github.io/rea
 ```javascript
 import BackgroundFetch from "react-native-background-fetch";
 
-let MyHeadlessTask = async () => {
-  console.log('[BackgroundFetch HeadlessTask] start');
+let MyHeadlessTask = async (event) => {
+  // Get task id from event {}:
+  let taskId = event.taskId;
+  console.log('[BackgroundFetch HeadlessTask] start: ', taskId);
 
   // Perform an example HTTP request.
   // Important:  await asychronous tasks when using HeadlessJS.
@@ -147,7 +214,7 @@ let MyHeadlessTask = async () => {
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish();
+  BackgroundFetch.finish(taskId);
 }
 
 // Register your BackgroundFetch HeadlessTask
@@ -200,6 +267,7 @@ This state is a loose definition provided by the system. In general, it means th
 | Method Name | Arguments | Notes
 |---|---|---|
 | `configure` | `{config}`, `callbackFn`, `failureFn` | Configures the plugin's fetch `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min).  The `failureFn` will be called if the device doesn't support background-fetch. |
+| `scheduleTask` | `{config}` | Executes a custom task.  The task will be executed in the same `Callback` function provided to `#configure`. |
 | `status` | `callbackFn` | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
 | `finish` | `fetchResult` | Valid values for `fetchResult (Integer)` include `BackgroundFetch.FETCH_RESULT_NEW_DATA` (0), `BackgroundFetch.FETCH_RESULT_NO_DATA` (1), and `BackgroundFetch.FETCH_RESULT_FAILED` (2).  You **MUST** call this method in your fetch `callbackFn` provided to `#configure` in order to signal to iOS that your fetch action is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
 | `start` | `successFn`, `failureFn` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |

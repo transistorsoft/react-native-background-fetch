@@ -1,9 +1,6 @@
 declare module "react-native-background-fetch" {
-	interface BackgroundFetchConfig {
-		/**
-		* The minimum interval in minutes to execute background fetch events.  Defaults to 15 minutes.  Minimum is 15 minutes.
-		*/
-		minimumFetchInterval?:number;
+
+	interface AbstractConfig {
 		/**
 		* [Android only] Set false to continue background-fetch events after user terminates the app.  Default to true.
 		*/
@@ -13,13 +10,13 @@ declare module "react-native-background-fetch" {
 		*/
 		startOnBoot?:boolean;
 		/**
-		* [Android only] Set true to automatically relaunch the application (if it was terminated) -- the application will launch to the foreground then immediately minimize.  Defaults to false.
-		*/
-		forceReload?:boolean;
-		/**
 		* [Android only] Set true to enable Headless mechanism for handling fetch events after app termination.
 		*/
 		enableHeadless?:boolean;
+		/**
+		* [Android only]
+		*/
+		forceAlarmManager?:boolean;
 		/**
 		* [Android only] Set detailed description of the kind of network your job requires.
 		*
@@ -52,6 +49,28 @@ declare module "react-native-background-fetch" {
 		* This state is a loose definition provided by the system. In general, it means that the device is not currently being used interactively, and has not been in use for some time. As such, it is a good time to perform resource heavy jobs. Bear in mind that battery usage will still be attributed to your application, and surfaced to the user in battery stats.
 		*/
 		requiresDeviceIdle?:boolean;
+	}
+
+	interface TaskConfig extends AbstractConfig {
+		/**
+		* The name of the task.  This will be used with [[BackgroundFetch.finish]] to signal task-completion.
+		*/
+		taskId:string;
+		/**
+		* The minimum interval in milliseconds to execute this task.
+		*/
+		delay:number;
+		/**
+		* Whether this task will continue executing or just a "one-shot".
+		*/
+		periodic?:boolean;
+	}
+
+	interface BackgroundFetchConfig extends AbstractConfig {
+		/**
+		* The minimum interval in minutes to execute background fetch events.  Defaults to 15 minutes.  Minimum is 15 minutes.
+		*/
+		minimumFetchInterval?:number;
 	}
 
 	/**
@@ -134,20 +153,22 @@ declare module "react-native-background-fetch" {
 		/**
 		* Initial configuration of BackgroundFetch, including config-options and Fetch-callback.  The [[start]] method will automatically be executed.
 		*/
-		static configure(config:BackgroundFetchConfig, callback:() => void, failure?:(status:BackgroundFetchStatus) => void):void;
+		static configure(config:BackgroundFetchConfig, callback:(taskId:string) => void, failure?:(status:BackgroundFetchStatus) => void):void;
 		/**
 		* Add an extra fetch event listener in addition to the one initially provided to [[configure]].
 		* @event
 		*/
+		static scheduleTask(config:TaskConfig):Promise<boolean>;
+
 		static onFetch(callback:() => void):void;
 		/**
 		* Start subscribing to fetch events.
 		*/
-		static start(success?:() => void, failure?:(status:BackgroundFetchStatus) => void):void;
+		static start():Promise<BackgroundFetchStatus>;
 		/**
 		* Stop subscribing to fetch events.
 		*/
-		static stop():void;
+		static stop(taskId?:string):Promise<boolean>;
 		/**
 		* You must execute [[finish]] within your fetch-callback to signal completion of your task.  You may optionally provide a [[BackgroundFetchResult]].  If no result is provided, default to FETCH_RESULT_NEW_DATA.
 		*
@@ -158,7 +179,7 @@ declare module "react-native-background-fetch" {
 		* | BackgroundFetch.FETCH_RESULT_FAILED   |
 		*
 		*/
-		static finish(result?:BackgroundFetchResult):void;
+		static finish(taskId?:string):void;
 		/**
 		* Query the BackgroundFetch API status
 		*
@@ -172,6 +193,6 @@ declare module "react-native-background-fetch" {
 		/**
 		* [Android only] Register a function to execute when the app is terminated.  Requires stopOnTerminate: false.
 		*/
-		static registerHeadlessTask(task:() => void):void;
+		static registerHeadlessTask(task:(taskId:String) => void):void;
 	}
 }

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <BackgroundTasks/BackgroundTasks.h>
 
 @interface TSBackgroundFetch : NSObject
 
@@ -16,17 +17,24 @@
 @property (readonly) BOOL active;
 
 + (TSBackgroundFetch *)sharedInstance;
--(void) performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))handler applicationState:(UIApplicationState)state;
--(void) configure:(NSDictionary*)config callback:(void(^)(UIBackgroundRefreshStatus status))callback;
--(void) configure:(NSDictionary*)config;
--(void) addListener:(NSString*)componentName callback:(void (^)(void))callback;
+
+-(void) registerAppRefreshTask;
+-(void) registerBGProcessingTask:(NSString*)identifier;
+
+-(void) configure:(NSTimeInterval)delay callback:(void(^)(UIBackgroundRefreshStatus status))callback;
+
+-(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic callback:(void (^)(NSString* taskId))callback;
+
+-(void) addListener:(NSString*)componentName callback:(void (^)(NSString* componentName))callback;
 -(void) removeListener:(NSString*)componentName;
 -(BOOL) hasListener:(NSString*)componentName;
--(void) start:(void(^)(UIBackgroundRefreshStatus status))callback;
--(void) start;
--(void) stop;
--(void) finish:(NSString*)tag result:(UIBackgroundFetchResult) result;
+
+-(NSError*) start:(NSString*)identifier;
+-(void) stop:(NSString*)identifier;
+-(void) finish:(NSString*)tag;
 -(void) status:(void(^)(UIBackgroundRefreshStatus status))callback;
 
+// @deprecated API
+-(void) performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))handler applicationState:(UIApplicationState)state;
 @end
 

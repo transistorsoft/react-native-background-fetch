@@ -18,6 +18,7 @@
 
 static NSString *const RN_BACKGROUND_FETCH_TAG = @"RNBackgroundFetch";
 static NSString *const EVENT_FETCH = @"fetch";
+static NSString *const PLUGIN_ID = @"react-native-background-fetch";
 
 @implementation RNBackgroundFetch {
     BOOL configured;
@@ -45,56 +46,57 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
 {
-
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
 
-    [fetchManager configure:config callback:^(UIBackgroundRefreshStatus status) {
-        if (status != UIBackgroundRefreshStatusAvailable) {
-            RCTLogInfo(@"- %@ failed to start, status: %lu", RN_BACKGROUND_FETCH_TAG, status);
-            failure(@[@(status)]);
-            return;
-        }
-        configured = YES;
+    [fetchManager addListener:PLUGIN_ID callback:[self createCallback]];
 
-        void (^handler)(void);
-        handler = ^void(void){
-            RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
-            [self sendEventWithName:EVENT_FETCH body:nil];
-        };
-        [fetchManager addListener:RN_BACKGROUND_FETCH_TAG callback:handler];
-        [fetchManager start];
+    NSTimeInterval delay = [[config objectForKey:@"minimumFetchInterval"] doubleValue] * 60;
+    [fetchManager configure:delay callback:^(UIBackgroundRefreshStatus status) {
+        self->configured = YES;
+        if (status != UIBackgroundRefreshStatusAvailable) {
+            NSLog(@"- %@ failed to start, status: %ld", RN_BACKGROUND_FETCH_TAG, (long)status);
+            failure(@[@(status)]);
+        }
     }];
 }
 
 RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager start:^(UIBackgroundRefreshStatus status) {
+
+    [fetchManager status:^(UIBackgroundRefreshStatus status) {
         if (status == UIBackgroundRefreshStatusAvailable) {
-            success(@[]);
+            [fetchManager addListener:PLUGIN_ID callback:[self createCallback]];
+            NSError *error = [fetchManager start:PLUGIN_ID];
+            if (!error) {
+                success(@[@(status)]);
+            } else {
+                failure(@[error.localizedDescription]);
+            }
         } else {
-            RCTLogInfo(@"- %@ failed to start, status: %lu", RN_BACKGROUND_FETCH_TAG, status);
-            failure(@[@(status)]);
+            NSLog(@"- %@ failed to start, status: %lu", PLUGIN_ID, (long)status);
+            NSString *msg = [NSString stringWithFormat:@"%ld", (long) status];
+            failure(@[msg]);
         }
     }];
 }
 
-RCT_EXPORT_METHOD(stop)
+RCT_EXPORT_METHOD(stop:(NSString*)taskId success:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager stop];
+    if (!taskId) {
+        [fetchManager removeListener:PLUGIN_ID];
+        [fetchManager stop:nil];
+    } else {
+        [fetchManager stop:taskId];
+    }
+    success(@[@(YES)]);
 }
 
-RCT_EXPORT_METHOD(finish:(NSInteger)fetchResult)
+RCT_EXPORT_METHOD(finish:(NSString*)taskId)
 {
-    UIBackgroundFetchResult result = UIBackgroundFetchResultNewData;
-    if (fetchResult == UIBackgroundFetchResultNewData
-     || fetchResult == UIBackgroundFetchResultNoData
-     || fetchResult == UIBackgroundFetchResultFailed) {
-        result = fetchResult;
-    }
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager finish:RN_BACKGROUND_FETCH_TAG result:result];
+    [fetchManager finish:taskId];
 }
 
 RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
@@ -104,6 +106,12 @@ RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
     }];
 }
 
+-(void (^)(NSString* taskId)) createCallback {
+    return ^void(NSString* taskId){
+        RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
+        [self sendEventWithName:EVENT_FETCH body:PLUGIN_ID];
+    };
+}
 
 -(NSString*) eventName:(NSString*)name
 {

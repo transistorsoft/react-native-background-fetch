@@ -9,6 +9,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.UiThreadUtil;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.jstasks.HeadlessJsTaskConfig;
 import com.facebook.react.jstasks.HeadlessJsTaskContext;
@@ -26,7 +27,7 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
     private ReactNativeHost mReactNativeHost;
     private HeadlessJsTaskContext mActiveTaskContext;
 
-    public HeadlessTask(Context context) {
+    public HeadlessTask(Context context, String taskId) {
         try {
             ReactApplication reactApplication = ((ReactApplication) context.getApplicationContext());
             mReactNativeHost = reactApplication.getReactNativeHost();
@@ -34,7 +35,9 @@ public class HeadlessTask implements HeadlessJsTaskEventListener {
             Log.e(BackgroundFetch.TAG, "Failed to fetch ReactApplication.  Task ignored.");
             return;  // <-- Do nothing.  Just return
         }
-        HeadlessJsTaskConfig config = new HeadlessJsTaskConfig(HEADLESS_TASK_NAME, new WritableNativeMap(), 30000);
+        WritableMap clientEvent = new WritableNativeMap();
+        clientEvent.putString("taskId", taskId);
+        HeadlessJsTaskConfig config = new HeadlessJsTaskConfig(HEADLESS_TASK_NAME, clientEvent, 30000);
         startTask(config);
     }
 
