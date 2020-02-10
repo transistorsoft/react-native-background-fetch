@@ -14,11 +14,13 @@ import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
 public class HeadlessBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+    	/*
         BackgroundFetch adapter = BackgroundFetch.getInstance(context.getApplicationContext());
         if (adapter.isMainActivityActive()) {
             return;
         }
         Log.d(BackgroundFetch.TAG, "HeadlessBroadcastReceiver onReceive");
         new HeadlessTask(context.getApplicationContext());
+        */
     }
 }

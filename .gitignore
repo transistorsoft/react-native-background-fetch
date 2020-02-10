@@ -42,4 +42,6 @@ android/build
 android/*.iml
 
 xcuserdata/
-android/.gradle/
+android/.gradle
+
+android/local.properties

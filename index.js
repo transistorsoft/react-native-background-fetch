@@ -53,6 +53,14 @@ export default class BackgroundFetch {
     return this.addListener(EVENT_FETCH, callback);
   }
 
+  static scheduleTask(config) {
+    return new Promise((resolve, reject) => {
+      let success = (success) => { resolve(success) }
+      let failure = (error) => { reject(error) }
+      RNBackgroundFetch.scheduleTask(config, success, failure);
+    });
+  }
+
   /**
   * Register HeadlessTask
   */
@@ -75,19 +83,32 @@ export default class BackgroundFetch {
     return EventEmitter.addListener(event, callback);
   }
 
-  static start(success, failure) {
-    success = success || function() {};
-    failure = failure || function() {};
-    RNBackgroundFetch.start(success, failure);
+  static start() {
+    return new Promise((resolve, reject) => {
+      let success = (status) => {
+        resolve(status);
+      }
+      let failure = (error) => {
+        reject(error);
+      }
+      RNBackgroundFetch.start(success, failure);
+    })
   }
 
-  static stop() {
-    RNBackgroundFetch.stop();
+  static stop(taskId) {
+    return new Promise((resolve, reject) => {
+      let success = (success) => {
+        resolve(success);
+      }
+      let failure = (error) => {
+        reject(error);
+      }
+      RNBackgroundFetch.stop(taskId, success, failure);
+    });
   }
 
-  static finish(result) {
-    const fetchResult = result ? result : FETCH_RESULT_NEW_DATA;
-    RNBackgroundFetch.finish(fetchResult);
+  static finish(taskId) {
+    RNBackgroundFetch.finish(taskId);
   }
 
   static status(callback) {

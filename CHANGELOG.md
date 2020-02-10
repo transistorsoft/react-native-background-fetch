@@ -1,5 +1,67 @@
 # CHANGELOG
 
+## [2.8.0] &mdash; 2020-02-10
+* [Added] [Android] New option `forceAlarmManager` for bypassing `JobScheduler` mechanism in favour of `AlarmManager` for more precise scheduling task execution.
+* [Changed] Migrate iOS deprecated "background-fetch" API to new [BGTaskScheduler](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc).  See new required steps in iOS Setup.
+* [Added] Added new `BackgroundFetch.scheduleTask` method for scheduling custom "onehot" and periodic tasks in addition to the default fetch-task.
+```dart
+BackgroundFetch.configure({
+  minimumFetchInterval: 15,
+  stopOnTerminate: false
+), (taskId) {  // <-- [NEW] taskId provided to Callback
+  console.log("[BackgroundFetch] taskId: ", taskId);
+  switch(taskId) {
+    case 'foo':
+      // Handle scheduleTask 'foo'
+      break;
+    default:
+      // Handle default fetch event.
+      break;
+  }
+  BackgroundFetch.finish(taskId);  // <-- [NEW] Provided taskId to #finish method.
+});
+
+// This event will end up in Callback provided to #configure above.
+BackgroundFetch.scheduleTask(TaskConfig(
+  taskId: 'foo',  //<-- required
+  delay: 60000,
+  periodic: false
+));
+```
+
+## Breaking Changes
+* With the introduction of ability to execute custom tasks via `#scheduleTask`, all tasks are executed in the Callback provided to `#configure`.  As a result, this Callback is now provided an argument `String taskId`.  This `taskId` must now be provided to the `#finish` method, so that the SDK knows *which* task is being `#finish`ed.
+
+```dart
+BackgroundFetch.configure(BackgroundFetchConfig(
+  minimumFetchInterval: 15,
+  stopOnTerminate: false
+), (String taskId) {  // <-- [NEW] taskId provided to Callback
+  console.log("[BackgroundFetch] taskId: ", taskId);
+  BackgroundFetch.finish(taskId);  // <-- [NEW] Provided taskId to #finish method.
+});
+```
+
+And with the Headless Task, as well:
+```dart
+/// This "Headless Task" is run when app is terminated.
+void backgroundFetchHeadlessTask(String taskId) async {  // <-- 1.  Headless task receives String taskId
+  console.log("[BackgroundFetch] Headless event received: ", taskId);
+
+  BackgroundFetch.finish(taskId);  // <-- 2.  #finish with taskId here as well.
+}
+
+void main() {
+  // Enable integration testing with the Flutter Driver extension.
+  // See https://flutter.io/testing/ for more info.
+  runApp(new MyApp());
+
+  // Register to receive BackgroundFetch events after app is terminated.
+  // Requires {stopOnTerminate: false, enableHeadless: true}
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+}
+```
+
 ## [2.7.1] &mdash; 2019-10-06
 - [Fixed] Resolve StrictMode violations; typically from accessing SharedPreferences on main-thread.
 

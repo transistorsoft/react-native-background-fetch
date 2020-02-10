@@ -19,7 +19,7 @@ public class HeadlessJobService extends JobService {
 
     @Override
     public boolean onStartJob(final JobParameters params) {
-
+        /*
         BackgroundFetch adapter = BackgroundFetch.getInstance(getApplicationContext());
 
         if (adapter.isMainActivityActive()) {
@@ -40,11 +40,12 @@ public class HeadlessJobService extends JobService {
 
         Log.d(BackgroundFetch.TAG, "HeadlessJobService onStartJob");
         mHeadlessTask = new HeadlessTask(getApplicationContext());
-
+        */
         return true;
     }
     @Override
     public boolean onStopJob(JobParameters params) {
+        /*
         Log.d(BackgroundFetch.TAG, "JobService onStopJob");
         if (mHeadlessTask != null) {
             mHeadlessTask.finish();
@@ -55,6 +56,7 @@ public class HeadlessJobService extends JobService {
             Log.e(BackgroundFetch.TAG, "Job was shutdown already?");
             return true;
         }
+        */
         return true;
     }
 }
