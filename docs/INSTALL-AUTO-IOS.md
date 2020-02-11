@@ -52,6 +52,13 @@ BackgroundFetch.scheduleTask({
 The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc) API introduced in iOS 13 requires special setup:
 
 ```obj-c
+  .
+  .
+  .
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
+@implementation AppDelegate
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   .
   .
