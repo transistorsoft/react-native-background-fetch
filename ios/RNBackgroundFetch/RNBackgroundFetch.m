@@ -93,6 +93,23 @@ RCT_EXPORT_METHOD(stop:(NSString*)taskId success:(RCTResponseSenderBlock)success
     success(@[@(YES)]);
 }
 
+RCT_EXPORT_METHOD(scheduleTask:(NSDictionary*)config success:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure) {
+    NSString *taskId = [config objectForKey:@"taskId"];
+    long delayMS = [[config objectForKey:@"delay"] longValue];
+    NSTimeInterval delay = delayMS / 1000;
+    BOOL periodic = [[config objectForKey:@"periodic"] boolValue];
+
+    NSError *error = [[TSBackgroundFetch sharedInstance] scheduleProcessingTaskWithIdentifier:taskId
+                                                                                        delay:delay
+                                                                                     periodic:periodic
+                                                                                     callback:[self createCallback]];
+    if (!error) {
+        success(@[@(YES)]);
+    } else {
+        failure(@[error.localizedDescription]);
+    }
+}
+
 RCT_EXPORT_METHOD(finish:(NSString*)taskId)
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
@@ -109,7 +126,7 @@ RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
 -(void (^)(NSString* taskId)) createCallback {
     return ^void(NSString* taskId){
         RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
-        [self sendEventWithName:EVENT_FETCH body:PLUGIN_ID];
+        [self sendEventWithName:EVENT_FETCH body:taskId];
     };
 }
 

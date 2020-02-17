@@ -279,7 +279,26 @@ This state is a loose definition provided by the system. In general, it means th
 
 ### iOS
 
-- Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`** (_Note:_ You are FORCING a background fetch to be run. This will run the `successFn` even if the `#stop` method has been called. In practice, iOS won't fire fetch events after you've called `#stop`)
+#### New `BGTaskScheduler` API for iOS 13+
+- The old command *Debug->Simulate Background Fetch* no longer works with new `BGTaskSCheduler` API.
+- At the time of writing, the new task simulator does not yet work in Simulator; Only real devices.
+- See Apple docs [Starting and Terminating Tasks During Development](https://developer.apple.com/documentation/backgroundtasks/starting_and_terminating_tasks_during_development?language=objc)
+- After running your app in XCode, Click the `[||]` button to initiate a *Breakpoint*.
+
+![](https://dl.dropboxusercontent.com/s/zr7w3g8ivf71u32/ios-simulate-bgtask-pause.png?dl=1)
+
+- In the console `(lldb)`, paste the following command (**Note:**  use cursor up/down keys to cycle through previously run commands):
+```obj-c
+e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.transistorsoft.fetch"]
+```
+![](https://dl.dropboxusercontent.com/s/87c9uctr1ka3s1e/ios-simulate-bgtask-paste.png?dl=1)
+
+- Click the `[ > ]` button to continue.  The task will execute and the Callback function provided to **`BackgroundFetch.configure`** will receive the event.
+
+![](https://dl.dropboxusercontent.com/s/bsv0avap5c2h7ed/ios-simulate-bgtask-play.png?dl=1)
+
+#### Old `BackgroundFetch` API
+- Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`**
 - iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, your can be **sure** that everything is working fine.  You just need to wait.
 
 ### Android

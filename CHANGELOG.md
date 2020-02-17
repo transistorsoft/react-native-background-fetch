@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [3.0.0] &mdash; 2020-02-17
+* [Fixed] Android - Incorrect event signature for method stop (not receiving success, failure callbacks)
+* [Fixed] iOS - Missing native implementation for method scheduleTask.
+* [Changed] Bumped 2.8.0 to 3.0.0 to better flag this version for breaking changes.
+
 ## [2.8.0] &mdash; 2020-02-10
 * [Added] [Android] New option `forceAlarmManager` for bypassing `JobScheduler` mechanism in favour of `AlarmManager` for more precise scheduling task execution.
 * [Changed] Migrate iOS deprecated "background-fetch" API to new [BGTaskScheduler](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc).  See new required steps in iOS Setup.
