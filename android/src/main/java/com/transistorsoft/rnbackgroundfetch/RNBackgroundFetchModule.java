@@ -63,10 +63,11 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
-    public void stop(@Nullable String taskId) {
+    public void stop(@Nullable String taskId, Callback success, Callback failure) {
         if (taskId == null) taskId = FETCH_TASK_ID;
         BackgroundFetch adapter = getAdapter();
         adapter.stop(taskId);
+        success.invoke(true);
     }
 
     @ReactMethod
