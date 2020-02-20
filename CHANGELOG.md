@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [3.0.2] &mdash; 2020-02-20
+* [Android] Fix Android NPE on `hasTaskId` when launched first time after upgrading to v3
+
 ## [3.0.1] &mdash; 2020-02-20
 
 * [iOS] It's no longer necessary to __`registerAppRefreshTask`__ and __`registerBGProcessingTask`__  in `AppDelegate.m` The SDK now reads the App `.plist` and automatically registers those tasks found in  *"Permitted background task scheduler identifiers"*, offering one simple setup method `didFinishLaunching`:  Make the following change to your `AppDelegate.m`:
