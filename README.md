@@ -11,7 +11,16 @@ Background Fetch is a *very* simple plugin which will awaken an app in the backg
 
 There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
 
-The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
+:new: Background Fetch now provides a [__`scheduleTask`__](#executing-custom-tasks) method for scheduling arbitrary "one-shot" or periodic tasks.
+
+### iOS
+- There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
+- [__`scheduleTask`__](#executing-custom-tasks) seems only to fire when the device is plugged into power.
+
+### Android
+- The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
+
+
 
 ## Installing the plugin
 
@@ -110,7 +119,7 @@ In addition to the default background-fetch task defined by `BackgroundFetch.con
 
 __:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged into power.  Hopefully Apple changes this in the future.
 
-```dart
+```javascript
 // Step 1:  Configure BackgroundFetch as usual.
 BackgroundFetch.configure({
   minimumFetchInterval: 15
@@ -264,14 +273,14 @@ This state is a loose definition provided by the system. In general, it means th
 
 ## Methods
 
-| Method Name | Arguments | Notes
-|---|---|---|
-| `configure` | `{config}`, `callbackFn`, `failureFn` | Configures the plugin's fetch `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min).  The `failureFn` will be called if the device doesn't support background-fetch. |
-| `scheduleTask` | `{config}` | Executes a custom task.  The task will be executed in the same `Callback` function provided to `#configure`. |
-| `status` | `callbackFn` | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
-| `finish` | `fetchResult` | Valid values for `fetchResult (Integer)` include `BackgroundFetch.FETCH_RESULT_NEW_DATA` (0), `BackgroundFetch.FETCH_RESULT_NO_DATA` (1), and `BackgroundFetch.FETCH_RESULT_FAILED` (2).  You **MUST** call this method in your fetch `callbackFn` provided to `#configure` in order to signal to iOS that your fetch action is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
-| `start` | `successFn`, `failureFn` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
-| `stop` | `successFn`, `failureFn` | Stop the background-fetch API from firing fetch events.  Your `callbackFn` provided to `#configure` will no longer be executed. |
+| Method Name | Arguments | Returns | Notes
+|---|---|---|---|
+| `configure` | `{FetchConfig}`, `callbackFn`, `failureFn` | `Void` | Configures the plugin's `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min) in addition to events from `#scheduleTask`.  The `failureFn` will be called if the device doesn't support background-fetch. |
+| `scheduleTask` | `{TaskConfig}` | `Promise<boolean>` | Executes a custom task.  The task will be executed in the same `Callback` function provided to `#configure`. |
+| `status` | `callbackFn` | `Void` (TODO: Should return `Promise`) | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
+| `finish` | `String taskId` | `Void` | You **MUST** call this method in your `callbackFn` provided to `#configure` in order to signal to the OS that your task is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
+| `start` | `none` | `Promise<BackgroundFetchStatus>` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
+| `stop` | `[taskId:String]` | `Promise<boolean>` | Stop the background-fetch API and all `#scheduleTask` from firing events.  Your `callbackFn` provided to `#configure` will no longer be executed. If you provide an optional `taskId`, only that `#scheduleTask` will be stopped.|
 
 
 
@@ -279,21 +288,21 @@ This state is a loose definition provided by the system. In general, it means th
 
 ### iOS
 
-#### New `BGTaskScheduler` API for iOS 13+
-- The old command *Debug->Simulate Background Fetch* no longer works with new `BGTaskSCheduler` API.
-- At the time of writing, the new task simulator does not yet work in Simulator; Only real devices.
+#### :new: `BGTaskScheduler` API for iOS 13+
+
+- :warning: At the time of writing, the new task simulator does not yet work in Simulator; Only real devices.
 - See Apple docs [Starting and Terminating Tasks During Development](https://developer.apple.com/documentation/backgroundtasks/starting_and_terminating_tasks_during_development?language=objc)
 - After running your app in XCode, Click the `[||]` button to initiate a *Breakpoint*.
-
-![](https://dl.dropboxusercontent.com/s/zr7w3g8ivf71u32/ios-simulate-bgtask-pause.png?dl=1)
-
 - In the console `(lldb)`, paste the following command (**Note:**  use cursor up/down keys to cycle through previously run commands):
 ```obj-c
 e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.transistorsoft.fetch"]
 ```
-![](https://dl.dropboxusercontent.com/s/87c9uctr1ka3s1e/ios-simulate-bgtask-paste.png?dl=1)
-
 - Click the `[ > ]` button to continue.  The task will execute and the Callback function provided to **`BackgroundFetch.configure`** will receive the event.
+
+
+![](https://dl.dropboxusercontent.com/s/zr7w3g8ivf71u32/ios-simulate-bgtask-pause.png?dl=1)
+
+![](https://dl.dropboxusercontent.com/s/87c9uctr1ka3s1e/ios-simulate-bgtask-paste.png?dl=1)
 
 ![](https://dl.dropboxusercontent.com/s/bsv0avap5c2h7ed/ios-simulate-bgtask-play.png?dl=1)
 
