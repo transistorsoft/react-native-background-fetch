@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## [3.0.1] &mdash; 2020-02-20
+
+* [iOS] It's no longer necessary to __`registerAppRefreshTask`__ and __`registerBGProcessingTask`__  in `AppDelegate.m` The SDK now reads the App `.plist` and automatically registers those tasks found in  *"Permitted background task scheduler identifiers"*, offering one simple setup method `didFinishLaunching`:  Make the following change to your `AppDelegate.m`:
+
+```diff
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
+@implementation AppDelegate
+
+(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+   .
+   .
+   .
+   // [react-native-background-fetch Setup] -- One easy step now:
++  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
+
+-  TSBackgroundFetch *fetch = [TSBackgroundFetch sharedInstance];
+-  // [REQUIRED] Register for usual periodic background refresh events here:
+-  [fetch registerAppRefreshTask];
+
+-  // [OPTIONAL] IF you've registered custom "Background Processing Task(s)" in your Info.plist above,
+-  // for use with #scheduleTask method, register each of those taskId(s) here as well.
+-  [fetch registerBGProcessingTask:@"com.foo.customtask"];
+
+   return YES;
+}
+```
+
+
 ## [3.0.0] &mdash; 2020-02-17
 * [Fixed] Android - Incorrect event signature for method stop (not receiving success, failure callbacks)
 * [Fixed] iOS - Missing native implementation for method scheduleTask.

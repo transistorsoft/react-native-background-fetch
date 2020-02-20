@@ -30,7 +30,7 @@ $ pod install
 
 
 ## Configure `Info.plist` (:new: __iOS 13+__)
-1.  Open your `Info.plist` and the key *"Permitted background task scheduler identifiers"*
+1.  Open your `Info.plist` and add the key *"Permitted background task scheduler identifiers"*
 
 ![](https://dl.dropboxusercontent.com/s/t5xfgah2gghqtws/ios-setup-permitted-identifiers.png?dl=1)
 
@@ -38,11 +38,13 @@ $ pod install
 
 ![](https://dl.dropboxusercontent.com/s/kwdio2rr256d852/ios-setup-permitted-identifiers-add.png?dl=1)
 
-3.  If you intend to execute your own custom tasks via **`BackgroundFetch.scheduleTask`**, you must add those custom identifiers as well.  For example, if you intend to execute a custom **`taskId: 'com.foo.customtask'`**, you must add the identifier **`com.foo.customtask`** to your *"Permitted background task scheduler identifiers"*, as well.
+3.  If you intend to execute your own custom tasks via **`BackgroundFetch.scheduleTask`**, you must add those custom identifiers as well.  For example, if you intend to execute a custom **`taskId: 'com.transistorsoft.customtask'`**, you must add the identifier **`com.transistorsoft.customtask`** to your *"Permitted background task scheduler identifiers"*, as well.
 
-```dart
+:warning: A task identifier can be any string you wish, but it's a good idea to prefix them now with `com.transistorsoft.` &mdash;  In the future, the `com.transistorsoft` prefix **may become required**.
+
+```javascript
 BackgroundFetch.scheduleTask({
-  taskId: 'com.foo.customtask',
+  taskId: 'com.transistorsoft.customtask',
   delay: 60 * 60 * 1000  //  In one hour (milliseconds)
 });
 ```
@@ -63,14 +65,8 @@ The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/background
   .
   .
   .
-  // [react-native-background-fetch Setup]
-  TSBackgroundFetch *fetch = [TSBackgroundFetch sharedInstance];
-  // [REQUIRED] Register for usual periodic background refresh events here:
-  [fetch registerAppRefreshTask];
-
-  // [OPTIONAL] IF you've registered custom "Background Processing Task(s)" in your Info.plist above,
-  // for use with #scheduleTask method, register each of those taskId(s) here as well.
-  [fetch registerBGProcessingTask:@"com.foo.customtask"];
+  // [REQUIRED] Register BackgroundFetch
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
 
   return YES;
 }

@@ -86,10 +86,8 @@ RCT_EXPORT_METHOD(stop:(NSString*)taskId success:(RCTResponseSenderBlock)success
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
     if (!taskId) {
         [fetchManager removeListener:PLUGIN_ID];
-        [fetchManager stop:nil];
-    } else {
-        [fetchManager stop:taskId];
     }
+    [fetchManager stop:taskId];
     success(@[@(YES)]);
 }
 

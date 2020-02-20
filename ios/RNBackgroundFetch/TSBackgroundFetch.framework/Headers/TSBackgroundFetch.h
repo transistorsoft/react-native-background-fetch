@@ -15,9 +15,11 @@
 @property (nonatomic) BOOL stopOnTerminate;
 @property (readonly) BOOL configured;
 @property (readonly) BOOL active;
+@property (readonly) NSString *fetchTaskId;
 
 + (TSBackgroundFetch *)sharedInstance;
 
+-(void) didFinishLaunching;
 -(void) registerAppRefreshTask;
 -(void) registerBGProcessingTask:(NSString*)identifier;
 
