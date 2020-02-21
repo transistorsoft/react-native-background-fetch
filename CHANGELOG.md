@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [3.0.3] &mdash; 2020-02-21
+* [Fixed] [Android] `stopOnTerminate: false` not cancelling scheduled job / Alarm when fired task fired after terminate.
+
 ## [3.0.2] &mdash; 2020-02-20
 * [Android] Fix Android NPE on `hasTaskId` when launched first time after upgrading to v3
 
