@@ -146,6 +146,9 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         if (options.hasKey(BackgroundFetchConfig.FIELD_REQUIRES_STORAGE_NOT_LOW)) {
             config.setRequiresStorageNotLow(options.getBoolean(BackgroundFetchConfig.FIELD_REQUIRES_STORAGE_NOT_LOW));
         }
+        if (options.hasKey(BackgroundFetchConfig.FIELD_PERIODIC)) {
+            config.setPeriodic(options.getBoolean(BackgroundFetchConfig.FIELD_PERIODIC));
+        }
         return config;
     }
 
