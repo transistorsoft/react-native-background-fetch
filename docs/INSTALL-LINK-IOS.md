@@ -56,28 +56,20 @@ BackgroundFetch.scheduleTask({
 
 The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc) API introduced in iOS 13 requires special setup:
 
-```obj-c
-.
-.
-#import <TSBackgroundFetch/TSBackgroundFetch.h>
-.
-.
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  .
-  .
-  .
-  // [react-native-background-fetch Setup]
-  TSBackgroundFetch *fetch = [TSBackgroundFetch sharedInstance];
-  // [REQUIRED] Register for usual periodic background refresh events here:
-  [fetch registerAppRefreshTask];
+```diff
++#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
-  // [OPTIONAL] IF you've registered custom "Background Processing Task(s)" in your Info.plist above,
-  // for use with #scheduleTask method, register each of those taskId(s) here as well.
-  [fetch registerBGProcessingTask:@"com.foo.customtask"];
+@implementation AppDelegate
+
+(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  .
+  .
+  .
++ // [REQUIRED] Register BackgroundFetch
++ [[TSBackgroundFetch sharedInstance] didFinishLaunching];
 
   return YES;
 }
-
 ```
 
 ## BackgroundFetch AppDelegate extension
