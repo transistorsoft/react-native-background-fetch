@@ -74,7 +74,7 @@ The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/background
 
 ## BackgroundFetch AppDelegate extension
 
-:warning: Deprecated iOS Background Fetch API for devices running __`< iOS 13`__.
+:warning: Deprecated iOS Background Fetch API for devices running __`> iOS 13`__.
 
 BackgroundFetch implements an `AppDelegate` method `didPerformFetchWithCompletionHandler`.  You must manually add this file to the same folder where your `AppDelegate.m` lives:
 
