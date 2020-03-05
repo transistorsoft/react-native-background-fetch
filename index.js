@@ -17,10 +17,6 @@ const STATUS_RESTRICTED = 0;
 const STATUS_DENIED     = 1;
 const STATUS_AVAILABLE  = 2;
 
-const FETCH_RESULT_NEW_DATA = 0;
-const FETCH_RESULT_NO_DATA  = 1;
-const FETCH_RESULT_FAILED   = 2;
-
 const NETWORK_TYPE_NONE         = 0;
 const NETWORK_TYPE_ANY          = 1;
 const NETWORK_TYPE_UNMETERED    = 2;
@@ -31,10 +27,6 @@ export default class BackgroundFetch {
   static get STATUS_RESTRICTED() { return STATUS_RESTRICTED; }
   static get STATUS_DENIED() { return STATUS_DENIED; }
   static get STATUS_AVAILABLE() { return STATUS_AVAILABLE; }
-
-  static get FETCH_RESULT_NEW_DATA() { return FETCH_RESULT_NEW_DATA; }
-  static get FETCH_RESULT_NO_DATA() { return FETCH_RESULT_NO_DATA; }
-  static get FETCH_RESULT_FAILED() { return FETCH_RESULT_FAILED; }
 
   static get NETWORK_TYPE_NONE() { return NETWORK_TYPE_NONE; }
   static get NETWORK_TYPE_ANY() { return NETWORK_TYPE_ANY; }

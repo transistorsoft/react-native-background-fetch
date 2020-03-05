@@ -80,15 +80,6 @@ declare module "react-native-background-fetch" {
 	* | BackgroundFetch.STATUS_DENIED      | The user explicitly disabled background behavior for this app or for the whole system. |
 	* | BackgroundFetch.STATUS_AVAILABLE   | Background fetch is available and enabled.      |
 	*/
-	type BackgroundFetchResult = 0 | 1 | 2;
-
-	/**
-	* | BackgroundFetchResult                 | Description                                                   |
-	* |---------------------------------------|---------------------------------------------------------------|
-	* | BackgroundFetch.FETCH_RESULT_NEW_DATA | New data was successfully downloaded.                         |
-	* | BackgroundFetch.FETCH_RESULT_NO_DATA  | There was no new data to download.                            |
-	* | BackgroundFetch.FETCH_RESULT_FAILED   | An attempt to download data was made but that attempt failed. |
-	*/
 	type BackgroundFetchStatus = 0 | 1 | 2;
 
 	/**
@@ -117,18 +108,6 @@ declare module "react-native-background-fetch" {
 		* Background fetch is available and enabled.
 		*/
 		static STATUS_AVAILABLE: BackgroundFetchStatus;
-		/**
-		* New data was successfully downloaded.
-		*/
-		static FETCH_RESULT_NEW_DATA: BackgroundFetchResult;
-		/**
-		* There was no new data to download.
-		*/
-		static FETCH_RESULT_NO_DATA: BackgroundFetchResult;
-		/**
-		* An attempt to download data was made but that attempt failed.
-		*/
-		static FETCH_RESULT_FAILED: BackgroundFetchResult;
 		/**
 		* This job doesn't care about network constraints, either any or none.
 		*/
@@ -170,14 +149,7 @@ declare module "react-native-background-fetch" {
 		*/
 		static stop(taskId?:string):Promise<boolean>;
 		/**
-		* You must execute [[finish]] within your fetch-callback to signal completion of your task.  You may optionally provide a [[BackgroundFetchResult]].  If no result is provided, default to FETCH_RESULT_NEW_DATA.
-		*
-		* | BackgroundFetchResult                 |
-		* |---------------------------------------|
-		* | BackgroundFetch.FETCH_RESULT_NEW_DATA |
-		* | BackgroundFetch.FETCH_RESULT_NO_DATA  |
-		* | BackgroundFetch.FETCH_RESULT_FAILED   |
-		*
+		* You must execute [[finish]] within your fetch-callback to signal completion of your task.
 		*/
 		static finish(taskId?:string):void;
 		/**
