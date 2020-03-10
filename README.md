@@ -123,7 +123,7 @@ __:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged in
 // Step 1:  Configure BackgroundFetch as usual.
 BackgroundFetch.configure({
   minimumFetchInterval: 15
-), async (taskId) => {
+}, async (taskId) => {
   // This is the fetch-event callback.
   console.log("[BackgroundFetch] taskId: ", taskId);
 
