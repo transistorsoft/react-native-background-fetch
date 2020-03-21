@@ -92,6 +92,14 @@ declare module "react-native-background-fetch" {
 	* | BackgroundFetch.NETWORK_TYPE_NOT_ROAMING | This job requires network connectivity that is not roaming. |
 	*/
 	type NetworkType = 0 | 1 | 2 | 3 | 4;
+
+	export interface HeadlessEvent {
+		/**
+		* The name of the task.  This will be used with [[BackgroundFetch.finish]] to signal task-completion.
+		*/
+		taskId: string;
+	}
+
 	/**
 	* BackgroundFetch is a module to receive periodic callbacks (min every 15 min) while your app is running in the background or terminated.
 	*/
@@ -165,6 +173,6 @@ declare module "react-native-background-fetch" {
 		/**
 		* [Android only] Register a function to execute when the app is terminated.  Requires stopOnTerminate: false.
 		*/
-		static registerHeadlessTask(task:(taskId:String) => void):void;
+		static registerHeadlessTask(task:(event:HeadlessEvent) => void):void;
 	}
 }
