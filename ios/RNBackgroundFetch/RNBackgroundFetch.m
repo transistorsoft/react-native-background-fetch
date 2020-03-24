@@ -67,7 +67,7 @@ RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSend
     [fetchManager status:^(UIBackgroundRefreshStatus status) {
         if (status == UIBackgroundRefreshStatusAvailable) {
             [fetchManager addListener:PLUGIN_ID callback:[self createCallback]];
-            NSError *error = [fetchManager start:PLUGIN_ID];
+            NSError *error = [fetchManager start:nil];
             if (!error) {
                 success(@[@(status)]);
             } else {

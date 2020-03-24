@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [3.0.4] &mdash; 2020-03-24
+* [Fixed] [iOS] Fixed bug calling `start` after executing `stop`.
+
 ## [3.0.3] &mdash; 2020-02-21
 * [Fixed] [Android] `stopOnTerminate: false` not cancelling scheduled job / Alarm when fired task fired after terminate.
 
