@@ -54,7 +54,22 @@ BackgroundFetch.scheduleTask({
 The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc) API introduced in iOS 13 requires special setup:
 
 ```diff
+#import "AppDelegate.h"
+
+#import <React/RCTBridge.h>
+#import <React/RCTBundleURLProvider.h>
+#import <React/RCTRootView.h>
+
+// IMPORTANT:  Paste import ABOVE the DEBUG macro 
 +#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
+#if DEBUG
+.
+. ///////////////////////////////////////////////////////////////////////////////////
+. // IMPORTANT:  DO NOT paste import within DEBUG macro or archiving will fail!!!
+. ///////////////////////////////////////////////////////////////////////////////////
+.
+#endif
 
 @implementation AppDelegate
 
