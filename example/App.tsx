@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {Component} from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,131 +16,237 @@ import {
   View,
   Text,
   StatusBar,
-  Switch
+  Switch,
+  Button
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Event } from './types';
+import { storeData, getData, eventsKey } from './storage';
+import { timeStr } from './helpers';
+import EventItem from './EventItem';
 
-import BackgroundFetch from "react-native-background-fetch";
+import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
 
-declare var global: {HermesInternal: null | {}};
-
+declare var global: { HermesInternal: null | {} };
+const toggleFetch = (value:boolean) => {
+  if (value) {
+    return BackgroundFetch.start();
+  } else {
+    return BackgroundFetch.stop();
+  }
+}
+const scheduleTask = async (name: string) => {
+  try {
+    await BackgroundFetch.scheduleTask({
+      taskId: name,
+      delay: 5000,       // milliseconds
+      forceAlarmManager: true,
+      periodic: false
+    });
+  } catch (e) {
+    console.warn('[js] scheduleTask fail', e);
+  }
+}
+const backgroundColor = '#fedd1e';
 type IProps = {
   navigation: any;
 };
-type IState = {
-  enabled?: boolean;
-};
 
-class App extends Component<IProps, IState> {
+const App: FC<IProps> = (props: IProps) => {
+  const [enabled, setEnabled] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [events, setEvents] = useState([] as Event[]);
 
-  constructor(props:IProps) {
-    super(props);
-
-    this.state = {
-      enabled: true,
-    };
+  const clear = () => {
+    events.splice(0, events.length);
+    setEvents([]);
+    storeData(eventsKey, events);
   }
+  const onToggleEnabled = async (value:boolean) => {
+    setDisabled(true);
+    try {
+      await toggleFetch(value);
+      setEnabled(value);
+    } catch (e) {
+      console.warn(`[js] BackgroundFetch ${value ? 'start' : 'stop'} falied`, e);
+    }
+    setDisabled(false);
+  }
+  const fetchEvent = async (taskId: string) => {
+    console.log('[js] Received background-fetch event: ', taskId);
 
-  componentDidMount() {
-    BackgroundFetch.configure({
-      minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
-      // Android options
-      forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
-      stopOnTerminate: false,
-      startOnBoot: true,
-      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
-      requiresCharging: false,      // Default
-      requiresDeviceIdle: false,    // Default
-      requiresBatteryNotLow: false, // Default
-      requiresStorageNotLow: false  // Default
-    }, async (taskId) => {
-      console.log("[js] Received background-fetch event: ", taskId);
+    events.push({
+      taskId,
+      timestamp: timeStr(new Date()),
+      isHeadless: false
+    })
+    setEvents([...events]);
+    storeData(eventsKey, events);
 
+    try {
       if (taskId === 'react-native-background-fetch') {
-        BackgroundFetch.scheduleTask({
-          taskId: 'com.transistorsoft.customtask',
-          delay: 5000,
-          stopOnTerminate: false,
-          enableHeadless: true
-        });
+        await scheduleTask('com.transistorsoft.customtask');
       }
+    } catch (e) {
+      console.warn('[js] BackgroundFetch scheduleTask falied', e);
+    }
+    try {
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
       // or assign battery-blame for consuming too much background-time
       BackgroundFetch.finish(taskId);
-    }, (error) => {
-      console.log("[js] RNBackgroundFetch failed to start");
-    });
-  }
-
-  onToggleEnabled(value:boolean) {
-    this.setState({
-      enabled: value
-    });
-    if (value) {
-      BackgroundFetch.start();
-    } else {
-      BackgroundFetch.stop();
+    } catch (e) {
+      console.warn('[js] BackgroundFetch finish falied', e);
     }
-  }
+  };
+  const init = async () => {
+    try {
+      BackgroundFetch.configure(
+        {
+          minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
+          // Android options
+          forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
+          stopOnTerminate: false,
+          startOnBoot: true,
+          requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
+          requiresCharging: false,      // Default
+          requiresDeviceIdle: false,    // Default
+          requiresBatteryNotLow: false, // Default
+          requiresStorageNotLow: false  // Default
+        },
+        fetchEvent,
+        (status: BackgroundFetchStatus) => {
+          console.log('[js] RNBackgroundFetch status', status);
+        });
+        const list = await getData<Event[]>(eventsKey);
+        list && setEvents(list);
+        list && events.splice(0, events.length, ...list);
+    } catch (e) {
+      console.warn('[js] BackgroundFetch could not configure', e);
+    }
 
-  render() {
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <View style={{padding:10}}>
-            <Switch value={this.state.enabled} onValueChange={this.onToggleEnabled.bind(this)} />
+    // Optional: Query the authorization status.
+    BackgroundFetch.status((status) => {
+      switch(status) {
+        case BackgroundFetch.STATUS_RESTRICTED:
+          console.info('[js] BackgroundFetch restricted');
+          break;
+        case BackgroundFetch.STATUS_DENIED:
+          console.info('[js] BackgroundFetch denied');
+          break;
+        case BackgroundFetch.STATUS_AVAILABLE:
+          console.info('[js] BackgroundFetch is enabled');
+          setEnabled(true);
+          break;
+      }
+    });
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  return (
+    <>
+      <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
+      <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
+          <View style={[styles.padding10, styles.row, styles.header, styles.center]}>
+            <Text style={[styles.title, styles.textCenter, styles.wide]}>BackgroundFetch Example</Text>
+            <Switch style={[styles.absolute, styles.rightTop]} value={enabled} disabled={disabled} onValueChange={onToggleEnabled} />
           </View>
-        </SafeAreaView>
-      </>
-    );
-  }
+          <ScrollView
+            contentInsetAdjustmentBehavior='automatic'
+            style={[styles.paddingLR10, styles.container, styles.wide]}
+          >
+            {!events.length && (<View style={[styles.padding10, styles.center]}>
+              <Text style={[styles.textCenter, styles.text]}>* Listening for events.</Text>
+              <Text style={[styles.textCenter, styles.text]}>Plese see README "Debugging" to learn how to simulate events</Text>
+            </View>)}
+            {events.map((event, i) => (<EventItem key={`${i}:${event.timestamp}`} styles={styles} {...event} />))}
+          </ScrollView>
+          <View style={[styles.padding10, styles.row, styles.footer]}>
+            <View style={[styles.wide, styles.row, styles.center]}>
+              <Text style={[styles.text, styles.bold]}>Status: </Text>
+              <Text style={[styles.text]}>{enabled ? 'enabled' : 'disabled'}</Text>
+            </View>
+
+            <Button onPress={clear} title='Clear' />
+          </View>
+      </SafeAreaView>
+    </>
+  );
 };
 
+BackgroundFetch.onFetch(() => {
+  console.info('[js] BackgroundFetch fetch');
+});
+
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  padding10: {
+    padding: 10,
   },
-  engine: {
+  absolute: {
     position: 'absolute',
-    right: 0,
   },
-  body: {
-    backgroundColor: Colors.white,
+  rightTop: {
+    top: 10,
+    right: 10,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
+  bold: {
     fontWeight: '700',
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
+  blue: {
+    color: '#2188E5',
+  },
+  borderBottom: {
+    borderStyle: 'solid',
+    borderColor: '#9B9C9C',
+    borderBottomWidth: 1,
+  },
+  center: {
+    alignSelf: 'center',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  paddingTB10: {
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  paddingLR10: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  wide: { flex: 20 },
+  flex1: { flex: 1 },
+  header: {
+    backgroundColor,
+  },
+  text: {
+    color: '#000',
+  },
+  footer: { justifyContent: 'flex-end' },
+  title: {
+    fontSize: 20,
     fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    color: '#000',
+  },
+  body: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  container: {
+    flexDirection: 'column',
+  },
+  border: {
+    borderStyle: 'solid',
+    borderColor: 'red',
+    borderWidth: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'stretch',
   },
 });
 
