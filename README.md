@@ -196,7 +196,7 @@ BackgroundFetch.configure({
 BackgroundFetch.scheduleTask({
   taskId: 'com.foo.customtask',
   delay: 5000,       // milliseconds
-  forceAlarmManager: true
+  forceAlarmManager: true,
   periodic: false
 });
 ```

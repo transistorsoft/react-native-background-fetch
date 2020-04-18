@@ -1,6 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * BackgroundFetch example app.
  *
  * Generated with the TypeScript template
  * https://github.com/react-native-community/react-native-template-typescript
@@ -8,140 +7,159 @@
  * @format
  */
 
-import React, {Component} from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
-  View,
-  Text,
   StatusBar,
-  Switch
 } from 'react-native';
+import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
+
+import { Event } from './types';
 
 import {
+  backgroundColor,
+  loadEvents,
+  persistEvents,
+  statusToString,
+  getTimestamp,
+  styles
+} from './utils';
+
+import {
+  EventItem,
+  Footer,
   Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  Notice,
+} from './components';
 
-import BackgroundFetch from "react-native-background-fetch";
-
-declare var global: {HermesInternal: null | {}};
+declare var global: { HermesInternal: null | {} };
 
 type IProps = {
   navigation: any;
 };
-type IState = {
-  enabled?: boolean;
-};
 
-class App extends Component<IProps, IState> {
-
-  constructor(props:IProps) {
-    super(props);
-
-    this.state = {
-      enabled: true,
-    };
-  }
-
-  componentDidMount() {
-    BackgroundFetch.configure({
-      minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
-      // Android options
-      forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
+/// Execute a BackgroundFetch.scheduleTask
+///
+export const scheduleTask = async (name: string) => {
+  try {
+    await BackgroundFetch.scheduleTask({
+      taskId: name,
       stopOnTerminate: false,
+      enableHeadless: true,
+      delay: 5000,               // milliseconds (5s)
+      forceAlarmManager: true,   // more precise timing with AlarmManager vs default JobScheduler
+      periodic: false            // Fire once only.
+    });
+  } catch (e) {
+    console.warn('[BackgroundFetch] scheduleTask fail', e);
+  }
+}
+
+const App: FC<IProps> = (props: IProps) => {
+  const [enabled, setEnabled] = useState(false);
+  const [defaultStatus, setDefaultStatus] = useState('unknown');
+  const [events, setEvents] = useState([] as Event[]);
+
+  /// [Clear] button-handler.
+  ///
+  const onClickClear = () => {
+    setEvents([]);
+    persistEvents([]);
+  };
+
+  /// Switch handler in top-toolbar.
+  ///
+  const onToggleEnabled = async (value:boolean) => {
+    try {
+      if (value) {
+        await BackgroundFetch.start();
+      } else {
+        await BackgroundFetch.stop();
+      }
+      setEnabled(value);
+    } catch (e) {
+      console.warn(`[BackgroundFetch] ${value ? 'start' : 'stop'} falied`, e);
+    }
+  };
+
+  /// BackgroundFetch event-handler.
+  /// All events from the plugin arrive here, including #scheduleTask events.
+  ///
+  const onBackgroundFetchEvent = async (taskId: string) => {
+    console.log('[BackgroundFetch] Event received: ', taskId);
+
+    // Add fetch-event to List
+    const events = await loadEvents<Event[]>() || [];
+    events.unshift({
+      isHeadless: false,
+      taskId,
+      timestamp: getTimestamp(),
+    });
+    setEvents([...events]);
+    persistEvents(events);
+
+    if (taskId === 'react-native-background-fetch') {
+      // Test initiating a #scheduleTask when the periodic fetch event is received.
+      try {
+        await scheduleTask('com.transistorsoft.customtask');
+      } catch (e) {
+        console.warn('[BackgroundFetch] scheduleTask falied', e);
+      }
+    }
+    // Required: Signal completion of your task to native code
+    // If you fail to do this, the OS can terminate your app
+    // or assign battery-blame for consuming too much background-time
+    BackgroundFetch.finish(taskId);
+  };
+
+  /// Configure BackgroundFetch
+  ///
+  const init = async () => {
+    BackgroundFetch.configure({
+      minimumFetchInterval: 15,      // <-- minutes (15 is minimum allowed)
+      // Android options
+      forceAlarmManager: false,      // <-- Set true to bypass JobScheduler.
+      stopOnTerminate: false,
+      enableHeadless: true,
       startOnBoot: true,
       requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
-      requiresCharging: false,      // Default
-      requiresDeviceIdle: false,    // Default
-      requiresBatteryNotLow: false, // Default
-      requiresStorageNotLow: false  // Default
-    }, async (taskId) => {
-      console.log("[js] Received background-fetch event: ", taskId);
-
-      if (taskId === 'react-native-background-fetch') {
-        BackgroundFetch.scheduleTask({
-          taskId: 'com.transistorsoft.customtask',
-          delay: 5000,
-          stopOnTerminate: false,
-          enableHeadless: true
-        });
-      }
-      // Required: Signal completion of your task to native code
-      // If you fail to do this, the OS can terminate your app
-      // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(taskId);
-    }, (error) => {
-      console.log("[js] RNBackgroundFetch failed to start");
+      requiresCharging: false,       // Default
+      requiresDeviceIdle: false,     // Default
+      requiresBatteryNotLow: false,  // Default
+      requiresStorageNotLow: false,  // Default
+    }, onBackgroundFetchEvent, (status: BackgroundFetchStatus) => {
+      setDefaultStatus(statusToString(status));
+      console.log('[BackgroundFetch] status', statusToString(status), status);
     });
-  }
+    // Turn on the enabled switch.
+    onToggleEnabled(true);
+    // Load the list with persisted events.
+    const events = await loadEvents<Event[]>();
+    events && setEvents(events);
+  };
 
-  onToggleEnabled(value:boolean) {
-    this.setState({
-      enabled: value
-    });
-    if (value) {
-      BackgroundFetch.start();
-    } else {
-      BackgroundFetch.stop();
-    }
-  }
+  useEffect(() => {
+    init();
+  }, []);
 
-  render() {
-    return (
-      <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <View style={{padding:10}}>
-            <Switch value={this.state.enabled} onValueChange={this.onToggleEnabled.bind(this)} />
-          </View>
-        </SafeAreaView>
-      </>
-    );
-  }
+  return (
+    <>
+      <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
+      <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
+          <Header enabled={enabled} onToggleEnabled={onToggleEnabled} />
+          <ScrollView contentInsetAdjustmentBehavior='automatic' style={[
+            styles.paddingLR10, styles.container, styles.wide
+          ]}>
+            {!events.length && <Notice />}
+            {events.map((event, i) => (
+              <EventItem key={`${i}:${event.timestamp}`} {...event} />
+            ))}
+          </ScrollView>
+          <Footer onClear={onClickClear} defaultStatus={defaultStatus} />
+      </SafeAreaView>
+    </>
+  );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
