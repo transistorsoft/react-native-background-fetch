@@ -5,16 +5,16 @@ import {
   View,
 } from 'react-native';
 
-import { Event } from './types';
+import styles from '../utils/styles';
+import { Event } from '../types';
 
 type IProps = {
-  styles: any;
   taskId: Event['taskId'];
   timestamp: Event['timestamp'];
   isHeadless: Event['isHeadless'];
 };
 
-const EventItem: FC<IProps> = ({ styles, taskId, timestamp, isHeadless }: IProps) => {
+const EventItem: FC<IProps> = ({ taskId, timestamp, isHeadless }: IProps) => {
 
   return (<View style={[styles.container, styles.borderBottom, styles.paddingTB10]}>
     <Text

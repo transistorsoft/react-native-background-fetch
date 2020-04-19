@@ -7,7 +7,7 @@ import BackgroundFetch, { HeadlessEvent } from 'react-native-background-fetch';
 
 import App from './App';
 import { name as appName } from './app.json';
-import { storeData, getData, eventsKey } from './storage';
+import { storeData, getData, eventsKey } from './utils/storage';
 import { Event } from './types';
 
 AppRegistry.registerComponent(appName, () => App);

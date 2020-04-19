@@ -11,43 +11,31 @@
 import React, { useEffect, useState, FC } from 'react';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
-  View,
-  Text,
   StatusBar,
-  Switch,
-  Button
 } from 'react-native';
-
-import { Event } from './types';
-import { storeData, getData, eventsKey } from './storage';
-import { timeStr } from './helpers';
-import EventItem from './EventItem';
-
 import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
 
+import { Event } from './types';
+import {
+  backgroundColor,
+  eventsKey,
+  getData,
+  scheduleTask,
+  storeData,
+  styles,
+  timeStr,
+  toggleFetch,
+} from './utils';
+import {
+  EventItem,
+  Footer,
+  Header,
+  Notice,
+} from './components';
+
 declare var global: { HermesInternal: null | {} };
-const toggleFetch = (value:boolean) => {
-  if (value) {
-    return BackgroundFetch.start();
-  } else {
-    return BackgroundFetch.stop();
-  }
-}
-const scheduleTask = async (name: string) => {
-  try {
-    await BackgroundFetch.scheduleTask({
-      taskId: name,
-      delay: 5000,       // milliseconds
-      forceAlarmManager: true,
-      periodic: false
-    });
-  } catch (e) {
-    console.warn('[js] scheduleTask fail', e);
-  }
-}
-const backgroundColor = '#fedd1e';
+
 type IProps = {
   navigation: any;
 };
@@ -150,28 +138,15 @@ const App: FC<IProps> = (props: IProps) => {
     <>
       <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
       <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
-          <View style={[styles.padding10, styles.row, styles.header, styles.center]}>
-            <Text style={[styles.title, styles.textCenter, styles.wide]}>BackgroundFetch Example</Text>
-            <Switch style={[styles.absolute, styles.rightTop]} value={enabled} disabled={disabled} onValueChange={onToggleEnabled} />
-          </View>
+          <Header {...{ enabled, disabled, onToggleEnabled }} />
           <ScrollView
             contentInsetAdjustmentBehavior='automatic'
             style={[styles.paddingLR10, styles.container, styles.wide]}
           >
-            {!events.length && (<View style={[styles.padding10, styles.center]}>
-              <Text style={[styles.textCenter, styles.text]}>* Listening for events.</Text>
-              <Text style={[styles.textCenter, styles.text]}>Plese see README "Debugging" to learn how to simulate events</Text>
-            </View>)}
-            {events.map((event, i) => (<EventItem key={`${i}:${event.timestamp}`} styles={styles} {...event} />))}
+            {!events.length && (<Notice />)}
+            {events.map((event, i) => (<EventItem key={`${i}:${event.timestamp}`} {...event} />))}
           </ScrollView>
-          <View style={[styles.padding10, styles.row, styles.footer]}>
-            <View style={[styles.wide, styles.row, styles.center]}>
-              <Text style={[styles.text, styles.bold]}>Status: </Text>
-              <Text style={[styles.text]}>{enabled ? 'enabled' : 'disabled'}</Text>
-            </View>
-
-            <Button onPress={clear} title='Clear' />
-          </View>
+          <Footer clear={clear} enabled={enabled} />
       </SafeAreaView>
     </>
   );
@@ -181,73 +156,5 @@ BackgroundFetch.onFetch(() => {
   console.info('[js] BackgroundFetch fetch');
 });
 
-const styles = StyleSheet.create({
-  padding10: {
-    padding: 10,
-  },
-  absolute: {
-    position: 'absolute',
-  },
-  rightTop: {
-    top: 10,
-    right: 10,
-  },
-  bold: {
-    fontWeight: '700',
-  },
-  blue: {
-    color: '#2188E5',
-  },
-  borderBottom: {
-    borderStyle: 'solid',
-    borderColor: '#9B9C9C',
-    borderBottomWidth: 1,
-  },
-  center: {
-    alignSelf: 'center',
-  },
-  textCenter: {
-    textAlign: 'center',
-  },
-  paddingTB10: {
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  paddingLR10: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  wide: { flex: 20 },
-  flex1: { flex: 1 },
-  header: {
-    backgroundColor,
-  },
-  text: {
-    color: '#000',
-  },
-  footer: { justifyContent: 'flex-end' },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#000',
-  },
-  body: {
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
-  container: {
-    flexDirection: 'column',
-  },
-  border: {
-    borderStyle: 'solid',
-    borderColor: 'red',
-    borderWidth: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
-  },
-});
 
 export default App;
