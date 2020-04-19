@@ -152,9 +152,4 @@ const App: FC<IProps> = (props: IProps) => {
   );
 };
 
-BackgroundFetch.onFetch(() => {
-  console.info('[js] BackgroundFetch fetch');
-});
-
-
 export default App;

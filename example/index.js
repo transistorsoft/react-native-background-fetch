@@ -12,7 +12,6 @@ import { Event } from './types';
 
 AppRegistry.registerComponent(appName, () => App);
 
-
 const headlessTask = async ({ taskId }: HeadlessEvent) => {
   // Get task id from event {}:
   console.log('[js] BackgroundFetch HeadlessTask start: ', taskId);
@@ -35,3 +34,7 @@ const headlessTask = async ({ taskId }: HeadlessEvent) => {
 
 // Register your BackgroundFetch HeadlessTask
 BackgroundFetch.registerHeadlessTask(headlessTask);
+
+BackgroundFetch.onFetch(() => {
+  console.info('[js] BackgroundFetch fetch');
+});
