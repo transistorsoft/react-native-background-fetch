@@ -38,14 +38,6 @@ type IProps = {
   navigation: any;
 };
 
-
-export const toggleFetch = (value:boolean) => {
-  if (value) {
-    return BackgroundFetch.start();
-  } else {
-    return BackgroundFetch.stop();
-  }
-}
 export const scheduleTask = async (name: string) => {
   try {
     await BackgroundFetch.scheduleTask({
@@ -61,7 +53,6 @@ export const scheduleTask = async (name: string) => {
 
 const App: FC<IProps> = (props: IProps) => {
   const [enabled, setEnabled] = useState(false);
-  const [disabled, setDisabled] = useState(false);
   const [events, setEvents] = useState([] as Event[]);
 
   const clear = () => {
@@ -70,14 +61,16 @@ const App: FC<IProps> = (props: IProps) => {
     storeData(eventsKey, events);
   }
   const onToggleEnabled = async (value:boolean) => {
-    setDisabled(true);
     try {
-      await toggleFetch(value);
+      if (value) {
+        await BackgroundFetch.start();
+      } else {
+        await BackgroundFetch.stop();
+      }
       setEnabled(value);
     } catch (e) {
       console.warn(`[js] BackgroundFetch ${value ? 'start' : 'stop'} falied`, e);
     }
-    setDisabled(false);
   }
   const fetchEvent = async (taskId: string) => {
     console.log('[js] Received background-fetch event: ', taskId);
@@ -157,7 +150,7 @@ const App: FC<IProps> = (props: IProps) => {
     <>
       <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
       <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
-          <Header {...{ enabled, disabled, onToggleEnabled }} />
+          <Header {...{ enabled, onToggleEnabled }} />
           <ScrollView
             contentInsetAdjustmentBehavior='automatic'
             style={[styles.paddingLR10, styles.container, styles.wide]}
