@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   },
   textCenter: {
     textAlign: 'center',
+    justifyContent: 'center',
   },
   paddingTB10: {
     paddingTop: 10,
@@ -46,7 +47,9 @@ const styles = StyleSheet.create({
   text: {
     color: '#000',
   },
-  footer: { justifyContent: 'flex-end' },
+  footer: {
+    justifyContent: 'flex-end',
+  },
   title: {
     fontSize: 20,
     fontWeight: '600',

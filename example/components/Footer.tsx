@@ -1,25 +1,34 @@
-import React, { FC } from 'react';
+import React, { useState, FC, useEffect } from 'react';
 
 import {
   Text,
   View,
   Button,
 } from 'react-native';
+import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
 
-import styles from '../utils/styles';
+import { styles, status as getStatus } from '../utils';
 
 type IProps = {
-  enabled: boolean;
-  clear: () => void
+  clear: () => void,
+  defaultStatus: string,
 };
 
-const Footer: FC<IProps> = ({ enabled, clear }: IProps) => {
+const Footer: FC<IProps> = ({ clear, defaultStatus = 'unknown' }: IProps) => {
+  const [currentStatus, setStatus] = useState(defaultStatus);
+  const checkAccess = async () => BackgroundFetch.status((status: BackgroundFetchStatus) => setStatus(getStatus(status)));
+
+  useEffect(() => {
+    checkAccess();
+  }, [])
 
   return (
     <View style={[styles.padding10, styles.row, styles.footer]}>
-      <View style={[styles.wide, styles.row, styles.center]}>
+      <Button onPress={checkAccess} title='Status' />
+
+      <View style={[styles.wide, styles.row, styles.center, styles.textCenter]}>
         <Text style={[styles.text, styles.bold]}>Status: </Text>
-        <Text style={[styles.text]}>{enabled ? 'enabled' : 'disabled'}</Text>
+        <Text style={[styles.text]}>{currentStatus}</Text>
       </View>
 
       <Button onPress={clear} title='Clear' />

@@ -21,6 +21,7 @@ import {
   backgroundColor,
   eventsKey,
   getData,
+  status as getStatus,
   storeData,
   styles,
   timeStr,
@@ -53,6 +54,7 @@ export const scheduleTask = async (name: string) => {
 
 const App: FC<IProps> = (props: IProps) => {
   const [enabled, setEnabled] = useState(false);
+  const [defaultStatus, setDefaultStatus] = useState('unknown');
   const [events, setEvents] = useState([] as Event[]);
 
   const clear = () => {
@@ -116,30 +118,16 @@ const App: FC<IProps> = (props: IProps) => {
         },
         fetchEvent,
         (status: BackgroundFetchStatus) => {
-          console.log('[js] RNBackgroundFetch status', status);
+          setDefaultStatus(getStatus(status));
+          console.log('[js] RNBackgroundFetch status', getStatus(status), status);
         });
+        onToggleEnabled(true);
         const list = await getData<Event[]>(eventsKey);
         list && setEvents(list);
         list && events.splice(0, events.length, ...list);
     } catch (e) {
       console.warn('[js] BackgroundFetch could not configure', e);
     }
-
-    // Optional: Query the authorization status.
-    BackgroundFetch.status((status) => {
-      switch(status) {
-        case BackgroundFetch.STATUS_RESTRICTED:
-          console.info('[js] BackgroundFetch restricted');
-          break;
-        case BackgroundFetch.STATUS_DENIED:
-          console.info('[js] BackgroundFetch denied');
-          break;
-        case BackgroundFetch.STATUS_AVAILABLE:
-          console.info('[js] BackgroundFetch is enabled');
-          setEnabled(true);
-          break;
-      }
-    });
   };
 
   useEffect(() => {
@@ -158,7 +146,7 @@ const App: FC<IProps> = (props: IProps) => {
             {!events.length && (<Notice />)}
             {events.map((event, i) => (<EventItem key={`${i}:${event.timestamp}`} {...event} />))}
           </ScrollView>
-          <Footer clear={clear} enabled={enabled} />
+          <Footer clear={clear} defaultStatus={defaultStatus} />
       </SafeAreaView>
     </>
   );
