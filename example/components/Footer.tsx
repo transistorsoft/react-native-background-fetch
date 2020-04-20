@@ -16,7 +16,10 @@ type IProps = {
 
 const Footer: FC<IProps> = ({ clear, defaultStatus = 'unknown' }: IProps) => {
   const [currentStatus, setStatus] = useState(defaultStatus);
-  const checkAccess = async () => BackgroundFetch.status((status: BackgroundFetchStatus) => setStatus(getStatus(status)));
+  const checkAccess = async () => {
+    const status: BackgroundFetchStatus = await BackgroundFetch.status();
+    status && setStatus(getStatus(status));
+  };
 
   useEffect(() => {
     checkAccess();
