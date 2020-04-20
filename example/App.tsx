@@ -58,9 +58,8 @@ const App: FC<IProps> = (props: IProps) => {
   const [events, setEvents] = useState([] as Event[]);
 
   const clear = () => {
-    events.splice(0, events.length);
     setEvents([]);
-    storeData(eventsKey, events);
+    storeData(eventsKey, []);
   }
   const onToggleEnabled = async (value:boolean) => {
     try {
@@ -125,7 +124,6 @@ const App: FC<IProps> = (props: IProps) => {
         onToggleEnabled(true);
         const list = await getData<Event[]>(eventsKey);
         list && setEvents(list);
-        list && events.splice(0, events.length, ...list);
     } catch (e) {
       console.warn('[js] BackgroundFetch could not configure', e);
     }
