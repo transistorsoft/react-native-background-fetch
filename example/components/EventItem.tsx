@@ -20,12 +20,12 @@ const EventItem: FC<IProps> = ({ taskId, timestamp, isHeadless }: IProps) => {
     <Text
       style={[styles.text, styles.blue]}
     >
-      [{[taskId, isHeadless ? '[Headless]': ''].filter(Boolean).join('] [')}]
+      [{taskId}]
     </Text>
     <Text
       style={[styles.text]}
     >
-      {timestamp}
+      {timestamp} {isHeadless ? '[Headless]': ''}
     </Text>
   </View>);
 }
