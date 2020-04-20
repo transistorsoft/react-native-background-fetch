@@ -15,6 +15,6 @@ const Notice: FC = () => {
       <Text style={[styles.textCenter, styles.text]}>Plese see README "Debugging" to learn how to simulate events</Text>
     </View>
   );
-}
+};
 
 export default Notice;

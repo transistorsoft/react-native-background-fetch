@@ -21,6 +21,6 @@ const Header: FC<IProps> = ({ enabled, onToggleEnabled }: IProps) => {
       <Switch style={[styles.absolute, styles.rightTop]} value={enabled} onValueChange={onToggleEnabled} />
     </View>
   );
-}
+};
 
 export default Header;

@@ -34,6 +34,6 @@ const Footer: FC<IProps> = ({ clear, defaultStatus = 'unknown' }: IProps) => {
       <Button onPress={clear} title='Clear' />
     </View>
   );
-}
+};
 
 export default Footer;

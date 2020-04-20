@@ -60,7 +60,7 @@ const App: FC<IProps> = (props: IProps) => {
   const clear = () => {
     setEvents([]);
     storeData(eventsKey, []);
-  }
+  };
   const onToggleEnabled = async (value:boolean) => {
     try {
       if (value) {
@@ -72,15 +72,15 @@ const App: FC<IProps> = (props: IProps) => {
     } catch (e) {
       console.warn(`[js] BackgroundFetch ${value ? 'start' : 'stop'} falied`, e);
     }
-  }
+  };
   const fetchEvent = async (taskId: string) => {
     console.log('[js] Received background-fetch event: ', taskId);
 
     events.unshift({
+      isHeadless: false,
       taskId,
-      timestamp: timeStr(new Date()),
-      isHeadless: false
-    })
+      timestamp: timeStr(),
+    });
     setEvents([...events]);
     storeData(eventsKey, events);
 
@@ -142,7 +142,7 @@ const App: FC<IProps> = (props: IProps) => {
             contentInsetAdjustmentBehavior='automatic'
             style={[styles.paddingLR10, styles.container, styles.wide]}
           >
-            {!events.length && (<Notice />)}
+            {!events.length && <Notice />}
             {events.map((event, i) => (<EventItem key={`${i}:${event.timestamp}`} {...event} />))}
           </ScrollView>
           <Footer clear={clear} defaultStatus={defaultStatus} />

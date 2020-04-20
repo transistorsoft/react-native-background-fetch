@@ -9,25 +9,23 @@ import styles from '../utils/styles';
 import { Event } from '../types';
 
 type IProps = {
+  isHeadless: Event['isHeadless'];
   taskId: Event['taskId'];
   timestamp: Event['timestamp'];
-  isHeadless: Event['isHeadless'];
 };
 
 const EventItem: FC<IProps> = ({ taskId, timestamp, isHeadless }: IProps) => {
 
-  return (<View style={[styles.container, styles.borderBottom, styles.paddingTB10]}>
-    <Text
-      style={[styles.text, styles.blue]}
-    >
-      [{taskId}]
-    </Text>
-    <Text
-      style={[styles.text]}
-    >
-      {timestamp} {isHeadless ? '[Headless]': ''}
-    </Text>
-  </View>);
+  return (
+    <View style={[styles.container, styles.borderBottom, styles.paddingTB10]}>
+      <Text style={[styles.text, styles.blue]}>
+        [{taskId}]
+      </Text>
+      <Text style={[styles.text]}>
+        {timestamp} {isHeadless ? '[Headless]': ''}
+      </Text>
+    </View>
+  );
 }
 
 

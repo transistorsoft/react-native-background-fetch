@@ -8,10 +8,10 @@ import BackgroundFetch, { HeadlessEvent } from 'react-native-background-fetch';
 import App from './App';
 import { name as appName } from './app.json';
 import {
-  timeStr,
-  storeData,
-  getData,
   eventsKey,
+  getData,
+  storeData,
+  timeStr,
 } from './utils';
 import { Event } from './types';
 
@@ -24,9 +24,9 @@ const headlessTask = async ({ taskId }: HeadlessEvent) => {
   const list: Event[] = await getData(eventsKey) || [];
 
   list.push({
-    taskId,
-    timestamp: timeStr(new Date()),
     isHeadless: true,
+    taskId,
+    timestamp: timeStr(),
   });
 
   await storeData(eventsKey, list);
@@ -35,7 +35,7 @@ const headlessTask = async ({ taskId }: HeadlessEvent) => {
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
   BackgroundFetch.finish(taskId);
-}
+};
 
 // Register your BackgroundFetch HeadlessTask
 BackgroundFetch.registerHeadlessTask(headlessTask);
