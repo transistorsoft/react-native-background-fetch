@@ -23,7 +23,7 @@ const headlessTask = async ({ taskId }: HeadlessEvent) => {
 
   const list: Event[] = await getData(eventsKey) || [];
 
-  list.push({
+  list.unshift({
     isHeadless: true,
     taskId,
     timestamp: timeStr(),
