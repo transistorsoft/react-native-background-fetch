@@ -77,7 +77,7 @@ const App: FC<IProps> = (props: IProps) => {
   const fetchEvent = async (taskId: string) => {
     console.log('[js] Received background-fetch event: ', taskId);
 
-    events.push({
+    events.unshift({
       taskId,
       timestamp: timeStr(new Date()),
       isHeadless: false
@@ -114,7 +114,8 @@ const App: FC<IProps> = (props: IProps) => {
           requiresCharging: false,      // Default
           requiresDeviceIdle: false,    // Default
           requiresBatteryNotLow: false, // Default
-          requiresStorageNotLow: false  // Default
+          requiresStorageNotLow: false,  // Default
+          enableHeadless: true,
         },
         fetchEvent,
         (status: BackgroundFetchStatus) => {

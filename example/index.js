@@ -20,7 +20,7 @@ const headlessTask = async ({ taskId }: HeadlessEvent) => {
 
   list.push({
     taskId,
-    timestamp: new Date(),
+    timestamp: timeStr(new Date()),
     isHeadless: true,
   });
 
