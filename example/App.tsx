@@ -109,6 +109,7 @@ const App: FC<IProps> = (props: IProps) => {
           // Android options
           forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
           stopOnTerminate: false,
+          enableHeadless: true,
           startOnBoot: true,
           requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
           requiresCharging: false,      // Default
