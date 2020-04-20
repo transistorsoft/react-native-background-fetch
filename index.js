@@ -104,10 +104,12 @@ export default class BackgroundFetch {
   }
 
   static status(callback) {
-    if (typeof(callback) !== 'function') {
-      throw "RNBackgroundFetch#status requires a callback as 1st argument";
+    if (typeof(callback) === 'function') {
+      return RNBackgroundFetch.status(callback);
     }
-    RNBackgroundFetch.status(callback);
+    return new Promise((resolve, reject) => {
+      RNBackgroundFetch.status(resolve);
+    })
   }
 }
 

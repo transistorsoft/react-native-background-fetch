@@ -3,7 +3,7 @@
  */
 
 import { AppRegistry } from 'react-native';
-import BackgroundFetch, { HeadlessEvent } from 'react-native-background-fetch';
+import BackgroundFetch from 'react-native-background-fetch';
 
 import App from './App';
 import { name as appName } from './app.json';
@@ -13,15 +13,14 @@ import {
   storeData,
   timeStr,
 } from './utils';
-import { Event } from './types';
 
 AppRegistry.registerComponent(appName, () => App);
 
-const headlessTask = async ({ taskId }: HeadlessEvent) => {
+const headlessTask = async ({ taskId }) => {
   // Get task id from event {}:
   console.log('[js] BackgroundFetch HeadlessTask start: ', taskId);
 
-  const list: Event[] = await getData(eventsKey) || [];
+  const list = await getData(eventsKey) || [];
 
   list.unshift({
     isHeadless: true,
