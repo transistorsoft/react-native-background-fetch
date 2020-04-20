@@ -75,14 +75,14 @@ const App: FC<IProps> = (props: IProps) => {
   };
   const fetchEvent = async (taskId: string) => {
     console.log('[js] Received background-fetch event: ', taskId);
-
-    events.unshift({
+    const list = await getData<Event[]>(eventsKey) || [];
+    list.unshift({
       isHeadless: false,
       taskId,
       timestamp: timeStr(),
     });
-    setEvents([...events]);
-    storeData(eventsKey, events);
+    setEvents([...list]);
+    storeData(eventsKey, list);
 
     try {
       if (taskId === 'react-native-background-fetch') {
