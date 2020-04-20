@@ -21,11 +21,9 @@ import {
   backgroundColor,
   eventsKey,
   getData,
-  scheduleTask,
   storeData,
   styles,
   timeStr,
-  toggleFetch,
 } from './utils';
 import {
   EventItem,
@@ -39,6 +37,27 @@ declare var global: { HermesInternal: null | {} };
 type IProps = {
   navigation: any;
 };
+
+
+export const toggleFetch = (value:boolean) => {
+  if (value) {
+    return BackgroundFetch.start();
+  } else {
+    return BackgroundFetch.stop();
+  }
+}
+export const scheduleTask = async (name: string) => {
+  try {
+    await BackgroundFetch.scheduleTask({
+      taskId: name,
+      delay: 5000,       // milliseconds
+      forceAlarmManager: true,
+      periodic: false
+    });
+  } catch (e) {
+    console.warn('[js] scheduleTask fail', e);
+  }
+}
 
 const App: FC<IProps> = (props: IProps) => {
   const [enabled, setEnabled] = useState(false);
