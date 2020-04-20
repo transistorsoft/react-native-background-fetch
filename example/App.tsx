@@ -116,7 +116,6 @@ const App: FC<IProps> = (props: IProps) => {
           requiresDeviceIdle: false,    // Default
           requiresBatteryNotLow: false, // Default
           requiresStorageNotLow: false,  // Default
-          enableHeadless: true,
         },
         fetchEvent,
         (status: BackgroundFetchStatus) => {
