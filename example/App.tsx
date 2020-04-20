@@ -150,7 +150,7 @@ const App: FC<IProps> = (props: IProps) => {
     <>
       <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
       <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
-          <Header {...{ enabled, onToggleEnabled }} />
+          <Header enabled={enabled} onToggleEnabled={onToggleEnabled} />
           <ScrollView
             contentInsetAdjustmentBehavior='automatic'
             style={[styles.paddingLR10, styles.container, styles.wide]}
