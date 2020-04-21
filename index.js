@@ -101,3 +101,25 @@ export const status = (callback) => {
   })
 };
 
+export default {
+  addListener,
+  configure,
+  finish,
+  on,
+  onFetch,
+  registerHeadlessTask,
+  scheduleTask,
+  start,
+  status,
+  stop,
+
+  STATUS_RESTRICTED: () => STATUS_RESTRICTED,
+  STATUS_DENIED: () => STATUS_DENIED,
+  STATUS_AVAILABLE: () => STATUS_AVAILABLE,
+
+  NETWORK_TYPE_NONE: () => NETWORK_TYPE_NONE,
+  NETWORK_TYPE_ANY: () => NETWORK_TYPE_ANY,
+  NETWORK_TYPE_UNMETERED: () => NETWORK_TYPE_UNMETERED,
+  NETWORK_TYPE_NOT_ROAMING: () => NETWORK_TYPE_NOT_ROAMING,
+  NETWORK_TYPE_CELLULAR: () => NETWORK_TYPE_CELLULAR,
+};
