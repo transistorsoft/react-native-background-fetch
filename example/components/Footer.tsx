@@ -5,7 +5,10 @@ import {
   View,
   Button,
 } from 'react-native';
-import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
+import {
+  BackgroundFetchStatus,
+  status as BGStatus,
+} from 'react-native-background-fetch';
 
 import { styles, status as getStatus } from '../utils';
 
@@ -17,7 +20,7 @@ type IProps = {
 const Footer: FC<IProps> = ({ clear, defaultStatus = 'unknown' }: IProps) => {
   const [currentStatus, setStatus] = useState(defaultStatus);
   const checkAccess = async () => {
-    const status: BackgroundFetchStatus = await BackgroundFetch.status();
+    const status: BackgroundFetchStatus = await BGStatus();
     status && setStatus(getStatus(status));
   };
 

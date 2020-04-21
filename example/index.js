@@ -3,7 +3,11 @@
  */
 
 import { AppRegistry } from 'react-native';
-import BackgroundFetch from 'react-native-background-fetch';
+import {
+  finish,
+  onFetch,
+  registerHeadlessTask,
+} from 'react-native-background-fetch';
 
 import App from './App';
 import { name as appName } from './app.json';
@@ -33,12 +37,12 @@ const headlessTask = async ({ taskId }) => {
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish(taskId);
+  finish(taskId);
 };
 
 // Register your BackgroundFetch HeadlessTask
-BackgroundFetch.registerHeadlessTask(headlessTask);
+registerHeadlessTask(headlessTask);
 
-BackgroundFetch.onFetch(() => {
+onFetch(() => {
   console.info('[js] BackgroundFetch fetch');
 });

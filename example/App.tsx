@@ -14,7 +14,15 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
+import {
+  BackgroundFetchStatus,
+  configure,
+  finish,
+  NETWORK_TYPE_NONE as requiredNetworkType,
+  scheduleTask as scheduleBGTask,
+  start,
+  stop,
+} from 'react-native-background-fetch';
 
 import { Event } from './types';
 import {
@@ -41,7 +49,7 @@ type IProps = {
 
 export const scheduleTask = async (name: string) => {
   try {
-    await BackgroundFetch.scheduleTask({
+    await scheduleBGTask({
       taskId: name,
       delay: 5000,       // milliseconds
       forceAlarmManager: true,
@@ -64,9 +72,9 @@ const App: FC<IProps> = (props: IProps) => {
   const onToggleEnabled = async (value:boolean) => {
     try {
       if (value) {
-        await BackgroundFetch.start();
+        await start();
       } else {
-        await BackgroundFetch.stop();
+        await stop();
       }
       setEnabled(value);
     } catch (e) {
@@ -95,14 +103,14 @@ const App: FC<IProps> = (props: IProps) => {
       // Required: Signal completion of your task to native code
       // If you fail to do this, the OS can terminate your app
       // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(taskId);
+      finish(taskId);
     } catch (e) {
       console.warn('[js] BackgroundFetch finish falied', e);
     }
   };
   const init = async () => {
     try {
-      BackgroundFetch.configure(
+      configure(
         {
           minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
           // Android options
@@ -110,7 +118,7 @@ const App: FC<IProps> = (props: IProps) => {
           stopOnTerminate: false,
           enableHeadless: true,
           startOnBoot: true,
-          requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
+          requiredNetworkType, // Default
           requiresCharging: false,      // Default
           requiresDeviceIdle: false,    // Default
           requiresBatteryNotLow: false, // Default
