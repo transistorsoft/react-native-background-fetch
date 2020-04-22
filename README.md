@@ -67,6 +67,8 @@ $ npm install --save react-native-background-fetch
 
 ## Example ##
 
+:information_source: This repo contains its own *Example App*.  See [`/example`](./example/README.md)
+
 ```javascript
 
 import BackgroundFetch from "react-native-background-fetch";
