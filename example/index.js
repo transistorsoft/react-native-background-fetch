@@ -8,27 +8,28 @@ import BackgroundFetch from 'react-native-background-fetch';
 import App from './App';
 import { name as appName } from './app.json';
 import {
-  eventsKey,
-  getData,
-  storeData,
-  timeStr,
+  loadEvents,
+  persistEvents,
+  getTimestamp,
 } from './utils';
 
-AppRegistry.registerComponent(appName, () => App);
-
+/// Android-only:  BackgroundFetch event-handler when app is terminated.
+/// NOTE:  This handler must be placed and registered here in index.js -- DO NOT place this in your App components.
+///
 const headlessTask = async ({ taskId }) => {
   // Get task id from event {}:
-  console.log('[js] BackgroundFetch HeadlessTask start: ', taskId);
+  console.log('[BackgroundFetch] 💀 HeadlessTask start: ', taskId);
 
-  const list = await getData(eventsKey) || [];
+  // Persist the event in AsyncStorage to render in list when app is relaunched.
+  const events = await loadEvents() || [];
 
-  list.unshift({
+  events.unshift({
     isHeadless: true,
     taskId,
-    timestamp: timeStr(),
+    timestamp: getTimestamp(),
   });
 
-  await storeData(eventsKey, list);
+  await persistEvents(events);
 
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
@@ -39,6 +40,5 @@ const headlessTask = async ({ taskId }) => {
 // Register your BackgroundFetch HeadlessTask
 BackgroundFetch.registerHeadlessTask(headlessTask);
 
-BackgroundFetch.onFetch(() => {
-  console.info('[js] BackgroundFetch fetch');
-});
+AppRegistry.registerComponent(appName, () => App);
+
