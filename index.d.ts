@@ -169,7 +169,7 @@ declare module "react-native-background-fetch" {
 		* | BackgroundFetch.STATUS_DENIED      | The user explicitly disabled background behavior for this app or for the whole system. |
 		* | BackgroundFetch.STATUS_AVAILABLE   | Background fetch is available and enabled.      |
 		*/
-		static status(callback:(status:BackgroundFetchStatus) => void):void;
+		static status(callback?:(status:BackgroundFetchStatus) => void): void | Promise<BackgroundFetchStatus>;
 		/**
 		* [Android only] Register a function to execute when the app is terminated.  Requires stopOnTerminate: false.
 		*/
