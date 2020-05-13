@@ -59,7 +59,7 @@ $ npm install --save react-native-background-fetch
 ## Android Setup
 
 ### `react-native >= 0.60`
-- No other steps required.
+- [Auto-linking Setup](docs/INSTALL-AUTO-ANDROID.md)
 
 ### `react-native < 0.60`
 - [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)

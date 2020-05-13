@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [3.0.5] &mdash; 2020-05-13
+* [Fixed] Remove an unnecessary reference to `androidx` to allow the plugin to work with non-androidX for those using RN `<=0.59`.
+* [Added] Update *Android Setup* with new required `proguard-rules.pro` for those building release with `minifyEnabled true`.  Fixes #261.
+
+1.  Edit `android/app/proguard-rules.pro`.
+2.  Add the following rule:
+
+```bash
+# [react-native-background-fetch]
+-keep class com.transistorsoft.rnbackgroundfetch.HeadlessTask { *; }
+```
+
 ## [3.0.4] &mdash; 2020-03-24
 * [Fixed] [iOS] Fixed bug calling `start` after executing `stop`.
 
