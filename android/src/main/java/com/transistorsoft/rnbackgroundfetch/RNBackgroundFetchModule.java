@@ -3,8 +3,6 @@ package com.transistorsoft.rnbackgroundfetch;
 import android.app.Activity;
 import android.content.Intent;
 
-import androidx.annotation.Nullable;
-
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
@@ -63,7 +61,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
-    public void stop(@Nullable String taskId, Callback success, Callback failure) {
+    public void stop(String taskId, Callback success, Callback failure) {
         if (taskId == null) taskId = FETCH_TASK_ID;
         BackgroundFetch adapter = getAdapter();
         adapter.stop(taskId);
