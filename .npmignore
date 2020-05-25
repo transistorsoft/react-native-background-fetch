@@ -3,4 +3,5 @@ docs/
 example/
 *.md
 node_modules
+.github/
 
