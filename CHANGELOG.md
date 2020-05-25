@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased
+* [Fixed] Android check `wakeLock.isHeld()` before executing `wakeLock.release()`.
+
 ## [3.0.5] &mdash; 2020-05-13
 * [Fixed] Remove an unnecessary reference to `androidx` to allow the plugin to work with non-androidX for those using RN `<=0.59`.
 * [Added] Update *Android Setup* with new required `proguard-rules.pro` for those building release with `minifyEnabled true`.  Fixes #261.
