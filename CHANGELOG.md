@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [3.0.6] &mdash; 2020-05-27
 * [Fixed] Android check `wakeLock.isHeld()` before executing `wakeLock.release()`.
 
 ## [3.0.5] &mdash; 2020-05-13
