@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## [3.1.0] &mdash; 2020-06-12
+* [Fixed][Android] `com.android.tools.build:gradle:4.0.0` no longer allows "*direct local aar dependencies*".  The Android Setup now requires a custom __`maven url`__ to be added to your app's root __`android/build.gradle`__:
+
+```diff
+allprojects {
+    repositories {
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
++       maven {
++           // react-native-background-fetch
++           url("${project(':react-native-background-fetch').projectDir}/libs")
++       }
+
+    }
+}
+```
+
 ## [3.0.6] &mdash; 2020-05-27
 * [Fixed] Android check `wakeLock.isHeld()` before executing `wakeLock.release()`.
 
