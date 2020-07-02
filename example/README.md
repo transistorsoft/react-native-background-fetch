@@ -9,6 +9,10 @@ react-native-background-fetch Example App
 $ git clone <url>
 $ cd example
 $ yarn install
+
+$ cd ios
+$ pod install
+
 $ react-native run-android
 $ react-native run-ios
 ```
