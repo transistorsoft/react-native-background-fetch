@@ -159,11 +159,11 @@ The minimum interval in **minutes** to execute background fetch events.  Default
 
 #### `@param {Integer} delay (milliseconds)`
 
-:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  The minimum number of milliseconds in future that task should execute.
+:information_source: Valid only for `BackgroundFetch.scheduleTask`.  The minimum number of milliseconds in future that task should execute.
 
 #### `@param {Boolean} periodic [false]`
 
-:information_source: Valid only for `BackgroundGeolocation.scheduleTask`.  Defaults to `false`.  Set true to execute the task repeatedly.  When `false`, the task will execute **just once**.
+:information_source: Valid only for `BackgroundFetch.scheduleTask`.  Defaults to `false`.  Set true to execute the task repeatedly.  When `false`, the task will execute **just once**.
 
 ### Android Options
 
