@@ -244,8 +244,8 @@ If your job doesn't need a network connection, you don't need use this options a
 | `BackgroundFetch.NETWORK_TYPE_NONE`     | This job doesn't care about network constraints, either any or none.|
 | `BackgroundFetch.NETWORK_TYPE_ANY`      | This job requires network connectivity.                             |
 | `BackgroundFetch.NETWORK_TYPE_CELLULAR` | This job requires network connectivity that is a cellular network.  |
-| `BackgroundFetch.NETWORK_TYPE_UNMETERED` | This job requires network connectivity that is unmetered.          |
-| `BackgroundFetch.NETWORK_TYPE_NOT_ROAMING` | This job requires network connectivity that is not roaming.      |
+| `BackgroundFetch.NETWORK_TYPE_UNMETERED` | This job requires network connectivity that is unmetered. Most WiFi networks are unmetered, as in "you can upload as much as you like". |
+| `BackgroundFetch.NETWORK_TYPE_NOT_ROAMING` | This job requires network connectivity that is not roaming (being outside the country of origin) |
 
 #### `@config {Boolean} requiresBatteryNotLow [false]`
 
