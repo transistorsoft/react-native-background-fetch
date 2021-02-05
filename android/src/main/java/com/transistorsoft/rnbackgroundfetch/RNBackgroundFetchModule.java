@@ -31,12 +31,21 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
-    public void configure(ReadableMap options, final Callback failure) {
+    public void configure(ReadableMap options, final Callback success, final Callback failure) {
         BackgroundFetch adapter = getAdapter();
 
         BackgroundFetch.Callback callback = new BackgroundFetch.Callback() {
             @Override public void onFetch(String taskId) {
-                getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class).emit(EVENT_FETCH, taskId);
+                WritableMap params = new WritableNativeMap();
+                params.putString("taskId", taskId);
+                params.putBoolean("timeout", false);
+                getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class).emit(EVENT_FETCH, params);
+            }
+            @Override public void onTimeout(String taskId) {
+                WritableMap params = new WritableNativeMap();
+                params.putString("taskId", taskId);
+                params.putBoolean("timeout", true);
+                getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class).emit(EVENT_FETCH, params);
             }
         };
         adapter.configure(buildConfig(options)
@@ -44,6 +53,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
                 .setIsFetchTask(true)
                 .build(), callback);
 
+        success.invoke(BackgroundFetch.STATUS_AVAILABLE);
     }
 
     @ReactMethod

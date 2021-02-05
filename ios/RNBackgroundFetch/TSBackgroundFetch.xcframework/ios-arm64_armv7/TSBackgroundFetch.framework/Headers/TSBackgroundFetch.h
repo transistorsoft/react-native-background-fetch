@@ -16,6 +16,8 @@
 @property (readonly) BOOL configured;
 @property (readonly) BOOL active;
 @property (readonly) NSString *fetchTaskId;
+@property (copy) void (^completionHandler)(UIBackgroundFetchResult);
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 
 + (TSBackgroundFetch *)sharedInstance;
 
@@ -25,9 +27,12 @@
 
 -(void) configure:(NSTimeInterval)delay callback:(void(^)(UIBackgroundRefreshStatus status))callback;
 
--(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic callback:(void (^)(NSString* taskId))callback;
+-(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic callback:(void (^)(NSString* taskId, BOOL timeout))callback;
+
+-(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic requiresExternalPower:(BOOL)requiresExternalPower requiresNetworkConnectivity:(BOOL)requiresNetworkConnectivity callback:(void (^)(NSString* taskId, BOOL timeout))callback;
 
 -(void) addListener:(NSString*)componentName callback:(void (^)(NSString* componentName))callback;
+-(void) addListener:(NSString*)componentName callback:(void (^)(NSString* componentName))callback timeout:(void (^)(NSString* componentName))timeout;
 -(void) removeListener:(NSString*)componentName;
 -(BOOL) hasListener:(NSString*)componentName;
 

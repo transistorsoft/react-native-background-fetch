@@ -7,7 +7,7 @@
 //
 
 #import "RNBackgroundFetch.h"
-#import <TSBackgroundFetch/TSBackgroundFetch.h>
+@import TSBackgroundFetch;
 #import <UIKit/UIKit.h>
 
 #if __has_include("RCTEventDispatcher.h")
@@ -44,11 +44,11 @@ RCT_EXPORT_MODULE();
     return @[EVENT_FETCH];
 }
 
-RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBlock)failure)
+RCT_EXPORT_METHOD(configure:(NSDictionary*)config success:(RCTResponseSenderBlock)success failure:(RCTResponseSenderBlock)failure)
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
 
-    [fetchManager addListener:PLUGIN_ID callback:[self createCallback]];
+    [fetchManager addListener:PLUGIN_ID callback:[self createFetchCallback]];
 
     NSTimeInterval delay = [[config objectForKey:@"minimumFetchInterval"] doubleValue] * 60;
     [fetchManager configure:delay callback:^(UIBackgroundRefreshStatus status) {
@@ -56,6 +56,8 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config failure:(RCTResponseSenderBloc
         if (status != UIBackgroundRefreshStatusAvailable) {
             NSLog(@"- %@ failed to start, status: %ld", RN_BACKGROUND_FETCH_TAG, (long)status);
             failure(@[@(status)]);
+        } else {
+            success(@[@(status)]);
         }
     }];
 }
@@ -66,7 +68,7 @@ RCT_EXPORT_METHOD(start:(RCTResponseSenderBlock)success failure:(RCTResponseSend
 
     [fetchManager status:^(UIBackgroundRefreshStatus status) {
         if (status == UIBackgroundRefreshStatusAvailable) {
-            [fetchManager addListener:PLUGIN_ID callback:[self createCallback]];
+            [fetchManager addListener:PLUGIN_ID callback:[self createFetchCallback] timeout:[self createFetchTimeoutCallback]];
             NSError *error = [fetchManager start:nil];
             if (!error) {
                 success(@[@(status)]);
@@ -96,11 +98,16 @@ RCT_EXPORT_METHOD(scheduleTask:(NSDictionary*)config success:(RCTResponseSenderB
     long delayMS = [[config objectForKey:@"delay"] longValue];
     NSTimeInterval delay = delayMS / 1000;
     BOOL periodic = [[config objectForKey:@"periodic"] boolValue];
+    BOOL requiresCharging = ([config objectForKey:@"requiresCharging"]) ? [[config objectForKey:@"requiresCharging"] boolValue] : NO;
+    BOOL requiresNetwork = ([config objectForKey:@"requiresNetworkConnectivity"]) ? [[config objectForKey:@"requiresNetworkConnectivity"] boolValue] : NO;
+
 
     NSError *error = [[TSBackgroundFetch sharedInstance] scheduleProcessingTaskWithIdentifier:taskId
                                                                                         delay:delay
                                                                                      periodic:periodic
-                                                                                     callback:[self createCallback]];
+                                                                        requiresExternalPower: requiresCharging
+                                                                  requiresNetworkConnectivity:requiresNetwork
+                                                                                     callback:[self createTaskCallback]];
     if (!error) {
         success(@[@(YES)]);
     } else {
@@ -121,10 +128,32 @@ RCT_EXPORT_METHOD(status:(RCTResponseSenderBlock)callback)
     }];
 }
 
--(void (^)(NSString* taskId)) createCallback {
+-(void (^)(NSString* taskId)) createFetchCallback {
     return ^void(NSString* taskId){
-        RCTLogInfo(@"- %@ Rx Fetch Event", RN_BACKGROUND_FETCH_TAG);
-        [self sendEventWithName:EVENT_FETCH body:taskId];
+        RCTLogInfo(@"- %@ Received fetch event %@", RN_BACKGROUND_FETCH_TAG, taskId);
+        [self sendEventWithName:EVENT_FETCH body:@{
+            @"taskId": taskId,
+            @"timeout": @(NO)
+        }];
+    };
+}
+
+-(void (^)(NSString* taskId)) createFetchTimeoutCallback {
+    return ^void(NSString* taskId){
+        [self sendEventWithName:EVENT_FETCH body:@{
+            @"taskId": taskId,
+            @"timeout": @(YES)
+        }];
+    };
+}
+
+-(void (^)(NSString* taskId, BOOL timeout)) createTaskCallback {
+    return ^void(NSString* taskId, BOOL timeout){
+        RCTLogInfo(@"- %@ Received event event %@", RN_BACKGROUND_FETCH_TAG, taskId);
+        [self sendEventWithName:EVENT_FETCH body:@{
+            @"taskId": taskId,
+            @"timeout": @(timeout)
+        }];
     };
 }
 

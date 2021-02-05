@@ -1,5 +1,93 @@
 # CHANGELOG
 
+## [3.2.0] &mdash; 2021-02-12
+
+* [Added][iOS] Implement two new iOS options for `BackgroundFetch.scheduleTask`:
+    - `bool requiresNetworkConnectivity`
+    - `bool requiresCharging` (previously Android-only).
+
+* [Changed][iOS] Migrate `TSBackgroundFetch.framework` to new `.xcframework` for *MacCatalyst* support with new Apple silcon.
+
+### :warning: Breaking Change:  Requires `cocoapods >= 1.10+`.
+
+*iOS'* new `.xcframework` requires *cocoapods >= 1.10+*:
+
+```bash
+$ pod --version
+// if < 1.10.0
+$ sudo gem install cocoapods
+```
+
+* [Added] task-timeout callback.  `BackgroundFetch.configure` now accepts the 3rd callback argument as `onTimeout` callback.  This callback will be executed when the operating system has signalled your task has expired before your task has called `BackgroundFetch.finish(taskId)`.  You must stop whatever you're task is doing and execute `BackgroundFetch.finish(taskId)` immediately.
+
+```javascript
+let status = await BackgroundFetch.configure({  // <-- NEW:  returns Promise
+  minimumFetchInterval: 15
+}, async (taskId) => {  // <-- task callback.
+  console.log("[BackgroundFetch] taskId:", taskId);
+  BackgroundFetch.finish(taskId);
+}, async (taskId) => {  // <-- NEW:  task-timeout callback.
+  // This task has exceeded its allowed running-time.
+  // You must stop what you're doing immediately finish(taskId)
+  //
+  console.log("[BackgroundFetch] TIMEOUT taskId", taskId);
+  BackgroundFetch.finish(taskId);
+});
+```
+
+### :warning: [Android] Breaking Change For Android Headless-task
+- Headless task event-object now includes a new attribute `event.timeout` when the OS signals your allowed background-time is about to expire.  You must immediately finish what you're doing and call `BackgroundFetch.finish(taskId)` *immediately*.
+
+```javascript
+let myBackgroundFetchHeadlessTask = async (event) => {
+  let taskId = event.taskId;
+  let isTimeout = event.timeout;  // <-- NEW:  true if this task has timed-out.
+  if (isTimeout) {
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing immediately BackgroundFetch.finish(taskId)
+    console.log("[BackgroundFetch] Headless TIMEOUT", taskId);
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+  console.log("[BackgroundFetch] Headless task:", taskId);
+  BackgroundFetch.finish(taskId);
+}
+BackgroundFetch.registerHeadlessTask(myBackgroundFetchHeadlessTask);
+```
+
+* [Changed] API for `BackgroundGeolocation.configure` now returns a `Promise<BackgroundFetchStatus>`
+
+### :warning: Breaking Change:  arguments to `BackgroundFetch.configure`
+
+__OLD__:
+When `BackgroundFetch` failed to start (eg: user disabled "Background Fetch" permission in your app settings), the *3rd argument* `failureCallback` would fire with the current `BackgroundFetchStatus`.
+```javascript
+BackgroundFetch.configure(options, eventCallback, failureCallback);
+```
+
+__NEW__:
+The current `BackgroundFetchStatus` is now returned as a `Promise` when calling `.configure()`.  The *3rd argument* is now `timeoutCallback`, executed when OS has signalled your allowed background time is about to expire:
+```javascript
+// BackgroundFetch event handler.
+const onEvent = async (taskId) => {  // <-- task callback.
+  console.log('[BackgroundFetch] task: ', taskId);
+  // Do your background work...
+  BackgroundFetch.finish(taskId);
+}
+
+// NEW:  Timeout callback is executed when your Task has exceeded its allowed running-time.
+// You must stop what you're doing immediately BackgorundFetch.finish(taskId)
+const onTimeout = async (taskId) => {
+  console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
+  BackgroundFetch.finish(taskId);
+}
+
+// Initialize BackgroundFetch only once when component mounts.
+let status = await BackgroundFetch.configure({minimumFetchInterval: 15}, onEvent, onTimeout);
+
+console.log('[BackgroundFetch] configure status: ', status);
+```
+
 ## [3.1.0] &mdash; 2020-06-12
 * [Fixed][Android] `com.android.tools.build:gradle:4.0.0` no longer allows "*direct local aar dependencies*".  The Android Setup now requires a custom __`maven url`__ to be added to your app's root __`android/build.gradle`__:
 

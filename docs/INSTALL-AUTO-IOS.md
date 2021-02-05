@@ -14,6 +14,14 @@ $ npm install --save react-native-background-fetch
 
 ## `pod install`
 
+**:warning: requires *cocoapods* `>= 1.10+`:**
+
+```bash
+$ pod --version
+// if < 1.10.0
+$ sudo gem install cocoapods
+```
+
 ```bash
 $ cd ios
 $ pod install
@@ -60,7 +68,7 @@ The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/background
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-// IMPORTANT:  Paste import ABOVE the DEBUG macro 
+// IMPORTANT:  Paste import ABOVE the DEBUG macro
 +#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 #if DEBUG
