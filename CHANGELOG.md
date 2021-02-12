@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [3.2.0] &mdash; 2021-02-12
+## [4.0.0] &mdash; 2021-02-12
 
 * [Added][iOS] Implement two new iOS options for `BackgroundFetch.scheduleTask`:
     - `bool requiresNetworkConnectivity`
