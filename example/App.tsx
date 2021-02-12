@@ -87,7 +87,7 @@ const App: FC<IProps> = (props: IProps) => {
   /// All events from the plugin arrive here, including #scheduleTask events.
   ///
   const onBackgroundFetchEvent = async (taskId: string) => {
-    console.log('[BackgroundFetch] Event received: ', taskId);
+    console.log('[BackgroundFetch] Event taskId: ', taskId);
 
     // Add fetch-event to List
     const events = await loadEvents<Event[]>() || [];
@@ -113,10 +113,20 @@ const App: FC<IProps> = (props: IProps) => {
     BackgroundFetch.finish(taskId);
   };
 
+  const onBackgroundFetchTimeout = async (taskId: string) => {
+    // The OS has signalled the end of your available background time.
+    // You must stop what you're doing an immediately call .finish(taskId).
+    console.log('[BackgroundFetch] TIMEOUT taskId: ', taskId);
+
+    // Required: Signal completion of your task to native code
+    // If you fail to do this, the OS can terminate your app
+    // or assign battery-blame for consuming too much background-time
+    BackgroundFetch.finish(taskId);
+  };
   /// Configure BackgroundFetch
   ///
   const init = async () => {
-    BackgroundFetch.configure({
+    let status = await BackgroundFetch.configure({
       minimumFetchInterval: 15,      // <-- minutes (15 is minimum allowed)
       // Android options
       forceAlarmManager: false,      // <-- Set true to bypass JobScheduler.
@@ -128,10 +138,9 @@ const App: FC<IProps> = (props: IProps) => {
       requiresDeviceIdle: false,     // Default
       requiresBatteryNotLow: false,  // Default
       requiresStorageNotLow: false,  // Default
-    }, onBackgroundFetchEvent, (status: BackgroundFetchStatus) => {
-      setDefaultStatus(statusToString(status));
-      console.log('[BackgroundFetch] status', statusToString(status), status);
-    });
+    }, onBackgroundFetchEvent, onBackgroundFetchTimeout);
+    console.log('[BackgroundFetch] configure status: ', status);
+
     // Turn on the enabled switch.
     onToggleEnabled(true);
     // Load the list with persisted events.

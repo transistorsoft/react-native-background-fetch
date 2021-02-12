@@ -10,7 +10,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <TSBackgroundFetch/TSBackgroundFetch.h>
+@import TSBackgroundFetch;
 
 @implementation AppDelegate
 

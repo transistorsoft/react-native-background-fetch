@@ -140,14 +140,13 @@ declare module "react-native-background-fetch" {
 		/**
 		* Initial configuration of BackgroundFetch, including config-options and Fetch-callback.  The [[start]] method will automatically be executed.
 		*/
-		static configure(config:BackgroundFetchConfig, callback:(taskId:string) => void | Promise<void>, failure?:(status:BackgroundFetchStatus) => void):void;
+		static configure(config:BackgroundFetchConfig, onEvent:(taskId:string) => void, onTimeout?:(taskId:string) => void):Promise<BackgroundFetchStatus>;
 		/**
 		* Add an extra fetch event listener in addition to the one initially provided to [[configure]].
 		* @event
 		*/
 		static scheduleTask(config:TaskConfig):Promise<boolean>;
 
-		static onFetch(callback:() => void):void;
 		/**
 		* Start subscribing to fetch events.
 		*/

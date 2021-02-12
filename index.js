@@ -34,15 +34,34 @@ export default class BackgroundFetch {
   static get NETWORK_TYPE_NOT_ROAMING() { return NETWORK_TYPE_NOT_ROAMING; }
   static get NETWORK_TYPE_CELLULAR() { return NETWORK_TYPE_CELLULAR; }
 
-  static configure(config, callback, failure) {
-    if (typeof(callback) !== 'function') {
-      throw "RNBackgroundFetch requires a fetch callback at 2nd argument";
+  static configure(config, onEvent, onTimeout) {
+    if (typeof(onEvent) !== 'function') {
+      throw "BackgroundFetch requires an event callback at 2nd argument";
     }
-    EventEmitter.removeAllListeners('fetch');
+    if (typeof(onTimeout) !== 'function') {
+      console.warn("[BackgroundFetch] configure:  You did not provide a 3rd argument onTimeout callback.  This callback is a signal from the OS that your allowed background time is about to expire.  Use this callback to finish what you're doing and immediately call BackgroundFetch.finish(taskId)");
+      onTimeout = (taskId) => {
+        console.warn('[BackgroundFetch] default onTimeout callback fired.  You should provide your own onTimeout callbcak to .configure(options, onEvent, onTimeout)');
+        BackgroundFetch.finish(taskId);
+      }
+    }
+    EventEmitter.removeAllListeners(EVENT_FETCH);
+
+    EventEmitter.addListener(EVENT_FETCH, (event) => {
+      if (!event.timeout) {
+        onEvent(event.taskId);
+      } else {
+        onTimeout(event.taskId);
+      }
+    });
+
     config = config || {};
-    failure = failure || function() {};
-    RNBackgroundFetch.configure(config, failure);
-    return this.addListener(EVENT_FETCH, callback);
+
+    return new Promise((resolve, reject) => {
+      let success = (status) => { resolve(status) };
+      let failure = (status) => { reject(status) };
+      RNBackgroundFetch.configure(config, success, failure);
+    });
   }
 
   static scheduleTask(config) {
@@ -58,21 +77,6 @@ export default class BackgroundFetch {
   */
   static registerHeadlessTask(task) {
     AppRegistry.registerHeadlessTask("BackgroundFetch", () => task);
-  }
-
-  static onFetch(callback) {
-    this.addListener('fetch', callback);
-  }
-
-  static on(event, callback) {
-    return this.addListener(event, callback);
-  }
-
-  static addListener(event, callback) {
-    if (EVENTS.indexOf(event) < 0) {
-      throw "RNBackgroundFetch: Unknown event '" + event + '"';
-    }
-    return EventEmitter.addListener(event, callback);
   }
 
   static start() {

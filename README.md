@@ -16,6 +16,9 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 ### iOS
 - There is **no way** to increase the rate which a fetch-event occurs and this plugin sets the rate to the most frequent possible &mdash; you will **never** receive an event faster than **15 minutes**.  The operating-system will automatically throttle the rate the background-fetch events occur based upon usage patterns.  Eg: if user hasn't turned on their phone for a long period of time, fetch events will occur less frequently.
 - [__`scheduleTask`__](#executing-custom-tasks) seems only to fire when the device is plugged into power.
+- ⚠️ When your app is **terminated**, iOS *no longer fires events* &mdash; There is *no such thing* as **`stopOnTerminate: false`** for iOS.
+- iOS can task *days* before Apple's machine-learning algorithm settles in and begins regularly firing events.  Do not sit staring at your logs waiting for an event to fire.  If your [*simulated events*](#debugging) work, that's all you need to know that everything is correctly configured.
+- If the user doesn't open your *iOS* app for long periods of time, *iOS* will **stop firing events**.
 
 ### Android
 - The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
@@ -51,81 +54,155 @@ $ npm install --save react-native-background-fetch
 ### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-IOS.md)
 
-### `react-native < 0.60`
-- [`react-native link` Setup](docs/INSTALL-LINK-IOS.md)
-- [Cocoapods Setup](docs/INSTALL-COCOAPODS-IOS.md)
-- [Manual Setup](docs/INSTALL-MANUAL-IOS.md)
-
 ## Android Setup
 
 ### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-ANDROID.md)
-
-### `react-native < 0.60`
-- [`react-native link` Setup](docs/INSTALL-LINK-ANDROID.md)
-- [Manual Setup](docs/INSTALL-MANUAL-ANDROID.md)
 
 ## Example ##
 
 :information_source: This repo contains its own *Example App*.  See [`/example`](./example/README.md)
 
 ```javascript
+import React from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  FlatList,
+  StatusBar,
+} from 'react-native';
+
+import {
+  Header,
+  Colors
+} from 'react-native/Libraries/NewAppScreen';
 
 import BackgroundFetch from "react-native-background-fetch";
 
-export default class App extends Component {
-  componentDidMount() {
-    // Configure it.
-    BackgroundFetch.configure({
-      minimumFetchInterval: 15,     // <-- minutes (15 is minimum allowed)
-      // Android options
-      forceAlarmManager: false,     // <-- Set true to bypass JobScheduler.
-      stopOnTerminate: false,
-      startOnBoot: true,
-      requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
-      requiresCharging: false,      // Default
-      requiresDeviceIdle: false,    // Default
-      requiresBatteryNotLow: false, // Default
-      requiresStorageNotLow: false  // Default
-    }, async (taskId) => {
-      console.log("[js] Received background-fetch event: ", taskId);
-      // Required: Signal completion of your task to native code
-      // If you fail to do this, the OS can terminate your app
-      // or assign battery-blame for consuming too much background-time
-      BackgroundFetch.finish(taskId);
-    }, (error) => {
-      console.log("[js] RNBackgroundFetch failed to start");
-    });
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      events: []
+    };
+  }
 
-    // Optional: Query the authorization status.
-    BackgroundFetch.status((status) => {
-      switch(status) {
-        case BackgroundFetch.STATUS_RESTRICTED:
-          console.log("BackgroundFetch restricted");
-          break;
-        case BackgroundFetch.STATUS_DENIED:
-          console.log("BackgroundFetch denied");
-          break;
-        case BackgroundFetch.STATUS_AVAILABLE:
-          console.log("BackgroundFetch is enabled");
-          break;
-      }
+  componentDidMount() {
+    // Initialize BackgroundFetch ONLY ONCE when component mounts.
+    this.initBackgroundFetch();
+  }
+
+  async initBackgroundFetch() {
+    // BackgroundFetch event handler.
+    const onEvent = async (taskId) => {
+      console.log('[BackgroundFetch] task: ', taskId);
+      // Do your background work...
+      await this.addEvent(taskId);
+      // IMPORTANT:  You must signal to the OS that your task is complete.
+      BackgroundFetch.finish(taskId);
+    }
+
+    // Timeout callback is executed when your Task has exceeded its allowed running-time.
+    // You must stop what you're doing immediately BackgorundFetch.finish(taskId)
+    const onTimeout = async (taskId) => {
+      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
+      BackgroundFetch.finish(taskId);
+    }
+
+    // Initialize BackgroundFetch only once when component mounts.
+    let status = await BackgroundFetch.configure({minimumFetchInterval: 15}, onEvent, onTimeout);
+
+    console.log('[BackgroundFetch] configure status: ', status);
+  }
+
+  // Add a BackgroundFetch event to <FlatList>
+  addEvent(taskId) {
+    // Simulate a possibly long-running asynchronous task with a Promise.
+    return new Promise((resolve, reject) => {
+      this.setState(state => ({
+        events: [...state.events, {
+          taskId: taskId,
+          timestamp: (new Date()).toString()
+        }]
+      }));
+      resolve();
     });
   }
-};
+
+  render() {
+    return (
+      <>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+            <Header />
+
+            <View style={styles.body}>
+              <View style={styles.sectionContainer}>
+                <Text style={styles.sectionTitle}>BackgroundFetch Demo</Text>
+              </View>
+            </View>
+          </ScrollView>
+          <View style={styles.sectionContainer}>
+            <FlatList
+              data={this.state.events}
+              renderItem={({item}) => (<Text>[{item.taskId}]: {item.timestamp}</Text>)}
+              keyExtractor={item => item.timestamp}
+            />
+          </View>
+        </SafeAreaView>
+      </>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  scrollView: {
+    backgroundColor: Colors.lighter,
+  },
+  body: {
+    backgroundColor: Colors.white,
+  },
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: Colors.dark,
+  },
+});
+
+export default App;
 ```
 
 ### Executing Custom Tasks
 
 In addition to the default background-fetch task defined by `BackgroundFetch.configure`, you may also execute your own arbitrary "oneshot" or periodic tasks (iOS requires additional [Setup Instructions](#iOS-Setup)).  However, all events will be fired into the Callback provided to **`BackgroundFetch#configure`**:
 
-__:warning: iOS__:  Custom iOS tasks seem only to run while device is plugged into power.  Hopefully Apple changes this in the future.
+### ⚠️ iOS:
+- `scheduleTask` on *iOS* seems only to run when the device is plugged into power.
+- `scheduleTask` on *iOS* are designed for *low-priority* tasks, such as purging cache files &mdash; they tend to be **unreliable for mission-critical tasks**.  `scheduleTask` will *never* run a frequently as you want.
+- The default `fetch` event is much more reliable and fires far more often.
+- `scheduleTask` on *iOS* stop when the *user* terminates the app.  There is no such thing as `stopOnTerminate: false` for *iOS*.
 
 ```javascript
 // Step 1:  Configure BackgroundFetch as usual.
-BackgroundFetch.configure({
+let status = await BackgroundFetch.configure({
   minimumFetchInterval: 15
-}, async (taskId) => {
+}, async (taskId) => {  // <-- Event callback
   // This is the fetch-event callback.
   console.log("[BackgroundFetch] taskId: ", taskId);
 
@@ -138,6 +215,10 @@ BackgroundFetch.configure({
       print("Default fetch task");
   }
   // Finish, providing received taskId.
+  BackgroundFetch.finish(taskId);
+}, async (taskId) => {  // <-- Task timeout callback
+  // This task has exceeded its allowed running-time.
+  // You must stop what you're doing and immediately .finish(taskId)
   BackgroundFetch.finish(taskId);
 });
 
@@ -184,11 +265,15 @@ By default, the plugin will use Android's `JobScheduler` when possible.  The `Jo
 Configuring `forceAlarmManager: true` will bypass `JobScheduler` to use Android's older `AlarmManager` API, resulting in more accurate task-execution at the cost of **higher battery usage**.
 
 ```javascript
-BackgroundFetch.configure({
+let status = await BackgroundFetch.configure({
   minimumFetchInterval: 15,
   forceAlarmManager: true
-}, async (taskId) => {
+}, async (taskId) => {  // <-- Event callback
   console.log("[BackgroundFetch] taskId: ", taskId);
+  BackgroundFetch.finish(taskId);
+}, async (taskId) => {  // <-- Task timeout callback
+  // This task has exceeded its allowed running-time.
+  // You must stop what you're doing and immediately .finish(taskId)
   BackgroundFetch.finish(taskId);
 });
 .
@@ -207,13 +292,21 @@ BackgroundFetch.scheduleTask({
 
 Set `true` to enable React Native's [Headless JS](https://facebook.github.io/react-native/docs/headless-js-android.html) mechanism, for handling fetch events after app termination.
 
-* :open_file_folder: **`index.js`**
+* :open_file_folder: **`index.js`** (**MUST BE IN `index.js`**):
 ```javascript
 import BackgroundFetch from "react-native-background-fetch";
 
 let MyHeadlessTask = async (event) => {
   // Get task id from event {}:
   let taskId = event.taskId;
+  let isTimeout = event.timeout;  // <-- true when your background-time has expired.
+  if (isTimeout) {
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing immediately finish(taskId)
+    console.log('[BackgroundFetch] Headless TIMEOUT:', taskId);
+    BackgroundFetch.finish(taskId);
+    return;
+  }
   console.log('[BackgroundFetch HeadlessTask] start: ', taskId);
 
   // Perform an example HTTP request.
@@ -308,6 +401,30 @@ e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWith
 
 ![](https://dl.dropboxusercontent.com/s/bsv0avap5c2h7ed/ios-simulate-bgtask-play.png?dl=1)
 
+#### Simulating task-timeout events
+
+- Only the new `BGTaskScheduler` api supports *simulated* task-timeout events.  To simulate a task-timeout, your `fetchCallback` must not call `BackgroundFetch.finish(taskId)`:
+
+```javascript
+let status = await BackgroundFetch.configure({
+  minimumFetchInterval: 15
+}, async (taskId) => {  // <-- Event callback.
+  // This is the task callback.
+  console.log("[BackgroundFetch] taskId", taskId);
+  //BackgroundFetch.finish(taskId); // <-- Disable .finish(taskId) when simulating an iOS task timeout
+}, async (taskId) => {  // <-- Event timeout callback
+  // This task has exceeded its allowed running-time.
+  // You must stop what you're doing and immediately .finish(taskId)
+  print("[BackgroundFetch] TIMEOUT taskId:", taskId);
+  BackgroundFetch.finish(taskId);
+});
+```
+
+- Now simulate an iOS task timeout as follows, in the same manner as simulating an event above:
+```obj-c
+e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateExpirationForTaskWithIdentifier:@"com.transistorsoft.fetch"]
+```
+
 #### Old `BackgroundFetch` API
 - Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`**
 - iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, your can be **sure** that everything is working fine.  You just need to wait.
@@ -327,18 +444,6 @@ $ adb shell cmd jobscheduler run -f <your.application.id> 999
 $ adb shell am broadcast -a <your.application.id>.event.BACKGROUND_FETCH
 
 ```
-
-## Implementation
-
-### iOS
-
-Implements [performFetchWithCompletionHandler](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplicationDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/UIApplicationDelegate/application:performFetchWithCompletionHandler:), firing a custom event subscribed-to in cordova plugin.
-
-### Android
-
-Android implements background fetch using two different mechanisms, depending on the Android SDK version.  Where the SDK version is `>= LOLLIPOP`, the new [`JobScheduler`](https://developer.android.com/reference/android/app/job/JobScheduler.html) API is used.  Otherwise, the old [`AlarmManager`](https://developer.android.com/reference/android/app/AlarmManager.html) will be used.
-
-Unlike iOS, the Android implementation *can* continue to operate after application terminate (`stopOnTerminate: false`) or device reboot (`startOnBoot: true`).
 
 ## Licence
 

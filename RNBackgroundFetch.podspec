@@ -20,5 +20,5 @@ Pod::Spec.new do |s|
   s.dependency 'React-Core'
   s.preserve_paths      = 'docs', 'CHANGELOG.md', 'LICENSE', 'package.json', 'RNBackgroundFetch.ios.js'
   s.source_files        = 'ios/RNBackgroundFetch/RNBackgroundFetch.h', 'ios/RNBackgroundFetch/RNBackgroundFetch.m'
-  s.vendored_frameworks = 'ios/RNBackgroundFetch/TSBackgroundFetch.framework'
+  s.vendored_frameworks = 'ios/RNBackgroundFetch/TSBackgroundFetch.xcframework'
 end
