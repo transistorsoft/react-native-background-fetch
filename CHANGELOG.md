@@ -18,7 +18,7 @@ $ pod --version
 $ sudo gem install cocoapods
 ```
 
-* [Added] task-timeout callback.  `BackgroundFetch.configure` now accepts the 3rd callback argument as `onTimeout` callback.  This callback will be executed when the operating system has signalled your task has expired before your task has called `BackgroundFetch.finish(taskId)`.  You must stop whatever you're task is doing and execute `BackgroundFetch.finish(taskId)` immediately.
+* [Added] task-timeout callback.  `BackgroundFetch.configure` now accepts the 3rd callback argument as `onTimeout` callback.  This callback will be executed when the operating system has signalled your background-time is about to expire. You must stop what your task is doing and execute `BackgroundFetch.finish(taskId)` immediately.
 
 ```javascript
 let status = await BackgroundFetch.configure({  // <-- NEW:  returns Promise
