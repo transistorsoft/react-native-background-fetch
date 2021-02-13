@@ -23,11 +23,22 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 ### Android
 - The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
 
+-------------------------------------------------------------
 
-
-## Installing the plugin
+# Contents
+- ### :books: [API Documentation](#api-documentation)
+  - [Config](#config)
+  - [Methods](#methods)
+- ### [Installing the Plugin](#installing-the-plugin)
+- ### [Setup Guides](#setup-guides)
+  - [iOS Setup](#ios-setup)
+  - [Android Setup](#android-setup)
+- ### [Example](#example)
+- ### [Debugging](#debugging)
 
 -------------------------------------------------------------
+
+## Installing the plugin
 
 :warning: If you have a previous version of **`react-native-background-fetch < 2.7.0`** installed into **`react-native >= 0.60`**, you should first `unlink` your previous version as `react-native link` is no longer required.
 
@@ -48,15 +59,16 @@ $ yarn add react-native-background-fetch
 $ npm install --save react-native-background-fetch
 ```
 
+## Setup Guides
 
-## iOS Setup
+### iOS Setup
 
-### `react-native >= 0.60`
+#### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-IOS.md)
 
-## Android Setup
+### Android Setup
 
-### `react-native >= 0.60`
+#### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-ANDROID.md)
 
 ## Example ##
@@ -230,6 +242,8 @@ BackgroundFetch.scheduleTask({
 });
 ```
 
+# API Documentation
+
 ## Config
 
 ### Common Options
@@ -370,13 +384,12 @@ This state is a loose definition provided by the system. In general, it means th
 
 | Method Name | Arguments | Returns | Notes
 |---|---|---|---|
-| `configure` | `{FetchConfig}`, `callbackFn`, `failureFn` | `Void` | Configures the plugin's `callbackFn`.  This callback will fire each time an iOS background-fetch event occurs (typically every 15 min) in addition to events from `#scheduleTask`.  The `failureFn` will be called if the device doesn't support background-fetch. |
+| `configure` | `{FetchConfig}`, `callbackFn`, `timeoutFn` | `Promise<BackgroundFetchStatus>` | Configures the plugin's `callbackFn` and `timeoutFn`.  This callback will fire each time a background-fetch event occurs in addition to events from `#scheduleTask`.  The `timeoutFn` will be called when the OS reports your task is nearing the end of its allowed background-time. |
 | `scheduleTask` | `{TaskConfig}` | `Promise<boolean>` | Executes a custom task.  The task will be executed in the same `Callback` function provided to `#configure`. |
-| `status` | `callbackFn` | `Void` (TODO: Should return `Promise`) | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
+| `status` | `callbackFn` | `Promise<BackgroundFetchStatus>` | Your callback will be executed with the current `status (Integer)` `0: Restricted`, `1: Denied`, `2: Available`.  These constants are defined as `BackgroundFetch.STATUS_RESTRICTED`, `BackgroundFetch.STATUS_DENIED`, `BackgroundFetch.STATUS_AVAILABLE` (**NOTE:** Android will always return `STATUS_AVAILABLE`)|
 | `finish` | `String taskId` | `Void` | You **MUST** call this method in your `callbackFn` provided to `#configure` in order to signal to the OS that your task is complete.  iOS provides **only** 30s of background-time for a fetch-event -- if you exceed this 30s, iOS will kill your app. |
 | `start` | `none` | `Promise<BackgroundFetchStatus>` | Start the background-fetch API.  Your `callbackFn` provided to `#configure` will be executed each time a background-fetch event occurs.  **NOTE** the `#configure` method *automatically* calls `#start`.  You do **not** have to call this method after you `#configure` the plugin |
 | `stop` | `[taskId:String]` | `Promise<boolean>` | Stop the background-fetch API and all `#scheduleTask` from firing events.  Your `callbackFn` provided to `#configure` will no longer be executed. If you provide an optional `taskId`, only that `#scheduleTask` will be stopped.|
-
 
 
 ## Debugging
