@@ -102,7 +102,7 @@ const App: FC<IProps> = (props: IProps) => {
     if (taskId === 'react-native-background-fetch') {
       // Test initiating a #scheduleTask when the periodic fetch event is received.
       try {
-        await scheduleTask('com.transistorsoft.customtask');
+        //await scheduleTask('com.transistorsoft.customtask');
       } catch (e) {
         console.warn('[BackgroundFetch] scheduleTask falied', e);
       }

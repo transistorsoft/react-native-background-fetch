@@ -48,9 +48,10 @@ RCT_EXPORT_METHOD(configure:(NSDictionary*)config success:(RCTResponseSenderBloc
 {
     TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
 
-    [fetchManager addListener:PLUGIN_ID callback:[self createFetchCallback]];
+    [fetchManager addListener:PLUGIN_ID callback:[self createFetchCallback] timeout:[self createFetchTimeoutCallback]];
 
     NSTimeInterval delay = [[config objectForKey:@"minimumFetchInterval"] doubleValue] * 60;
+
     [fetchManager configure:delay callback:^(UIBackgroundRefreshStatus status) {
         self->configured = YES;
         if (status != UIBackgroundRefreshStatusAvailable) {

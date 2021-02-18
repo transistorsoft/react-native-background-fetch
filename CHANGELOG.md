@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [4.0.1] &mdash; 2021-02-18
+
+* [Fixed][Android] Fix `java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.transistorsoft.tsbackgroundfetch.BGTask.getTaskId()' on a null object reference`
+* [Fixed][iOS] Mistake implementing timeout callback for TSBackgroundFetch addListener.  Provided old signature.
+
 ## [4.0.0] &mdash; 2021-02-12
 
 * [Added][iOS] Implement two new iOS options for `BackgroundFetch.scheduleTask`:
