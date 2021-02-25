@@ -98,6 +98,10 @@ declare module "react-native-background-fetch" {
 		* The name of the task.  This will be used with [[BackgroundFetch.finish]] to signal task-completion.
 		*/
 		taskId: string;
+		/**
+		* Whether this event is a timeout event or not. If true stop all processing and call [[BackgroundFetch.finish]] immediately.
+		*/
+		timeout: boolean;
 	}
 
 	/**
