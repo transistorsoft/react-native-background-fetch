@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [4.0.2] &mdash; 2021-02-25
+## [4.0.2] &mdash; 2021-04-02
 * [Fixed] Typescript definition for interface `HeadlessEvent` was missing `timeout: boolean` attribute.  Thanks @mikehardy.
 
 ## [4.0.1] &mdash; 2021-02-18
