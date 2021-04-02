@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.0.2] &mdash; 2021-02-25
+* [Fixed] Typescript definition for interface `HeadlessEvent` was missing `timeout: boolean` attribute.  Thanks @mikehardy.
+
 ## [4.0.1] &mdash; 2021-02-18
 
 * [Fixed][Android] Fix `java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.transistorsoft.tsbackgroundfetch.BGTask.getTaskId()' on a null object reference`
