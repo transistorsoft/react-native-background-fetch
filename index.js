@@ -41,7 +41,7 @@ export default class BackgroundFetch {
     if (typeof(onTimeout) !== 'function') {
       console.warn("[BackgroundFetch] configure:  You did not provide a 3rd argument onTimeout callback.  This callback is a signal from the OS that your allowed background time is about to expire.  Use this callback to finish what you're doing and immediately call BackgroundFetch.finish(taskId)");
       onTimeout = (taskId) => {
-        console.warn('[BackgroundFetch] default onTimeout callback fired.  You should provide your own onTimeout callbcak to .configure(options, onEvent, onTimeout)');
+        console.warn('[BackgroundFetch] default onTimeout callback fired.  You should provide your own onTimeout callback to .configure(options, onEvent, onTimeout)');
         BackgroundFetch.finish(taskId);
       }
     }
