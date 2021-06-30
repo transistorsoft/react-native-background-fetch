@@ -37,7 +37,7 @@ const headlessTask = async (event) => {
   // Required:  Signal to native code that your task is complete.
   // If you don't do this, your app could be terminated and/or assigned
   // battery-blame for consuming too much time in background.
-  BackgroundFetch.finish(taskId);
+  BackgroundFetch.finish(event.taskId);
 };
 
 // Register your BackgroundFetch HeadlessTask
