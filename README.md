@@ -118,7 +118,7 @@ class App extends React.Component {
     }
 
     // Timeout callback is executed when your Task has exceeded its allowed running-time.
-    // You must stop what you're doing immediately BackgorundFetch.finish(taskId)
+    // You must stop what you're doing immediately BackgroundFetch.finish(taskId)
     const onTimeout = async (taskId) => {
       console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
       BackgroundFetch.finish(taskId);
