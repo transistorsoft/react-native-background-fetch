@@ -19,7 +19,7 @@ android {
 }
 
 repositories{
-    jcenter()
+    mavenCentral()
     maven {
         url './libs'
     }

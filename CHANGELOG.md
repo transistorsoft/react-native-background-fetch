@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [4.0.4] &mdash; 2021-10-22
+* [Fixed] EventEmitter warning about `addListener` / `removeListeners`
+* [Changed] Re-generate /example app with `react-native init`.  Complete re-factor to use React Hooks.
+
 ## [4.0.3] &mdash; 2021-06-30
 * [Changed][Android] Allow multiple calls to .configure to allow re-configuring the fetch task.  Existing task will be cancelled and a new periodic fetch task re-scheduled according to new config.
 * [Changed][Android] Ignore initial fetch task fired immediately.
