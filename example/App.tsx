@@ -1,5 +1,6 @@
 /**
- * BackgroundFetch example app.
+ * Sample React Native App
+ * https://github.com/facebook/react-native
  *
  * Generated with the TypeScript template
  * https://github.com/react-native-community/react-native-template-typescript
@@ -7,168 +8,224 @@
  * @format
  */
 
-import React, { useEffect, useState, FC } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  Switch,
+  Button,
+  Alert
 } from 'react-native';
-import BackgroundFetch, { BackgroundFetchStatus } from 'react-native-background-fetch';
 
-import { Event } from './types';
+import BackgroundFetch from "react-native-background-fetch";
 
-import {
-  backgroundColor,
-  loadEvents,
-  persistEvents,
-  statusToString,
-  getTimestamp,
-  styles
-} from './utils';
-
-import {
-  EventItem,
-  Footer,
-  Header,
-  Notice,
-} from './components';
-
-declare var global: { HermesInternal: null | {} };
-
-type IProps = {
-  navigation: any;
-};
-
-/// Execute a BackgroundFetch.scheduleTask
-///
-export const scheduleTask = async (name: string) => {
-  try {
-    await BackgroundFetch.scheduleTask({
-      taskId: name,
-      stopOnTerminate: false,
-      enableHeadless: true,
-      delay: 5000,               // milliseconds (5s)
-      forceAlarmManager: true,   // more precise timing with AlarmManager vs default JobScheduler
-      periodic: false            // Fire once only.
-    });
-  } catch (e) {
-    console.warn('[BackgroundFetch] scheduleTask fail', e);
-  }
+const Colors = {
+  gold: '#fedd1e',
+  black: '#000',
+  white: '#fff',
+  lightGrey: '#ccc',
+  blue: '#337AB7',
 }
 
-const App: FC<IProps> = (props: IProps) => {
-  const [enabled, setEnabled] = useState(false);
-  const [defaultStatus, setDefaultStatus] = useState('unknown');
-  const [events, setEvents] = useState([] as Event[]);
+/// Util class for handling fetch-event peristence in AsyncStorage.
+import Event from "./src/Event";
 
-  /// [Clear] button-handler.
+const App = () => {
+
+  const [enabled, setEnabled] = React.useState(false);
+  const [status, setStatus] = React.useState(-1);
+  const [events, setEvents] = React.useState<Event[]>([]);
+
+  React.useEffect(() => {
+    initBackgroundFetch()
+    loadEvents();
+  }, []);
+
+  /// Configure BackgroundFetch.
   ///
-  const onClickClear = () => {
-    setEvents([]);
-    persistEvents([]);
-  };
-
-  /// Switch handler in top-toolbar.
-  ///
-  const onToggleEnabled = async (value:boolean) => {
-    try {
-      if (value) {
-        await BackgroundFetch.start();
-      } else {
-        await BackgroundFetch.stop();
-      }
-      setEnabled(value);
-    } catch (e) {
-      console.warn(`[BackgroundFetch] ${value ? 'start' : 'stop'} falied`, e);
-    }
-  };
-
-  /// BackgroundFetch event-handler.
-  /// All events from the plugin arrive here, including #scheduleTask events.
-  ///
-  const onBackgroundFetchEvent = async (taskId: string) => {
-    console.log('[BackgroundFetch] Event taskId: ', taskId);
-
-    // Add fetch-event to List
-    const events = await loadEvents<Event[]>() || [];
-    events.unshift({
-      isHeadless: false,
-      taskId,
-      timestamp: getTimestamp(),
-    });
-    setEvents([...events]);
-    persistEvents(events);
-
-    if (taskId === 'react-native-background-fetch') {
-      // Test initiating a #scheduleTask when the periodic fetch event is received.
-      try {
-        //await scheduleTask('com.transistorsoft.customtask');
-      } catch (e) {
-        console.warn('[BackgroundFetch] scheduleTask falied', e);
-      }
-    }
-    // Required: Signal completion of your task to native code
-    // If you fail to do this, the OS can terminate your app
-    // or assign battery-blame for consuming too much background-time
-    BackgroundFetch.finish(taskId);
-  };
-
-  const onBackgroundFetchTimeout = async (taskId: string) => {
-    // The OS has signalled the end of your available background time.
-    // You must stop what you're doing an immediately call .finish(taskId).
-    console.log('[BackgroundFetch] TIMEOUT taskId: ', taskId);
-
-    // Required: Signal completion of your task to native code
-    // If you fail to do this, the OS can terminate your app
-    // or assign battery-blame for consuming too much background-time
-    BackgroundFetch.finish(taskId);
-  };
-  /// Configure BackgroundFetch
-  ///
-  const init = async () => {
-    let status = await BackgroundFetch.configure({
+  const initBackgroundFetch = async () => {
+    const status:number = await BackgroundFetch.configure({
       minimumFetchInterval: 15,      // <-- minutes (15 is minimum allowed)
-      // Android options
-      forceAlarmManager: false,      // <-- Set true to bypass JobScheduler.
       stopOnTerminate: false,
       enableHeadless: true,
       startOnBoot: true,
+      // Android options
+      forceAlarmManager: false,      // <-- Set true to bypass JobScheduler.
       requiredNetworkType: BackgroundFetch.NETWORK_TYPE_NONE, // Default
       requiresCharging: false,       // Default
       requiresDeviceIdle: false,     // Default
       requiresBatteryNotLow: false,  // Default
       requiresStorageNotLow: false,  // Default
-    }, onBackgroundFetchEvent, onBackgroundFetchTimeout);
-    console.log('[BackgroundFetch] configure status: ', status);
+    }, async (taskId:string) => {
+      console.log('[BackgroundFetch] taskId', taskId);
+      // Create an Event record.
+      const event = await Event.create(taskId, false);
+      // Update state.
+      setEvents((prev) => [...prev, event]);
+      // Finish.
+      BackgroundFetch.finish(taskId);
+    }, (taskId:string) => {
+      // Oh No!  Our task took too long to complete and the OS has signalled
+      // that this task must be finished immediately.
+      console.log('[Fetch] TIMEOUT taskId:', taskId);
+      BackgroundFetch.finish(taskId);
+    });
+    setStatus(status);
+    setEnabled(true);
+  }
 
-    // Turn on the enabled switch.
-    onToggleEnabled(true);
-    // Load the list with persisted events.
-    const events = await loadEvents<Event[]>();
-    events && setEvents(events);
-  };
+  /// Load persisted events from AsyncStorage.
+  ///
+  const loadEvents = () => {
+    Event.all().then((data) => {
+      setEvents(data);
+    }).catch((error) => {
+      Alert.alert('Error', 'Failed to load data from AsyncStorage: ' + error);
+    });
+  }
 
-  useEffect(() => {
-    init();
-  }, []);
+  /// Toggle BackgroundFetch ON/OFF
+  ///
+  const onClickToggleEnabled = (value:boolean) => {
+    setEnabled(value);
+
+    if (value) {
+      BackgroundFetch.start();
+    } else {
+      BackgroundFetch.stop();
+    }
+  }
+
+  /// [Status] button handler.
+  ///
+  const onClickStatus = () => {
+    BackgroundFetch.status().then((status:number) => {
+      let statusConst = '';
+      switch (status) {
+        case BackgroundFetch.STATUS_AVAILABLE:
+          statusConst = 'STATUS_AVAILABLE';
+          break;
+        case BackgroundFetch.STATUS_DENIED:
+          statusConst = 'STATUS_DENIED';
+          break;
+        case BackgroundFetch.STATUS_RESTRICTED:
+          statusConst = 'STATUS_RESTRICTED';
+          break;
+      }
+      Alert.alert('BackgroundFetch.status()', `${statusConst} (${status})`);
+    });
+  }
+
+  /// [scheduleTask] button handler.
+  /// Schedules a custom-task to fire in 5000ms
+  ///
+  const onClickScheduleTask = () => {
+    BackgroundFetch.scheduleTask({
+      taskId: 'com.transistorsoft.customtask',
+      delay: 5000,
+      forceAlarmManager: true
+    }).then(() => {
+      Alert.alert('scheduleTask', 'Scheduled task with delay: 5000ms');
+    }).catch((error) => {
+      Alert.alert('scheduleTask ERROR', error);
+    });
+  }
+
+  /// Clear the Events list.
+  ///
+  const onClickClear = () => {
+    Event.destroyAll();
+    setEvents([]);
+  }
+
+  /// Fetch events renderer.
+  ///
+  const renderEvents = () => {
+    if (!events.length) {
+      return (
+        <Text style={{padding: 10, fontSize: 16}}>Waiting for BackgroundFetch events...</Text>
+      );
+    }
+    return events.slice().reverse().map(event => (
+      <View key={event.key} style={styles.event}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.taskId}>{event.taskId}&nbsp;{event.isHeadless ? '[Headless]' : ''}</Text>
+        </View>
+        <Text style={styles.timestamp}>{event.timestamp}</Text>
+      </View>
+    ))
+  }
 
   return (
-    <>
-      <StatusBar backgroundColor={backgroundColor} barStyle='dark-content' />
-      <SafeAreaView style={[styles.body, styles.container, styles.flex1]}>
-          <Header enabled={enabled} onToggleEnabled={onToggleEnabled} />
-          <ScrollView contentInsetAdjustmentBehavior='automatic' style={[
-            styles.paddingLR10, styles.container, styles.wide
-          ]}>
-            {!events.length && <Notice />}
-            {events.map((event, i) => (
-              <EventItem key={`${i}:${event.timestamp}`} {...event} />
-            ))}
-          </ScrollView>
-          <Footer onClear={onClickClear} defaultStatus={defaultStatus} />
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={{flex:1, backgroundColor:Colors.gold}}>
+      <StatusBar barStyle={'light-content'}>
+      </StatusBar>
+      <View style={styles.container}>
+        <View style={styles.toolbar}>
+          <Text style={styles.title}>BGFetch Demo</Text>
+          <Switch value={enabled} onValueChange={onClickToggleEnabled} />
+        </View>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.eventList}>
+          {renderEvents()}
+        </ScrollView>
+        <View style={styles.toolbar}>
+          <Button title={"status: " + status} onPress={onClickStatus} />
+          <Text>&nbsp;</Text>
+          <Button title="scheduleTask" onPress={onClickScheduleTask} />
+          <View style={{flex:1}} />
+          <Button title="clear" onPress={onClickClear} />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 1
+  },
+  title: {
+    fontSize: 24,
+    flex: 1,
+    fontWeight: 'bold',
+    color: Colors.black
+  },
+  eventList: {
+    flex: 1,
+    backgroundColor: Colors.white
+  },
+  event: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: Colors.lightGrey
+  },
+  taskId: {
+    color: Colors.blue,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  headless: {
+    fontWeight: 'bold'
+  },
+  timestamp: {
+    color: Colors.black
+  },
+  toolbar: {
+    height: 57,
+    flexDirection: 'row',
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    backgroundColor: Colors.gold
+  },
+
+});
 
 export default App;

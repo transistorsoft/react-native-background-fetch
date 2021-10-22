@@ -13,8 +13,8 @@ $ yarn install
 $ cd ios
 $ pod install
 
-$ react-native run-android
-$ react-native run-ios
+$ npx react-native run-android
+$ npx react-native run-ios
 ```
 
 :warning: __iOS__: Test on a real device.  The new iOS 13 `BGTaskScheduler` API does not work on Simulators.

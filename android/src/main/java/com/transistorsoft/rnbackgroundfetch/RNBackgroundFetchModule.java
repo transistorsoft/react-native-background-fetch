@@ -90,6 +90,16 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         adapter.finish(taskId);
     }
 
+    @ReactMethod
+    public void addListener(String event) {
+        // Keep:  Required for RN built-in NativeEventEmitter calls.
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep:  Required for RN built-in NativeEventEmitter calls.
+    }
+
     @Override
     public void onHostResume() {
         if (!initialized) {

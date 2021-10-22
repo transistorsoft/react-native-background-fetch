@@ -3,6 +3,7 @@
   <groupId>com.transistorsoft</groupId>
   <artifactId>tsbackgroundfetch</artifactId>
   <versioning>
+    <latest>0.5.4</latest>
     <release>0.5.4</release>
     <versions>
       <version>0.5.1</version>
@@ -10,6 +11,6 @@
       <version>0.5.3</version>
       <version>0.5.4</version>
     </versions>
-    <lastUpdated>20210630161622</lastUpdated>
+    <lastUpdated>20210901130832</lastUpdated>
   </versioning>
 </metadata>
