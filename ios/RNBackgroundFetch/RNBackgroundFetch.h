@@ -10,13 +10,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#if __has_include("RCTEventEmitter.h")
-#import "RCTEventEmitter.h"
-#import "RCTLog.h"
-#else
-#import <React/RCTEventEmitter.h>
 #import <React/RCTLog.h>
-#endif
+#import <React/RCTAppearance.h>
 
 @interface RNBackgroundFetch : RCTEventEmitter <UIApplicationDelegate>
 
