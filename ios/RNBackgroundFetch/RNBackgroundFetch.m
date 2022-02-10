@@ -10,11 +10,7 @@
 @import TSBackgroundFetch;
 #import <UIKit/UIKit.h>
 
-#if __has_include("RCTEventDispatcher.h")
-#import "RCTEventDispatcher.h"
-#else
 #import <React/RCTEventDispatcher.h>
-#endif
 
 static NSString *const RN_BACKGROUND_FETCH_TAG = @"RNBackgroundFetch";
 static NSString *const EVENT_FETCH = @"fetch";
