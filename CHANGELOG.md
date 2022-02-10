@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.0.5] &mdash; 2022-02-10
+* [Fixed][iOS] Remove obsolete `__has_include("RCTEventEmitter.h")` code which was breaking Expo apps.
+
 ## [4.0.4] &mdash; 2021-10-22
 * [Fixed] EventEmitter warning about `addListener` / `removeListeners`
 * [Changed] Re-generate /example app with `react-native init`.  Complete re-factor to use React Hooks.
