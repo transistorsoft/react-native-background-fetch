@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 
 #import <React/RCTLog.h>
-#import <React/RCTAppearance.h>
+#import <React/RCTEventEmitter.h>
 
 @interface RNBackgroundFetch : RCTEventEmitter <UIApplicationDelegate>
 
