@@ -21,7 +21,7 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 - If the user doesn't open your *iOS* app for long periods of time, *iOS* will **stop firing events**.
 
 ### Android
-- The Android plugin provides a [HeadlessJS](https://facebook.github.io/react-native/docs/headless-js-android.html) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
+- The Android plugin provides a [HeadlessJS](https://reactnative.dev/docs/headless-js-android) implementation allowing you to continue handling events even after app-termination (see **[`@config enableHeadless`](#config-boolean-enableheadless-false)**)
 
 -------------------------------------------------------------
 
@@ -304,7 +304,7 @@ BackgroundFetch.scheduleTask({
 
 #### `@config {Boolean} enableHeadless [false]`
 
-Set `true` to enable React Native's [Headless JS](https://facebook.github.io/react-native/docs/headless-js-android.html) mechanism, for handling fetch events after app termination.
+Set `true` to enable React Native's [Headless JS](https://reactnative.dev/docs/headless-js-android) mechanism, for handling fetch events after app termination.
 
 * :open_file_folder: **`index.js`** (**MUST BE IN `index.js`**):
 ```javascript
@@ -325,7 +325,7 @@ let MyHeadlessTask = async (event) => {
 
   // Perform an example HTTP request.
   // Important:  await asychronous tasks when using HeadlessJS.
-  let response = await fetch('https://facebook.github.io/react-native/movies.json');
+  let response = await fetch('https://reactnative.dev/movies.json');
   let responseJson = await response.json();
   console.log('[BackgroundFetch HeadlessTask] response: ', responseJson);
 
