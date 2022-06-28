@@ -13,6 +13,8 @@ $ yarn install
 $ cd ios
 $ pod install
 
+# Edit the ios/FetchDemo.xcodeproj/project.pbxproj file and set both lines with DEVELOPMENT_TEAM to your own Team ID. This can be found at https://developer.apple.com/account under Membership.
+
 $ npx react-native run-android
 $ npx react-native run-ios
 ```
