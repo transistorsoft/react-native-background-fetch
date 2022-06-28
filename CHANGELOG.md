@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [4.1.1] &mdash; 2022-06-28
+* Fix issue for react-native 0.69:  They made a breaking change with the old, unused react-native.config.js, causing builds to fail.  Simply delete the file `react-native.config.js`.
+
+## [4.1.0] &mdash; 2022-04-06
+* [Android] Add new permission required for Android 12: android.permission.SCHEDULE_EXACT_ALARM
+
 ## [4.0.5] &mdash; 2022-02-10
 * [Fixed][iOS] Remove obsolete `__has_include("RCTEventEmitter.h")` code which was breaking Expo apps.
 
