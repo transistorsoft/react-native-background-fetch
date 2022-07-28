@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.2] &mdash; 2022-07-28
+* [Android] Implement gradle ext variable getter `minSdkVersion` instead of hard-coded `16`.
+
 ## [4.1.1] &mdash; 2022-06-28
 * Fix issue for react-native 0.69:  They made a breaking change with the old, unused react-native.config.js, causing builds to fail.  Simply delete the file `react-native.config.js`.
 
