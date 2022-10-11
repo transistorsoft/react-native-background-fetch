@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.3] &mdash; 2022-10=11
+* [Android] Use `LifecycleManager` for modern headless-detection instead of legacy mechanism requiring permission `GET_TASKS`.
+
 ## [4.1.2] &mdash; 2022-07-28
 * [Android] Implement gradle ext variable getter `minSdkVersion` instead of hard-coded `16`.
 
