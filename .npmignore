@@ -5,4 +5,4 @@ example/
 node_modules
 .github/
 expo/plugin/src
-expo/plugin/src/tsconfig.json
+expo/plugin/tsconfig.json
