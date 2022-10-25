@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.4] &mdash; 2022-10-25
+* [Expo] The plugin now implements an Expo `ConfigPlugin` for automated Setup.
+
 ## [4.1.3] &mdash; 2022-10=11
 * [Android] Use `LifecycleManager` for modern headless-detection instead of legacy mechanism requiring permission `GET_TASKS`.
 

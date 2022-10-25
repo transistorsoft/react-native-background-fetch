@@ -40,13 +40,11 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 
 ## Installing the plugin
 
-:warning: If you have a previous version of **`react-native-background-fetch < 2.7.0`** installed into **`react-native >= 0.60`**, you should first `unlink` your previous version as `react-native link` is no longer required.
+### With *Expo*
 
 ```bash
-$ react-native unlink react-native-background-fetch
+$ npx expo install react-native-background-fetch
 ```
-
--------------------------------------------------------------
 
 ### With `yarn`
 
@@ -61,14 +59,16 @@ $ npm install --save react-native-background-fetch
 
 ## Setup Guides
 
+### *Expo* Setup
+
+- [Expo Setup](docs/INSTALL-EXPO.md)
+
 ### iOS Setup
 
-#### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-IOS.md)
 
 ### Android Setup
 
-#### `react-native >= 0.60`
 - [Auto-linking Setup](docs/INSTALL-AUTO-ANDROID.md)
 
 ## Example ##
