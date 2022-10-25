@@ -45,3 +45,7 @@ xcuserdata/
 android/.gradle
 
 android/local.properties
+
+# Expo build
+expo/plugin/build/**
+
