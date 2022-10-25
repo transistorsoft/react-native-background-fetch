@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.5] &mdash; 2022-10-25
+* Remove `peerDependencies`.
+
 ## [4.1.4] &mdash; 2022-10-25
 * [Expo] The plugin now implements an Expo `ConfigPlugin` for automated Setup.
 
