@@ -1,3 +1,6 @@
+| <img src="https://dl.dropbox.com/s/gxl3sr8znhkrtah/expo-logo.png?dl=1" alt="alt text" width="32" /> | Now with *Expo* support |
+| --- | --- |
+
 react-native-background-fetch &middot; [![npm](https://img.shields.io/npm/dm/react-native-background-fetch.svg)]() [![npm](https://img.shields.io/npm/v/react-native-background-fetch.svg)]()
 ==============================================================================
 

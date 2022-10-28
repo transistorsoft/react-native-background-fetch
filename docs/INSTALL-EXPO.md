@@ -1,4 +1,4 @@
-# Expo Installation
+# Expo Setup
 
 ```bash
 npx expo install react-native-background-fetch
@@ -62,4 +62,19 @@ BackgroundFetch.scheduleTask({
 });
 ```
 
-**That's it!**
+### Re-build
+
+You must rebuild your Android app for the added plugins to be evaluated.
+
+- If you developing locally:
+
+```bash
+npx expo prebuild
+```
+
+- If you're using *Expo EAS*:
+```bash
+eas build --profile development --platform android
+```
+
+
