@@ -64,6 +64,10 @@ declare module "react-native-background-fetch" {
 		* Whether this task will continue executing or just a "one-shot".
 		*/
 		periodic?:boolean;
+		/**
+		* When set true, ensure that this job will run if the device has network connection.
+		*/
+		requiresNetworkConnectivity? boolean;
 	}
 
 	interface BackgroundFetchConfig extends AbstractConfig {
