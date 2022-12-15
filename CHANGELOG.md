@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.6] &mdash; 2022-12-15
+* `TaskConfig.requiresNetworkConnectivity` was missing from typescript API.
+
 ## [4.1.5] &mdash; 2022-10-25
 * Remove `peerDependencies`.
 
