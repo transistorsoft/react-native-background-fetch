@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.1.7] &mdash; 2022-12-15
+* Fix typo in previous release.
+
 ## [4.1.6] &mdash; 2022-12-15
 * `TaskConfig.requiresNetworkConnectivity` was missing from typescript API.
 
