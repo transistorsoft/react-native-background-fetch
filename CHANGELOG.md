@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [4.1.8] &mdash; 2023-01-23
+* [Android] Log JobScheduler jobId to facilitate simulating scheduleTask events with `adb shell`:
+```bash
+// from adb logcat *:S TSBackgroundFetch
+TSBackgroundFetch: - registerTask: com.transistorsoft.customtask (jobId: -359368280) <-- 
+```
+Now copy that `jobId` from logcat and insert into the `adb shell` command to simulate a task:
+```bash
+$ adb shell cmd jobscheduler run -f com.your.package.name -359368280
+```
+
 ## [4.1.7] &mdash; 2022-12-15
 * Fix typo in previous release.
 
