@@ -455,6 +455,21 @@ $ adb logcat *:S ReactNative:V ReactNativeJS:V TSBackgroundFetch:V
 ```bash
 $ adb shell cmd jobscheduler run -f <your.application.id> 999
 ```
+
+- Simulating `scheduleTask` events:
+1. Observe `adb logcat` for the `registerTask` log-entry and copy the `jobId`.
+
+```
+// from adb logcat *:S TSBackgroundFetch
+TSBackgroundFetch: - registerTask: com.your.package.name (jobId: -359368280) <--
+```
+
+```
+2. Now paste that `jobId` from logcat into the `adb shell` command to simulate a `JobScheduler` event:
+```bash
+$ adb shell cmd jobscheduler run -f com.your.package.name -359368280
+```
+
 - For devices with sdk `<21`, simulate a "Headless JS" event with (insert *&lt;your.application.id&gt;*)
 ```bash
 $ adb shell am broadcast -a <your.application.id>.event.BACKGROUND_FETCH
