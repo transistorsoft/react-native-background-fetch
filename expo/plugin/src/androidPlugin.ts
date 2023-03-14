@@ -53,8 +53,8 @@ const applyMavenUrl = (buildGradle: string):string => {
     tag: `[${MODULE_NAME}]-maven`,
     src: buildGradle,
     newSrc: `\tmaven { url "\${project(":${MODULE_NAME}").projectDir}/libs" }`,
-    anchor: /mavenLocal\(\)/,
-    offset: 1,
+    anchor: /maven\s\{/,
+    offset: 0,
     comment: "//",
   }).contents;
 }
@@ -69,7 +69,7 @@ const applyAppGradle = (buildGradle:string) => {
     tag: `[${MODULE_NAME}]-project`,
     src: buildGradle,
     newSrc: newSrc.join("\n"),
-    anchor: /\"react\.gradle\"\)/,
+    anchor: /android\s\{/,
     offset: 1,
     comment: "//",
   }).contents;

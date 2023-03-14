@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [4.1.9] &mdash; 2023-03-13
+* [Android] Fix expo plugin failing on Expo SDK >= 48.  Regular expressions failed because Expo changed lines in the build.gradle files that the Expo plugin was using for anchors for where to inject new src.  Changed to use more fundamental anchor elements for regular expressions that must exist.
+* [Android] Fix expo plugin failing on Expo SDK >= 48.  Regular expressions failed because Expo changed lines in the build.gradle files that the Expo plugin was using for anchors for where to inject new src
+c
+
 ## [4.1.8] &mdash; 2023-01-23
 * [Android] Log JobScheduler jobId to facilitate simulating scheduleTask events with `adb shell`:
 ```bash
