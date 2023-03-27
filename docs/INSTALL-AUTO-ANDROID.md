@@ -15,7 +15,8 @@ $ npm install --save react-native-background-fetch
 
 ## Gradle Configuration
 
-The SDK requires a custom __`maven url`__ in the root __`android/build.gradle`__:
+The SDK requires a custom __`maven url`__ in the root __`android/build.gradle`__.
+Please note that some more recent versions of React Native the Android template may not include __`allprojects`__ section. You should add this manually as a separate section along with the nested __`repositories`__ section in the same __`android/build.gradle`__ file.
 
 ### :open_file_folder: **`android/build.gradle`**
 
