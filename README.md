@@ -443,7 +443,7 @@ e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateExpirationForTask
 
 #### Old `BackgroundFetch` API
 - Simulate background fetch events in XCode using **`Debug->Simulate Background Fetch`**
-- iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, your can be **sure** that everything is working fine.  You just need to wait.
+- iOS can take some hours or even days to start a consistently scheduling background-fetch events since iOS schedules fetch events based upon the user's patterns of activity.  If *Simulate Background Fetch* works, you can be **sure** that everything is working fine.  You just need to wait.
 
 ### Android
 
