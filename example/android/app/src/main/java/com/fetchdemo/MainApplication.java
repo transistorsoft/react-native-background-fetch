@@ -2,6 +2,8 @@ package com.fetchdemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -50,11 +52,24 @@ public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
-    super.onCreate();
-    // If you opted-in for the New Architecture, we enable the TurboModule system
-    ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
-    SoLoader.init(this, /* native exopackage */ false);
-    initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+              .detectDiskReads()
+              .detectDiskWrites()
+              .detectAll()
+              .penaltyLog()
+              .build());
+      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+              .detectLeakedSqlLiteObjects()
+              .detectLeakedClosableObjects()
+              .penaltyLog()
+              .penaltyDeath()
+              .build());
+
+      super.onCreate();
+      // If you opted-in for the New Architecture, we enable the TurboModule system
+      ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+      SoLoader.init(this, /* native exopackage */ false);
+      initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
 
   /**

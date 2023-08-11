@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [4.2.0] &mdash; 2023-07-31
+* [Android] Android 14 (SDK 34) support.
+* [Android] Android 14 (SDK 34) support:  When using `forceAlarmManager: true`, you must now optionally add the permission `android.permission.USE_EXACT_ALARM` to your `AndroidManifest` to schedule **exact** alarms.  Otherwise `AlarmManager` will use **in-exact** alarms.  **NOTE** You must include the permission **exactly as-shown** with __`android:minSdkVersion="34"`__.
+
+:open_file_folder: `AndroidManifest`
+```xml
+<manifest>
+    <!-- [background-fetch] OPTIONAL:  allows forceAlarmManager: true to use exact alarms -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" android:minSdkVersion="34" />
+    .
+    .
+    .
+</manifest>
+```
+
 ## [4.1.10] &mdash; 2023-05-03
 * [Android] Gradle v8 now requires `namespace` attribute in gradle files.
 

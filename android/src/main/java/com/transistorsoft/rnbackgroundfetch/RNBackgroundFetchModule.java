@@ -2,30 +2,29 @@ package com.transistorsoft.rnbackgroundfetch;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetchConfig;
+import com.transistorsoft.tsbackgroundfetch.LifecycleManager;
 
 public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
     public static final String TAG = "RNBackgroundFetch";
-
     private static final String EVENT_FETCH = "fetch";
     private static final String JOB_SERVICE_CLASS = HeadlessTask.class.getName();
-    private static final String FETCH_TASK_ID                       = "react-native-background-fetch";
-
-    private boolean isForceReload = false;
+    private static final String FETCH_TASK_ID = "react-native-background-fetch";
     private boolean initialized = false;
 
     public RNBackgroundFetchModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        Log.d(BackgroundFetch.TAG, "[RNBackgroundFetch initialize]");
+        BackgroundFetch.getInstance(reactContext.getApplicationContext());
         reactContext.addLifecycleEventListener(this);
     }
 
     @Override
-
-
     public String getName() {
         return TAG;
     }
@@ -117,6 +116,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
 
     @Override
     public void onHostDestroy() {
+        LifecycleManager.getInstance().setHeadless(true);
         initialized = false;
     }
 

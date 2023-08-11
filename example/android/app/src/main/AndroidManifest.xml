@@ -2,6 +2,8 @@
   package="com.fetchdemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- [background-fetch] OPTIONAL:  allows forceAlarmManager: true to use exact alarms -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" android:minSdkVersion="34" />
 
     <application
       android:name=".MainApplication"
