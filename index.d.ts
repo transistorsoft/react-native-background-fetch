@@ -180,6 +180,6 @@ declare module "react-native-background-fetch" {
 		/**
 		* [Android only] Register a function to execute when the app is terminated.  Requires stopOnTerminate: false.
 		*/
-		static registerHeadlessTask(task:(event:HeadlessEvent) => void):void;
+		static registerHeadlessTask(task:(event:HeadlessEvent) => Promise<void>):void;
 	}
 }
