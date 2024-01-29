@@ -50,7 +50,7 @@ const androidPlugin: ConfigPlugin<Props> = (config, props={}) => {
 
 const applyMavenUrl = (buildGradle: string):string => {
   return mergeContents({
-    tag: `[${MODULE_NAME}]-maven`,
+    tag: `${MODULE_NAME}-maven`,
     src: buildGradle,
     newSrc: `\tmaven { url "\${project(":${MODULE_NAME}").projectDir}/libs" }`,
     anchor: /maven\s\{/,
@@ -66,7 +66,7 @@ const applyAppGradle = (buildGradle:string) => {
   newSrc.push(`Project background_fetch = project(':${MODULE_NAME}')`)
 
   buildGradle = mergeContents({
-    tag: `[${MODULE_NAME}]-project`,
+    tag: `${MODULE_NAME}-project`,
     src: buildGradle,
     newSrc: newSrc.join("\n"),
     anchor: /android\s\{/,
@@ -75,7 +75,7 @@ const applyAppGradle = (buildGradle:string) => {
   }).contents;
 
   buildGradle = mergeContents({
-    tag: `[${MODULE_NAME}]-proguard`,
+    tag: `${MODULE_NAME}-proguard`,
     src: buildGradle,
     newSrc: `\t    proguardFiles "\${background_fetch.projectDir}/proguard-rules.pro"`,
     anchor: /\"proguard-rules.pro\"/,
