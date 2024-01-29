@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## Unreleased
+## 4.2.2 &mdash; 2024-01-29
+* [Expo] Fix bug for Expo v50 "Invalid regular expression".
 * [iOS] Only allow registration of `BGProcessingTasks` (*Permitted background task scheduler identifiers*) in `Info.plist` which are prefixed with `com.transistorsoft`.  Any other task identifier will be ignored.
 
 ## [4.2.1] &mdash; 2023-08-20
