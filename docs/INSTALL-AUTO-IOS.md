@@ -57,9 +57,8 @@ BackgroundFetch.scheduleTask({
 });
 ```
 
-## `AppDelegate.m` (:new: __iOS 13+__)
-
-The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler?language=objc) API introduced in iOS 13 requires special setup:
+## `AppDelegate`
+:open_file_folder: __`AppDelegate.m`__
 
 ```diff
 #import "AppDelegate.h"
@@ -92,6 +91,27 @@ The [**`BGTaskScheduler`**](https://developer.apple.com/documentation/background
 }
 ```
 
+#### Or if you're using `Swift`:
+:open_file_folder: __`AppDelegate.swift`__:
+
+```diff
+import Foundation
+import UIKit
++import TSBackgroundFetch
+
+@UIApplicationMain
+class AppDelegate: RCTAppDelegate {
+
+  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    .
+    .
+    .   
++   // [REQUIRED] Register BackgroundFetch
++   TSBackgroundFetch.sharedInstance().didFinishLaunching();
+    return self.application(application, didFinishLaunchingWithOptions: launchOptions);
+  }
+}
+```
 
 ## BackgroundFetch AppDelegate extension
 
