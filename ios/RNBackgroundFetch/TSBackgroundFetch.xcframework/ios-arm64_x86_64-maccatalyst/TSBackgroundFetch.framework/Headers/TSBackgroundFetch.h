@@ -27,9 +27,9 @@
 
 -(void) configure:(NSTimeInterval)delay callback:(void(^)(UIBackgroundRefreshStatus status))callback;
 
--(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic callback:(void (^)(NSString* taskId, BOOL timeout))callback;
+-(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier type:(NSInteger)type delay:(NSTimeInterval)delay periodic:(BOOL)periodic callback:(void (^)(NSString* taskId, BOOL timeout))callback;
 
--(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier delay:(NSTimeInterval)delay periodic:(BOOL)periodic requiresExternalPower:(BOOL)requiresExternalPower requiresNetworkConnectivity:(BOOL)requiresNetworkConnectivity callback:(void (^)(NSString* taskId, BOOL timeout))callback;
+-(NSError*) scheduleProcessingTaskWithIdentifier:(NSString*)identifier type:(NSInteger)type delay:(NSTimeInterval)delay periodic:(BOOL)periodic requiresExternalPower:(BOOL)requiresExternalPower requiresNetworkConnectivity:(BOOL)requiresNetworkConnectivity callback:(void (^)(NSString* taskId, BOOL timeout))callback;
 
 -(void) addListener:(NSString*)componentName callback:(void (^)(NSString* componentName))callback;
 -(void) addListener:(NSString*)componentName callback:(void (^)(NSString* componentName))callback timeout:(void (^)(NSString* componentName))timeout;
