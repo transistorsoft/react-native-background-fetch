@@ -22,4 +22,5 @@ Pod::Spec.new do |s|
   s.preserve_paths      = 'docs', 'CHANGELOG.md', 'LICENSE', 'package.json', 'RNBackgroundFetch.ios.js'
   s.source_files        = 'ios/RNBackgroundFetch/RNBackgroundFetch.h', 'ios/RNBackgroundFetch/RNBackgroundFetch.m'
   s.vendored_frameworks = 'ios/RNBackgroundFetch/TSBackgroundFetch.xcframework'
+  s.resource_bundles    = {'TSBackgroundFetch' => ['ios/RNBackgroundFetch/Resources/PrivacyInfo.xcprivacy']}
 end

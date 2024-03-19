@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.2.3 &mdash; 2024-03-19
+* [iOS] Implement new [iOS Privacy Manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files?language=objc)
+
 ## 4.2.2 &mdash; 2024-01-29
 * [Expo] Fix bug for Expo v50 "Invalid regular expression".
 * [iOS] Only allow registration of `BGProcessingTasks` (*Permitted background task scheduler identifiers*) in `Info.plist` which are prefixed with `com.transistorsoft`.  Any other task identifier will be ignored.

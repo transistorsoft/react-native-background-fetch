@@ -368,11 +368,11 @@ PODS:
     - React-jsi (= 0.70.13)
     - React-logger (= 0.70.13)
     - React-perflogger (= 0.70.13)
-  - RNBackgroundFetch (4.2.1):
+  - RNBackgroundFetch (4.2.3):
     - React-Core
-  - RNCAsyncStorage (1.19.1):
+  - RNCAsyncStorage (1.22.3):
     - React-Core
-  - SocketRocket (0.6.0)
+  - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -579,12 +579,12 @@ SPEC CHECKSUMS:
   React-RCTVibration: 3b0e5f51cf2e6a1f8a7f36d50157bad0bfa4b984
   React-runtimeexecutor: 9ea931b43e2c2eb3c66ccdefcba8ff00cb523e09
   ReactCommon: a24276ab12f11099c91af00f7cf2c89d5f55313f
-  RNBackgroundFetch: 501c34ad6e880818ba17e7840b23f20a2d112923
-  RNCAsyncStorage: f47fe18526970a69c34b548883e1aeceb115e3e1
-  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  RNBackgroundFetch: b6cb89fa8ff0e1d8a245b19caca2944304b95fbf
+  RNCAsyncStorage: 10591b9e0a91eaffee14e69b3721009759235125
+  SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 445485143df46a9d5d4ef61cbbc629fec40fb9a0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: f203c2c7974894ff86637e23fe98114f59d2d3ee
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

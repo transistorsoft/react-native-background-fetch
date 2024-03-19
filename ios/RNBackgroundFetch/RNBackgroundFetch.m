@@ -100,6 +100,7 @@ RCT_EXPORT_METHOD(scheduleTask:(NSDictionary*)config success:(RCTResponseSenderB
 
 
     NSError *error = [[TSBackgroundFetch sharedInstance] scheduleProcessingTaskWithIdentifier:taskId
+                                                                                         type:0
                                                                                         delay:delay
                                                                                      periodic:periodic
                                                                         requiresExternalPower: requiresCharging
