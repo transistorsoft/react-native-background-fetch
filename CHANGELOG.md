@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.2.4 &mdash; 2024-03-23
+* [iOS] codesign `TSBackgroundFetch`
+* [iOS] Add PrivacyInfo -> TSBackgroundFetch.xcframework
+
 ## 4.2.3 &mdash; 2024-03-19
 * [iOS] Implement new [iOS Privacy Manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files?language=objc)
 
