@@ -127,4 +127,50 @@ BackgroundFetch implements an `AppDelegate` method `didPerformFetchWithCompletio
 **`node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m`**
 ![](https://dl.dropbox.com/s/r4f564giaz257fw/autolinking-step2.png?dl=1)
 
+## Privacy Manifest
 
+Apple now requires apps provide a [Privacy Manifest for "sensitive" APIs](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api?language=objc) which could be abused for "fingerprinting" a user for malicious marketing activity.
+
+If your app does not yet have a *Privacy Manifest* (__`PrivacyInfo.xcprivacy`__), create one now:
+
+<details>
+    <summary>ℹ️ Click here for detailed instructions...</summary>
+
+- In XCode, __`File -> New -> File...`__:
+
+![](https://dl.dropboxusercontent.com/scl/fi/n28028i3fbrxd67u491w2/file-new-PrivacyInfo.png?rlkey=sc7s1lyy8fli2c1hz2cfa4cpm&dl=1)
+
+- Be sure to enable your `Targets: [x] YourApp`:
+
+![](https://dl.dropboxusercontent.com/scl/fi/pmbfn5jypvns6r5pyhnui/file-new-PrivacyInfo-targets.png?rlkey=epvjffar23bxgyi9xax9ys40i&dl=1)
+
+
+</details>
+
+
+It's best to edit this file's XML manually.
+- :open_file_folder: `ios/PrivacyInfo.xcprivacy`
+- Add the following block within the `NSPrivacyAccessedAPITypes` `<array>` container:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<plist version="1.0">
+<dict>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+        <!-- [1] background_fetch: UserDefaults -->
+        <dict>
+            <key>NSPrivacyAccessedAPIType</key>
+            <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+
+            <key>NSPrivacyAccessedAPITypeReasons</key>
+            <array>
+                <string>CA92.1</string>
+            </array>
+        </dict>        
+    </array>
+</dict>
+</plist>
+```
