@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-fetch",
-  "version": "4.2.5",
+  "version": "4.2.6",
   "description": "iOS & Android BackgroundFetch API implementation for React Native",
   "scripts": {
     "build": "yarn run build:expo",
