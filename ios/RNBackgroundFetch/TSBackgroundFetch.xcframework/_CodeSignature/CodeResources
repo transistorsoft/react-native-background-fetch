@@ -10,7 +10,7 @@
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/Info.plist</key>
 		<data>
-		3D41ofPesOO1EBF5ARFTRPvC7Ac=
+		g5KwE7yzRykV7uVfiQSQt6r89M4=
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/Modules/module.modulemap</key>
 		<data>
@@ -22,11 +22,11 @@
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/TSBackgroundFetch</key>
 		<data>
-		1iAvBYAY0XGFgmV79+KoFbkoePs=
+		+xfrqT0X8AfknLzvmlYlR35FhGU=
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<data>
-		zGzOOPBUtJ1kPyd6qPt4O2wBPtQ=
+		aAxTHX3K/y3F+eAAoFor0D37vUM=
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
 		<data>
@@ -34,15 +34,15 @@
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements-1</key>
 		<data>
-		67VQWrD6XTv1BJ6I3skHOYCa7nA=
+		Vswsf2I0AByaT4VnLIX41OVzJ6I=
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<data>
-		zyzfxnkVKHYoVMlTCOFMDASXq64=
+		8Z24w4yQYZxCg1RvnNouKcVrIxE=
 		</data>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>
 		<data>
-		vtmB0MWT669/M5zNV7hRZ+24mpU=
+		H76oU1T1xm11+BEfbmcyAqKmj2Y=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/Headers/TSBackgroundFetch.h</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/Resources/Info.plist</key>
 		<data>
-		flgZuJ/n6b00i9bklNzZJztuyZc=
+		GEjl+23SugkNeX9nPF4BEgzsmjs=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/Resources/PrivacyInfo.xcprivacy</key>
 		<data>
@@ -62,11 +62,11 @@
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/TSBackgroundFetch</key>
 		<data>
-		hfSJIiapmwHSt21qIS4JwXN5ooQ=
+		MDRNzL3slzM12l7gheZu2l0Jby8=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<data>
-		g8QplAyOCRM9pk+KPOrBXoAQHEM=
+		5oF/A8OONW+sow/uuaai1+77JOc=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
 		<data>
@@ -74,15 +74,15 @@
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements-1</key>
 		<data>
-		xsM8IDclHg/B9BIGEAuUgUett6M=
+		L4ve3x7CapZDjg3Axsd4zSJPo6k=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<data>
-		aixf0qPshX+RAsR1pvwxIaLyW14=
+		T2szDo8Ds3t25w5DF5P224tv+zM=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>
 		<data>
-		/+sHrvOrP8MvVVQ5WO+sxiTByVA=
+		NeP6frmHQwnzUYP5gpIWgarNbjM=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/Headers/TSBackgroundFetch.h</key>
 		<data>
@@ -90,7 +90,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/Info.plist</key>
 		<data>
-		nuLNdksDRztsLQN9fb4D5dAxMp8=
+		mOzm6b0eaVHuzGcHESY9RUv6qkw=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/Modules/module.modulemap</key>
 		<data>
@@ -102,11 +102,11 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/TSBackgroundFetch</key>
 		<data>
-		B3lAqOR6f8VH27sxKqqxtqsLoYU=
+		ySizz07PM/PbZ6jFtOZCK4oEs0c=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<data>
-		ja1f016RJ1r2EumhJLhl8CzlZYU=
+		xEFE1sQD/gr9WbgVdQkCrNewEuE=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
 		<data>
@@ -114,11 +114,11 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements-1</key>
 		<data>
-		4KAQIOdMrfbqXfI7EIpdoQPnxxY=
+		sX915DwSimIbkmTwwz/y9moMHJc=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<data>
-		T1wR4ULF/DtKbtgiITz1xQLS2eo=
+		vPVwsl7c8PEqooW4U20Ur+ciSj4=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>
 		<data>
@@ -142,11 +142,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3D41ofPesOO1EBF5ARFTRPvC7Ac=
+			g5KwE7yzRykV7uVfiQSQt6r89M4=
 			</data>
 			<key>hash2</key>
 			<data>
-			7VaRrB6XRNpQmF0WuKxccfCtAD4hU9g776oDbYEJJas=
+			4FOXQVTBC9RX7GRsZfIBb+reB+z0JpYkFFgxqz0FSP4=
 			</data>
 		</dict>
 		<key>ios-arm64/TSBackgroundFetch.framework/Modules/module.modulemap</key>
@@ -175,22 +175,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1iAvBYAY0XGFgmV79+KoFbkoePs=
+			+xfrqT0X8AfknLzvmlYlR35FhGU=
 			</data>
 			<key>hash2</key>
 			<data>
-			3CTe56NCwyteAI6AxFT8HZa4BpdfYXHbIvoVP2noDmI=
+			qmrwRjEBi49B6GT3XLqtbSAC0rD+88LmLMvmRmrIXK8=
 			</data>
 		</dict>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zGzOOPBUtJ1kPyd6qPt4O2wBPtQ=
+			aAxTHX3K/y3F+eAAoFor0D37vUM=
 			</data>
 			<key>hash2</key>
 			<data>
-			zKYxTMeuEo42mtgJxtYjFT6PBWzWffajkU37mHElU60=
+			fVGf5C1qhSXegd6iSUrdwAknO/rih9OZkNsZXMNj2EU=
 			</data>
 		</dict>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
@@ -208,33 +208,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			67VQWrD6XTv1BJ6I3skHOYCa7nA=
+			Vswsf2I0AByaT4VnLIX41OVzJ6I=
 			</data>
 			<key>hash2</key>
 			<data>
-			H7BwmBuvsJldBGipjfFLbRxcaFl2sKiHIb3sDCI387M=
+			zRcKR6jjUpaThwP/8k5jbDq0LNaIlRGX/61qVCQ11vM=
 			</data>
 		</dict>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zyzfxnkVKHYoVMlTCOFMDASXq64=
+			8Z24w4yQYZxCg1RvnNouKcVrIxE=
 			</data>
 			<key>hash2</key>
 			<data>
-			9H9YL/KToJXcQqRI/rW9MTcP6MC89JalNxJeexQdhiI=
+			mewgqgs56ulDnYD3GLv6ysPkus5TsbyvkmlMkIdVWc4=
 			</data>
 		</dict>
 		<key>ios-arm64/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			vtmB0MWT669/M5zNV7hRZ+24mpU=
+			H76oU1T1xm11+BEfbmcyAqKmj2Y=
 			</data>
 			<key>hash2</key>
 			<data>
-			+bn1uYPEbSaGr/XEsSMrxNh2Sd5I4H+5IQMXo86NVCs=
+			ml2q1jRK+YjMgs13GJqIxYXsD5voiNcVqcWYn2GRtrE=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/Headers/TSBackgroundFetch.h</key>
@@ -263,11 +263,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			flgZuJ/n6b00i9bklNzZJztuyZc=
+			GEjl+23SugkNeX9nPF4BEgzsmjs=
 			</data>
 			<key>hash2</key>
 			<data>
-			6mTusxUk01CljV8oTy/CW/M9zhiSYvSIbBO6emO0pfg=
+			qhI4TybMj0v7HJwj5AAbHpL4L0WDr8Uvz9xJCU9vQxs=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/Resources/PrivacyInfo.xcprivacy</key>
@@ -285,22 +285,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hfSJIiapmwHSt21qIS4JwXN5ooQ=
+			MDRNzL3slzM12l7gheZu2l0Jby8=
 			</data>
 			<key>hash2</key>
 			<data>
-			b1gz8cSI2bkkRPD8huOWIMrKimm5YS5pdcEPlwf0FnA=
+			PbvkVE8BUbOI127sc8Dpp7uKHCIFnMlQAUyUnKBnB/Q=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			g8QplAyOCRM9pk+KPOrBXoAQHEM=
+			5oF/A8OONW+sow/uuaai1+77JOc=
 			</data>
 			<key>hash2</key>
 			<data>
-			pjivT2UIUzVuB5Sdf0ujGRF4jTyzdY85BIxcg/dM2j8=
+			A5G7snz2nURf+XLkjJVHxD/pyNl1mGRtbaARqDolVGU=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
@@ -318,33 +318,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xsM8IDclHg/B9BIGEAuUgUett6M=
+			L4ve3x7CapZDjg3Axsd4zSJPo6k=
 			</data>
 			<key>hash2</key>
 			<data>
-			Ryj+75/11zuXWRFsAIX0z9jMuhXqKn0XaFid+QVvAe8=
+			fXfNN6fvUKKuHti+ijpASAldJMdfBzzmCrAJ+FNgzuQ=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			aixf0qPshX+RAsR1pvwxIaLyW14=
+			T2szDo8Ds3t25w5DF5P224tv+zM=
 			</data>
 			<key>hash2</key>
 			<data>
-			cmKVn050O9rc4wYcLGw9DEAeSYcoODI0LRn3JzJAJ8Q=
+			qsMNk/+l1pnhTf//Y952Ux85YXfqaKIkkq9GKOCFsY8=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			/+sHrvOrP8MvVVQ5WO+sxiTByVA=
+			NeP6frmHQwnzUYP5gpIWgarNbjM=
 			</data>
 			<key>hash2</key>
 			<data>
-			p2X/Yzt3n2hdWq8azrYMB1t+zD6dJEPIwzvJKZVrgZM=
+			g0o6oLBVI+e2reOs+pCG2ejbui+afMHVbofktfBcxyU=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/Headers/TSBackgroundFetch.h</key>
@@ -362,11 +362,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			nuLNdksDRztsLQN9fb4D5dAxMp8=
+			mOzm6b0eaVHuzGcHESY9RUv6qkw=
 			</data>
 			<key>hash2</key>
 			<data>
-			T/G6hp/Me/8rAHF8fVSXVI0aTGPnMwLD4ExSvvQtItU=
+			8O2tQGvLmWmSxYKcinUTohLnDOqmMHzdW+u0ynMdh7E=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/Modules/module.modulemap</key>
@@ -395,22 +395,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			B3lAqOR6f8VH27sxKqqxtqsLoYU=
+			ySizz07PM/PbZ6jFtOZCK4oEs0c=
 			</data>
 			<key>hash2</key>
 			<data>
-			uKtVltm5ymFmUqhF1ReT+gU6/ljcYqsNnojPTgY90zI=
+			D6iIZ8nEDUJtyk8ta3scMJ/DgvptBZTFsRPfDfkYmc8=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeDirectory</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			ja1f016RJ1r2EumhJLhl8CzlZYU=
+			xEFE1sQD/gr9WbgVdQkCrNewEuE=
 			</data>
 			<key>hash2</key>
 			<data>
-			JxH6F+vwkTA3Sya5mzGeC1EgL9vplEVceMzykCSPZGU=
+			uKFvCKNBTqFW/foCOvri0YgF2z8cVGURyth5xFdxG6I=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeRequirements</key>
@@ -428,22 +428,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			4KAQIOdMrfbqXfI7EIpdoQPnxxY=
+			sX915DwSimIbkmTwwz/y9moMHJc=
 			</data>
 			<key>hash2</key>
 			<data>
-			PgPYjcp0NPzrq8ooZBdGDd3pO9tUzZel0iWTK0iXJdI=
+			9kZqHXbbtlJm80RDvzpqld9QF1xhEV5MWfU50JYiW4s=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			T1wR4ULF/DtKbtgiITz1xQLS2eo=
+			vPVwsl7c8PEqooW4U20Ur+ciSj4=
 			</data>
 			<key>hash2</key>
 			<data>
-			ptBM4CGM2NBZmbJfNusHhYiP3NasFyqytyxM8NlducM=
+			pBtKX7kafpbW95rbnCDtSQGabtDjIjdfOT4hHXXLKaU=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSBackgroundFetch.framework/_CodeSignature/CodeSignature</key>

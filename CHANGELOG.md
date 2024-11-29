@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.2.6 &mdash; 2024-11-29
+* [Android] Implement support for new "Bridgeless Architecture".
+
 ## 4.2.5 &mdash; 2024-04-22
 * [iOS] Code-sign `TSBackgroundFetch.xcframework` with new Apple Organization (*9224-2932 Quebec Inc*) certificate.
 
