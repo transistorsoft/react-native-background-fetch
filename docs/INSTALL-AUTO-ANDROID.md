@@ -41,18 +41,6 @@ allprojects {
 }
 ```
 
-## Configure __`proguard-rules.pro`__
-
-If you're using __`minifyEnabled true`__ with your Android release build, the plugin's __`HeadlessTask`__ class will be mistakenly *removed* and you will have [this crash](https://github.com/transistorsoft/react-native-background-fetch/issues/261).
-
-1.  Edit `android/app/proguard-rules.pro`.
-2.  Add the following rule:
-
-```bash
-# [react-native-background-fetch]
--keep class com.transistorsoft.rnbackgroundfetch.HeadlessTask { *; }
-```
-
 ## Precise event-scheduling with `forceAlarmManager: true`:
 
 **Only** If you wish to use precise scheduling of events with __`forceAlarmManager: true`__, *Android 14 (SDK 34)*, has restricted usage of ["`AlarmManager` exact alarms"](https://developer.android.com/about/versions/14/changes/schedule-exact-alarms).  To continue using precise timing of events with *Android 14*, you can manually add this permission to your __`AndroidManifest`__.  Otherwise, the plugin will gracefully fall-back to "*in-exact* `AlarmManager` scheduling":
