@@ -75,12 +75,14 @@ public class HeadlessTask {
         UiThreadUtil.runOnUiThread(() -> {
             try {
                 final int taskId = headlessJsTaskContext.startTask(taskConfig);
-                Log.d(BackgroundFetch.TAG, "[HeadlessTask] start HeadlessJsTask: " + taskId);
+                Log.d(BackgroundFetch.TAG, "[HeadlessTask] start taskId: " + taskId);
                 // Add a BGTask.finish(taskId) listener.  This is executed when the user runs BackgroundFetch.finish(taskId).
                 // We use this to finish the RN headless task.
                 mBGTask.setCompletionHandler(() -> {
-                    Log.d(BackgroundFetch.TAG, "[HeadlessTask] end HeadlessJsTask: " + taskId);
-                    headlessJsTaskContext.finishTask(taskId);
+                    Log.d(BackgroundFetch.TAG, "[HeadlessTask] end taskId: " + taskId);
+                    if (headlessJsTaskContext.isTaskRunning(taskId)) {
+                        headlessJsTaskContext.finishTask(taskId);
+                    }
                 });
             } catch (IllegalStateException exception) {
                 Log.e(BackgroundFetch.TAG, "[HeadlessTask] task attempted to run in the foreground.  Task ignored.");

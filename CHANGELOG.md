@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.2.7 &mdash; 2024-12-07
+* [Android] Check if RN headless-task is running before calling `headlessJsTaskContext.finshTask(taskId)`
+.
 ## 4.2.6 &mdash; 2024-11-29
 * [Android] Implement support for new "Bridgeless Architecture".
 
