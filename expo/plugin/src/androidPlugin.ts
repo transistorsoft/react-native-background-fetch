@@ -74,15 +74,6 @@ const applyAppGradle = (buildGradle:string) => {
     comment: "//",
   }).contents;
 
-  buildGradle = mergeContents({
-    tag: `${MODULE_NAME}-proguard`,
-    src: buildGradle,
-    newSrc: `\t    proguardFiles "\${background_fetch.projectDir}/proguard-rules.pro"`,
-    anchor: /\"proguard-rules.pro\"/,
-    offset: 1,
-    comment: "//",
-  }).contents;
-
   return buildGradle;
 
 }
