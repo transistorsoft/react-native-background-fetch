@@ -1,0 +1,60 @@
+name: Help Wanted
+description: I need assistance
+title: "[Help Wanted]: "
+labels: ["triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this support request.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Required Reading
+      description: "- I have read the [README](../blob/master/README.md) and [Debugging](blob/master/README.md#debugging-1) section\n- I am aware of the [API Documentation](../blob/master/README.md#api-documentation)\n- I am aware of the [CHANGELOG](../blob/master/CHANGELOG.md)"
+      options:
+        - label: Confirmed
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: Plugin Version
+      description: What version of our software are you running?
+      placeholder: "Consult your package.json (do not enter 'latest')"
+    validations:
+      required: true
+  - type: checkboxes
+    id: os
+    attributes:
+      label: Mobile operating-system(s)
+      description: Which mobile operating-system(s) is this about?
+      options:
+        - label: iOS
+        - label: Android
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What do you require assistance about?
+    validations:
+      required: true  
+  - type: textarea
+    id: config
+    attributes:
+      label: "[Optional] Plugin Code and/or Config"
+      description: Provide the Config you're using with the `BackgroundFetch.configure(config)` method along with any other relevant code.
+      placeholder: "Paste your Config or code here, eg: BackgroundFetch.configure(config).\n\nYour code will be automatically syntax-highlighted"
+      render: typescript
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: "[Optional] Relevant log output"
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      placeholder: "include iOS / Android logs\n- $ adb logcat -s TSLocationManager:V\n- ios XCode logs"
+      render: shell
+    validations:
+        required: false
+
