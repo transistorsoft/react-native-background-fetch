@@ -53,7 +53,7 @@ body:
     attributes:
       label: "[Optional] Relevant log output"
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      placeholder: "include iOS / Android logs\n- $ adb logcat -s TSLocationManager:V\n- ios XCode logs"
+      placeholder: "include iOS / Android logs\n- $ adb logcat -s TSBackgroundFetch:V\n- ios XCode logs"
       render: shell
     validations:
         required: false
