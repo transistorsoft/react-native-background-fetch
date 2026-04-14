@@ -66,7 +66,7 @@ const modifySwiftAppDelegate = (src:string) => {
     tag: "react-native-background-fetch-import",
     src,
     newSrc: "import TSBackgroundFetch",
-    anchor: /@(UIApplication)?main/,
+    anchor: /@(UIApplication)?[Mm]ain/,
     offset: -1,
     comment: "//",
   }).contents;

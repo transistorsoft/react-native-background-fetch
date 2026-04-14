@@ -1,17 +1,15 @@
 'use strict'
 
 import {
-  NativeModules,
   NativeEventEmitter,
   AppRegistry
 } from "react-native";
 
-const RNBackgroundFetch = NativeModules.RNBackgroundFetch;
-const EventEmitter = new NativeEventEmitter(RNBackgroundFetch);
+import NativeBackgroundFetch from './src/NativeBackgroundFetch';
+
+const EventEmitter = new NativeEventEmitter(NativeBackgroundFetch);
 
 const EVENT_FETCH = "fetch";
-const TAG         = "RNBackgroundFetch";
-const EVENTS      = ["fetch"];
 
 const STATUS_RESTRICTED = 0;
 const STATUS_DENIED     = 1;
@@ -57,63 +55,34 @@ export default class BackgroundFetch {
 
     config = config || {};
 
-    return new Promise((resolve, reject) => {
-      let success = (status) => { resolve(status) };
-      let failure = (status) => { reject(status) };
-      RNBackgroundFetch.configure(config, success, failure);
-    });
+    return NativeBackgroundFetch.configure(config);
   }
 
   static scheduleTask(config) {
-    return new Promise((resolve, reject) => {
-      let success = (success) => { resolve(success) }
-      let failure = (error) => { reject(error) }
-      RNBackgroundFetch.scheduleTask(config, success, failure);
-    });
+    return NativeBackgroundFetch.scheduleTask(config);
   }
 
-  /**
-  * Register HeadlessTask
-  */
   static registerHeadlessTask(task) {
     AppRegistry.registerHeadlessTask("BackgroundFetch", () => task);
   }
 
   static start() {
-    return new Promise((resolve, reject) => {
-      let success = (status) => {
-        resolve(status);
-      }
-      let failure = (error) => {
-        reject(error);
-      }
-      RNBackgroundFetch.start(success, failure);
-    })
+    return NativeBackgroundFetch.start();
   }
 
   static stop(taskId) {
-    return new Promise((resolve, reject) => {
-      let success = (success) => {
-        resolve(success);
-      }
-      let failure = (error) => {
-        reject(error);
-      }
-      RNBackgroundFetch.stop(taskId, success, failure);
-    });
+    return NativeBackgroundFetch.stop(taskId || null);
   }
 
   static finish(taskId) {
-    RNBackgroundFetch.finish(taskId);
+    NativeBackgroundFetch.finish(taskId);
   }
 
   static status(callback) {
     if (typeof(callback) === 'function') {
-      return RNBackgroundFetch.status(callback);
+      NativeBackgroundFetch.status().then(callback);
+      return;
     }
-    return new Promise((resolve, reject) => {
-      RNBackgroundFetch.status(resolve);
-    })
+    return NativeBackgroundFetch.status();
   }
 }
-

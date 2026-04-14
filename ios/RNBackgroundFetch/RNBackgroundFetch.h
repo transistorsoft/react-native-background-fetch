@@ -13,6 +13,11 @@
 #import <React/RCTLog.h>
 #import <React/RCTEventEmitter.h>
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <RNBackgroundFetchSpec/RNBackgroundFetchSpec.h>
+@interface RNBackgroundFetch : RCTEventEmitter <NativeBackgroundFetchSpec, UIApplicationDelegate>
+#else
 @interface RNBackgroundFetch : RCTEventEmitter <UIApplicationDelegate>
+#endif
 
 @end

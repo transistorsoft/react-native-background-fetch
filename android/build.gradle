@@ -1,18 +1,25 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.facebook.react'
 
-def DEFAULT_COMPILE_SDK_VERSION     = 31
-def DEFAULT_TARGET_SDK_VERSION      = 30
-def DEFAULT_MIN_SDK_VERSION 	    = 16
-def DEFAULT_LIFE_CYCLE_RUNTIME_VERSION              = "2.4.1"
-def DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION           = "2.2.0"
+def DEFAULT_COMPILE_SDK_VERSION     = 35
+def DEFAULT_TARGET_SDK_VERSION      = 35
+def DEFAULT_MIN_SDK_VERSION 	    = 24
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def isNewArchitectureEnabled() {
+    return rootProject.hasProperty("newArchEnabled") && rootProject.newArchEnabled == "true"
+}
+
 android {
     if (project.android.hasProperty("namespace")) {
         namespace("com.transistorsoft.rnbackgroundfetch")
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
@@ -23,6 +30,7 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
         versionCode 1
         versionName "1.0"
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,18 +40,11 @@ android {
 
 repositories{
     mavenCentral()
-    maven {
-        url './libs'
-    }
 }
 
 dependencies {
-    def lifeCycleRuntimeVersion = safeExtGet('lifeCycleRuntimeVersion', DEFAULT_LIFE_CYCLE_RUNTIME_VERSION)
-    def lifeCycleExtensionsVersion = safeExtGet('lifeCycleExtensionsVersion', DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION)
+    def backgroundFetchVersion = safeExtGet('backgroundFetchVersion', '4.0.+')
 
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-    implementation(group: 'com.transistorsoft', name:'tsbackgroundfetch', version: '+')
-    // LifeCycleObserver
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifeCycleRuntimeVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtensionsVersion"
+    api "com.transistorsoft:tsbackgroundfetch:$backgroundFetchVersion"
 }

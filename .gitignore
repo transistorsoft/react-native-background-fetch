@@ -45,6 +45,7 @@ android/*.iml
 
 xcuserdata/
 android/.gradle
+android/.settings
 
 android/local.properties
 
