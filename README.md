@@ -29,13 +29,11 @@ There is **no way** to increase the rate which a fetch-event occurs and this plu
 
 # Contents
 
-| Resource | Link |
-|----------|------|
-| :wrench: Setup Guide | [Setup](https://fetch.transistorsoft.com/react-native/setup) |
-| :books: API Documentation | [API Reference](https://fetch.transistorsoft.com/react-native/BackgroundFetch) |
-| :rocket: Examples | [Examples](https://fetch.transistorsoft.com/react-native/examples) |
-| :beetle: Debugging | [Debugging](https://fetch.transistorsoft.com/react-native/debugging) |
-| :open_file_folder: Example App | [`/example`](./example) |
+- :wrench: [Setup Guide](https://fetch.transistorsoft.com/react-native/setup)
+- :books: [API Documentation](https://fetch.transistorsoft.com/react-native/BackgroundFetch)
+- :rocket: [Examples](https://fetch.transistorsoft.com/react-native/examples)
+- :beetle: [Debugging](https://fetch.transistorsoft.com/react-native/debugging)
+- :open_file_folder: [Example App](./example)
 
 ## Installing the plugin
 
