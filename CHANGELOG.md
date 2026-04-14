@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 4.4.0 &mdash; 2026-04-14
+* [Changed] Migrate to TurboModule architecture.
+* [Expo][iOS] Support Expo SDK 55+ (`@main` Swift 6 AppDelegate).
+* [Changed] New example apps: bare React Native (RN 0.85+) and Expo (SDK 54+).
+* [Android] Native library `tsbackgroundfetch` now hosted on Maven Central.  Custom `maven url` referencing `react-native-background-fetch` in your `android/build.gradle` is no longer required and can be removed.
+* [iOS] Native library `TSBackgroundFetch` now hosted on CocoaPods.
+* [Changed] Simplified README with links to new [Documentation Site](https://fetch.transistorsoft.com/react-native).
+
+## 4.3.0 &mdash; 2026-01-01
+* [iOS] import `TSBackgroundFetch` from Cocoapods
+
 ## 4.2.8 &mdash; 2025-05-02
 * [Expo][iOS] Add support for swift (`AppDelegate.swift`).
 

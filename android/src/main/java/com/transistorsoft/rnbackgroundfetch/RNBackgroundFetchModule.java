@@ -6,12 +6,13 @@ import android.util.Log;
 
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
+import com.facebook.fbreact.specs.NativeBackgroundFetchSpec;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetch;
 import com.transistorsoft.tsbackgroundfetch.BackgroundFetchConfig;
 import com.transistorsoft.tsbackgroundfetch.LifecycleManager;
 
-public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implements ActivityEventListener, LifecycleEventListener {
-    public static final String TAG = "RNBackgroundFetch";
+public class RNBackgroundFetchModule extends NativeBackgroundFetchSpec implements ActivityEventListener, LifecycleEventListener {
+    public static final String TAG = NAME;
     private static final String EVENT_FETCH = "fetch";
     private static final String JOB_SERVICE_CLASS = HeadlessTask.class.getName();
     private static final String FETCH_TASK_ID = "react-native-background-fetch";
@@ -24,13 +25,8 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
         reactContext.addLifecycleEventListener(this);
     }
 
-    @Override
-    public String getName() {
-        return TAG;
-    }
-
     @ReactMethod
-    public void configure(ReadableMap options, final Callback success, final Callback failure) {
+    public void configure(ReadableMap options, final Promise promise) {
         BackgroundFetch adapter = getAdapter();
 
         BackgroundFetch.Callback callback = new BackgroundFetch.Callback() {
@@ -52,35 +48,35 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
                 .setIsFetchTask(true)
                 .build(), callback);
 
-        success.invoke(BackgroundFetch.STATUS_AVAILABLE);
+        promise.resolve(BackgroundFetch.STATUS_AVAILABLE);
     }
 
     @ReactMethod
-    public void scheduleTask(ReadableMap options, final Callback success, final Callback failure) {
+    public void scheduleTask(ReadableMap options, final Promise promise) {
         BackgroundFetch adapter = getAdapter();
         adapter.scheduleTask(buildConfig(options).build());
-        success.invoke(true);
+        promise.resolve(true);
     }
 
     @ReactMethod
-    public void start(Callback success, Callback failure) {
+    public void start(Promise promise) {
         BackgroundFetch adapter = getAdapter();
         adapter.start(FETCH_TASK_ID);
-        success.invoke(adapter.status());
+        promise.resolve(adapter.status());
     }
 
     @ReactMethod
-    public void stop(String taskId, Callback success, Callback failure) {
+    public void stop(String taskId, Promise promise) {
         if (taskId == null) taskId = FETCH_TASK_ID;
         BackgroundFetch adapter = getAdapter();
         adapter.stop(taskId);
-        success.invoke(true);
+        promise.resolve(true);
     }
 
     @ReactMethod
-    public void status(Callback success) {
+    public void status(Promise promise) {
         BackgroundFetch adapter = getAdapter();
-        success.invoke(adapter.status());
+        promise.resolve(adapter.status());
     }
 
     @ReactMethod
@@ -95,7 +91,7 @@ public class RNBackgroundFetchModule extends ReactContextBaseJavaModule implemen
     }
 
     @ReactMethod
-    public void removeListeners(Integer count) {
+    public void removeListeners(double count) {
         // Keep:  Required for RN built-in NativeEventEmitter calls.
     }
 
