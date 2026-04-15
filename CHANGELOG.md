@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.4.1 &mdash; 2026-04-15
+* Update native libs for 4.1.0
+
 ## 4.4.0 &mdash; 2026-04-14
 * [Changed] Migrate to TurboModule architecture.
 * [Expo][iOS] Support Expo SDK 55+ (`@main` Swift 6 AppDelegate).

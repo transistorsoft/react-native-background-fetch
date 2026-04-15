@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
 
   s.preserve_paths      = 'docs', 'CHANGELOG.md', 'LICENSE', 'package.json', 'RNBackgroundFetch.ios.js'
   s.source_files        = 'ios/RNBackgroundFetch/RNBackgroundFetch.h', 'ios/RNBackgroundFetch/RNBackgroundFetch.mm'
-  s.dependency          'TSBackgroundFetch', '~> 4.0.6'
+  s.dependency          'TSBackgroundFetch', '~> 4.1.0'
 
   install_modules_dependencies(s)
 end
