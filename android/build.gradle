@@ -43,7 +43,7 @@ repositories{
 }
 
 dependencies {
-    def backgroundFetchVersion = safeExtGet('backgroundFetchVersion', '4.0.+')
+    def backgroundFetchVersion = safeExtGet('backgroundFetchVersion', '4.1.+')
 
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
     api "com.transistorsoft:tsbackgroundfetch:$backgroundFetchVersion"
