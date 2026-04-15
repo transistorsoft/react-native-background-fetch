@@ -1,7 +1,6 @@
 package com.transistorsoft.rnbackgroundfetch;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -31,7 +30,6 @@ import java.lang.reflect.Method;
 
 public class HeadlessTask {
     private static final String HEADLESS_TASK_NAME = "BackgroundFetch";
-    private static final Handler mHandler = new Handler();
 
     private final BGTask mBGTask;
     public HeadlessTask(Context context, BGTask task) {
@@ -134,7 +132,7 @@ public class HeadlessTask {
             ReactInstanceEventListener callback = new ReactInstanceEventListener() {
                 @Override
                 public void onReactContextInitialized(@NonNull ReactContext reactContext) {
-                    mHandler.postDelayed(() -> invokeStartTask(reactContext, taskConfig), 500);
+                    reactContext.runOnJSQueueThread(() -> invokeStartTask(reactContext, taskConfig));
                     try {
                         Method removeReactInstanceEventListener = reactHost.getClass().getMethod("removeReactInstanceEventListener", ReactInstanceEventListener.class);
                         removeReactInstanceEventListener.invoke(reactHost, this);
@@ -157,7 +155,7 @@ public class HeadlessTask {
             reactInstanceManager.addReactInstanceEventListener(new ReactInstanceEventListener() {
                 @Override
                 public void onReactContextInitialized(@NonNull ReactContext reactContext) {
-                    mHandler.postDelayed(() -> invokeStartTask(reactContext, taskConfig), 500);
+                    reactContext.runOnJSQueueThread(() -> invokeStartTask(reactContext, taskConfig));
                     reactInstanceManager.removeReactInstanceEventListener(this);
                 }
             });

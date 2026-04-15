@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.4.2 &mdash; 2026-04-15
+* [Android] Fix headless task race-condition: replace fragile `postDelayed(500)` with `runOnJSQueueThread` to ensure JS bundle is fully evaluated before dispatching the headless task.
+
 ## 4.4.1 &mdash; 2026-04-15
 * Update native libs for 4.1.0
 
