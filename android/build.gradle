@@ -42,7 +42,7 @@ dependencies {
     def lifeCycleExtensionsVersion = safeExtGet('lifeCycleExtensionsVersion', DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION)
 
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-    implementation(group: 'com.transistorsoft', name:'tsbackgroundfetch', version: '+')
+    implementation(group: 'com.transistorsoft', name:'tsbackgroundfetch', version: '1.0.4')
     // LifeCycleObserver
     implementation "androidx.lifecycle:lifecycle-runtime:$lifeCycleRuntimeVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtensionsVersion"

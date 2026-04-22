@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.2.9 &mdash; 2026-04-22
+* Pin local lib `tsbackgroundfetch@1.0.4`
+
 ## 4.2.8 &mdash; 2025-05-02
 * [Expo][iOS] Add support for swift (`AppDelegate.swift`).
 
