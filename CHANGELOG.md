@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+* [iOS] Support React Native's experimental Swift Package Manager app mode (`npx react-native spm`, verified on React Native 0.88.1). The package now ships `ios/Package.swift`, which pulls TSBackgroundFetch from Swift Package Manager. CocoaPods apps keep using the podspec. (WO-001)
+* [iOS] Require iOS 15.0 (was 13.4). With CocoaPods, also require TSBackgroundFetch 4.2 (`~> 4.2`).
+  - React Native 0.76+ already targets 15.1. On older versions, raise `platform :ios` in your Podfile to 15.0.
+  - Existing CocoaPods apps locked to TSBackgroundFetch 4.1.1 must run `pod update TSBackgroundFetch`. (WO-001)
+* [iOS] Remove the vendored `ios/RNBackgroundFetch/TSBackgroundFetch.xcframework`. It has been unused since 4.4.0 switched to the TSBackgroundFetch pod, and Swift Package Manager refuses to build while it is present. (WO-001)
+* [iOS] Get TSBackgroundFetch from one package manager only. Don't use Swift Package Manager app mode together with `react-native-background-geolocation`, which still gets TSBackgroundFetch from CocoaPods.
+  - CocoaPods Trunk becomes read-only on 2026-12-02, so CocoaPods apps stay on TSBackgroundFetch 4.2.x after that date. (WO-001)
+
 ## 4.4.2 &mdash; 2026-04-15
 * [Android] Fix headless task race-condition: replace fragile `postDelayed(500)` with `runOnJSQueueThread` to ensure JS bundle is fully evaluated before dispatching the headless task.
 
