@@ -16,11 +16,14 @@ Pod::Spec.new do |s|
   s.source              = { :git => 'https://github.com/transistorsoft/react-native-background-fetch.git', :tag => s.version }
 
   s.requires_arc        = true
-  s.platforms           = { :ios => '13.4' }
+  s.platforms           = { :ios => '15.0' }
 
   s.preserve_paths      = 'docs', 'CHANGELOG.md', 'LICENSE', 'package.json', 'RNBackgroundFetch.ios.js'
   s.source_files        = 'ios/RNBackgroundFetch/RNBackgroundFetch.h', 'ios/RNBackgroundFetch/RNBackgroundFetch.mm'
-  s.dependency          'TSBackgroundFetch', '~> 4.1.0'
+  # Trunk pod, not spm_dependency: with RN's default static linkage spm_dependency fails to link,
+  # and under dynamic frameworks a second TSBackgroundFetch copy crashes at launch. SwiftPM-mode
+  # apps use ios/Package.swift instead. (WO-001)
+  s.dependency          'TSBackgroundFetch', '~> 4.2'
 
   install_modules_dependencies(s)
 end
