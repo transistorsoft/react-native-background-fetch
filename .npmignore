@@ -6,3 +6,12 @@ node_modules
 .github/
 expo/plugin/src
 expo/plugin/tsconfig.json
+
+# Repository tooling, not the module
+scripts/
+.yarnignore
+*.tgz
+# A local Android build's output and IDE state (4.4.2 shipped 149 files of android/build/)
+android/build/
+.gradle/
+.settings/
