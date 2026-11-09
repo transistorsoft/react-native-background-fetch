@@ -3,13 +3,16 @@
   "version": "4.4.2",
   "description": "iOS & Android BackgroundFetch API implementation for React Native",
   "scripts": {
-    "build": "yarn run build:expo",
+    "build": "npm run build:expo",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:expo": "rimraf expo/plugin/build && tsc --build ./expo/plugin"
+    "build:expo": "rimraf expo/plugin/build && tsc --build ./expo/plugin",
+    "prepublishOnly": "npm run build",
+    "preflight": "scripts/preflight.sh",
+    "release": "scripts/release.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/transistorsoft/react-native-background-fetch.git"
+    "url": "git+https://github.com/transistorsoft/react-native-background-fetch.git"
   },
   "keywords": [
     "react-native",
