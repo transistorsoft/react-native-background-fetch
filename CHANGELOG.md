@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Unreleased
+* [Android] A configuration change that recreates the Activity (bold text, font size, or any other change your `android:configChanges` doesn't list) no longer leaves the plugin in headless mode. Until the app next went to the background, every fetch with the app on screen missed the app's `configure()` callback, so with `stopOnTerminate: true` the fetch was stopped and its job cancelled, and with `false` it was left unfinished. (WO-003)
 * [iOS] Support React Native's experimental Swift Package Manager app mode (`npx react-native spm`, verified on React Native 0.88.1). The package now ships `ios/Package.swift`, which pulls TSBackgroundFetch from Swift Package Manager. CocoaPods apps keep using the podspec. (WO-001)
 * [iOS] Require iOS 15.0 (was 13.4) and TSBackgroundFetch 4.2 or any later 4.x: `~> 4.2` with CocoaPods, `from: "4.2.0"` with Swift Package Manager.
   - React Native 0.76+ already targets 15.1. On older versions, raise `platform :ios` in your Podfile to 15.0.
