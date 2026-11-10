@@ -97,6 +97,9 @@ public class RNBackgroundFetchModule extends NativeBackgroundFetchSpec implement
 
     @Override
     public void onHostResume() {
+        // (WO-003) An Activity is on screen, so the app is not headless.  After a configuration-change recreation
+        // nothing else clears the flag: ProcessLifecycleOwner does not dispatch for one.
+        LifecycleManager.getInstance().setHeadless(false);
         if (!initialized) {
             initializeBackgroundFetch();
         }
@@ -112,7 +115,13 @@ public class RNBackgroundFetchModule extends NativeBackgroundFetchSpec implement
 
     @Override
     public void onHostDestroy() {
-        LifecycleManager.getInstance().setHeadless(true);
+        // (WO-003) A configuration-change recreation is not a termination: a new Activity follows at once.  Going
+        // headless here would stop (stopOnTerminate) or strand the next fetch with the app on screen.  React Native
+        // calls this before it clears the current Activity, so this is still the one being destroyed.
+        Activity activity = getCurrentActivity();
+        if (activity == null || !activity.isChangingConfigurations()) {
+            LifecycleManager.getInstance().setHeadless(true);
+        }
         initialized = false;
     }
 
