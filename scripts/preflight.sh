@@ -46,8 +46,12 @@ npm run -s build >"$WORK/build.log" 2>&1 || { cat "$WORK/build.log" >&2; fail "n
 ok "expo/plugin/build rebuilt"
 
 step "3. the tarball"
-npm pack --silent --pack-destination "$WORK" >/dev/null || fail "npm pack"
-TARBALL="$(ls "$WORK"/*.tgz)"
+# Its own directory: the version on npm, packed below, has the same file name whenever
+# package.json still says the released version, and would overwrite this one, so step 4
+# would install and test what is already on npm instead of this build.
+mkdir -p "$WORK/pack" "$WORK/npm"
+npm pack --silent --pack-destination "$WORK/pack" >/dev/null || fail "npm pack"
+TARBALL="$(ls "$WORK"/pack/*.tgz)"
 tar -tzf "$TARBALL" | sort > "$WORK/contents"
 # What a React Native app needs: the module and its typings, the codegen spec, the Expo
 # config plugin and the build app.plugin.js loads, and the native halves (CocoaPods, SwiftPM
@@ -65,8 +69,8 @@ ok "$(basename "$TARBALL") — $(wc -l < "$WORK/contents" | tr -d ' ') files"
 # Against the version on npm now: files that vanish or appear are worth a look before
 # they ship. Printed, not enforced — a deliberate change is fine.
 PREV="$(npm view "$NAME" dist-tags.latest 2>/dev/null || true)"
-if [ -n "$PREV" ] && (cd "$WORK" && npm pack --silent "$NAME@$PREV" >/dev/null 2>&1); then
-  tar -tzf "$WORK"/*-"$PREV".tgz | sort > "$WORK/previous"
+if [ -n "$PREV" ] && (cd "$WORK/npm" && npm pack --silent "$NAME@$PREV" >/dev/null 2>&1); then
+  tar -tzf "$WORK"/npm/*.tgz | sort > "$WORK/previous"
   gone="$(comm -23 "$WORK/previous" "$WORK/contents" | sed 's#^package/##')"
   new="$(comm -13 "$WORK/previous" "$WORK/contents" | sed 's#^package/##')"
   ok "against $PREV on npm: $(echo -n "$gone" | grep -c . || true) gone, $(echo -n "$new" | grep -c . || true) new"
