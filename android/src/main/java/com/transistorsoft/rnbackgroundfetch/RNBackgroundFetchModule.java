@@ -67,7 +67,9 @@ public class RNBackgroundFetchModule extends NativeBackgroundFetchSpec implement
 
     @ReactMethod
     public void stop(String taskId, Promise promise) {
-        if (taskId == null) taskId = FETCH_TASK_ID;
+        // (WO-013) No taskId: hand the SDK null, as the types and docs say and as this plugin's iOS side does.
+        // stop(null) cancels the fetch task and every scheduleTask() task this process holds.  It used to be mapped to
+        // this plugin's own fetch taskId, which stopped the fetch task alone on Android.
         BackgroundFetch adapter = getAdapter();
         adapter.stop(taskId);
         promise.resolve(true);
