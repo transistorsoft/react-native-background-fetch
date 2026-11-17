@@ -7,9 +7,11 @@
 * [iOS] Require iOS 15.0 (was 13.4) and TSBackgroundFetch 4.2 or any later 4.x: `~> 4.2` with CocoaPods, `from: "4.2.0"` with Swift Package Manager.
   - React Native 0.76+ already targets 15.1. On older versions, raise `platform :ios` in your Podfile to 15.0.
   - Existing CocoaPods apps locked to TSBackgroundFetch 4.1.1 must run `pod update TSBackgroundFetch`. (WO-001)
-* [iOS] Remove the vendored `ios/RNBackgroundFetch/TSBackgroundFetch.xcframework`. It has been unused since 4.4.0 switched to the TSBackgroundFetch pod, and Swift Package Manager refuses to build while it is present. (WO-001)
+* [iOS] Remove the vendored `ios/RNBackgroundFetch/TSBackgroundFetch.xcframework`. It was unused, since the plugin gets TSBackgroundFetch from its pod, and Swift Package Manager refuses to build while it is present. (WO-001)
 * [iOS] Get TSBackgroundFetch from one package manager only. Don't use Swift Package Manager app mode together with `react-native-background-geolocation`, which still gets TSBackgroundFetch from CocoaPods.
   - CocoaPods Trunk becomes read-only on 2026-12-02, so CocoaPods apps stay on TSBackgroundFetch 4.2.x after that date. (WO-001)
+* [iOS] If your app also uses `react-native-background-geolocation`, stay on 4.4.2, pinned exactly (`"react-native-background-fetch": "4.4.2"`): a `^4.4.2` range installs 4.5.0 on your next `npm update` or fresh install. TSLocationManager 4.8.3, the latest, requires TSBackgroundFetch 4.1.x, so CocoaPods cannot resolve both. Upgrade once a TSLocationManager that accepts TSBackgroundFetch 4.2 is out and your `react-native-background-geolocation` accepts it (5.8.2 takes TSLocationManager 4.8.x only), then run `pod update TSLocationManager TSBackgroundFetch`. (WO-001)
+* Require `@transistorsoft/background-fetch-types` 1.0.1 or later. Its 1.0.0 throws `ReferenceError: BackgroundFetch is not defined` when a build loads the package at run time (esbuild, Vite, or Babel or SWC compiling TypeScript one file at a time).
 
 ## 4.4.2 &mdash; 2026-04-15
 * [Android] Fix headless task race-condition: replace fragile `postDelayed(500)` with `runOnJSQueueThread` to ensure JS bundle is fully evaluated before dispatching the headless task.

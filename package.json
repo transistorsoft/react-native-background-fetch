@@ -38,7 +38,7 @@
     "name": "RNBackgroundFetch"
   },
   "dependencies": {
-    "@transistorsoft/background-fetch-types": "^1.0.0"
+    "@transistorsoft/background-fetch-types": "^1.0.1"
   },
   "peerDependencies": {
     "@expo/config-plugins": ">=10.0.0"

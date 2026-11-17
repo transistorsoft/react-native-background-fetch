@@ -15,3 +15,5 @@ scripts/
 android/build/
 .gradle/
 .settings/
+# Xcode's per-user state (4.4.2 shipped one)
+xcuserdata/
