@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-fetch",
-  "version": "4.4.2",
+  "version": "4.5.0",
   "description": "iOS & Android BackgroundFetch API implementation for React Native",
   "scripts": {
     "build": "npm run build:expo",
@@ -38,7 +38,7 @@
     "name": "RNBackgroundFetch"
   },
   "dependencies": {
-    "@transistorsoft/background-fetch-types": "^1.0.0"
+    "@transistorsoft/background-fetch-types": "^1.0.1"
   },
   "peerDependencies": {
     "@expo/config-plugins": ">=10.0.0"
